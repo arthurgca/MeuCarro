@@ -1,3 +1,7 @@
 <resources>
     <string name="app_name">MeuCarro</string>
+    <string name="cadastrar">Cadastrar</string>
+    <string name="logar">Logar</string>
+    <string name="logout">Logout</string>
+    <string name="cadastrosucesso">Cadastro realizado com sucesso</string>
 </resources>

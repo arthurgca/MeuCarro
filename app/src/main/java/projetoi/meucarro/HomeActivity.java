@@ -33,6 +33,7 @@ public class HomeActivity extends AppCompatActivity {
             public void onClick(View v) {
                 FirebaseAuth.getInstance().signOut();
                 Intent it = new Intent(HomeActivity.this, LoginActivity.class);
+                it.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
                 startActivity(it);
             }
         });

@@ -19,7 +19,7 @@
         android:id="@+id/logoutHomeButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignParentStart="true"
-        android:layout_below="@+id/homeActivityInfo"
-        android:text="@string/logout" />
+        android:text="@string/logout"
+        android:layout_alignParentBottom="true"
+        android:layout_alignEnd="@+id/homeActivityInfo" />
 </RelativeLayout>

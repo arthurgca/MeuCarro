@@ -41,6 +41,10 @@ public class CadastroActivity extends AppCompatActivity {
                 FirebaseUser user = firebaseAuth.getCurrentUser();
                 if (user != null) {
                     // User is signed in
+                    Intent it = new Intent(CadastroActivity.this, LoginActivity.class);
+                    FirebaseAuth.getInstance().signOut();
+                    it.setFlags(Intent.FLAG_ACTIVITY_NO_HISTORY);
+                    startActivity(it);
                     Log.d("Signed in: ", "onAuthStateChanged:signed_in:" + user.getUid());
                 } else {
                     // User is signed out
@@ -57,27 +61,31 @@ public class CadastroActivity extends AppCompatActivity {
                 String email = emailEditText.getText().toString();
                 String senha = senhaEditText.getText().toString();
 
-                mAuth.createUserWithEmailAndPassword(email, senha)
-                        .addOnCompleteListener(CadastroActivity.this, new OnCompleteListener<AuthResult>() {
-                            @Override
-                            public void onComplete(@NonNull Task<AuthResult> task) {
-                                Log.d("Log: ", "createUserWithEmail:onComplete:" + task.isSuccessful());
+                if (email.isEmpty() || email == null || senha.isEmpty() || senha == null) {
+                    Toast.makeText(CadastroActivity.this, R.string.mensagemVazio,
+                            Toast.LENGTH_SHORT).show();
+                } else {
 
-                                // If sign in fails, display a message to the user. If sign in succeeds
-                                // the auth state listener will be notified and logic to handle the
-                                // signed in user can be handled in the listener.
-                                if (!task.isSuccessful()) {
-                                    Toast.makeText(CadastroActivity.this, task.getException().getLocalizedMessage(),
-                                            Toast.LENGTH_SHORT).show();
-                                } else {
-                                    Toast.makeText(CadastroActivity.this, R.string.cadastrosucesso,
-                                            Toast.LENGTH_SHORT).show();
-                                    Intent it = new Intent(CadastroActivity.this, HomeActivity.class);
-                                    startActivity(it);
+                    mAuth.createUserWithEmailAndPassword(email, senha)
+                            .addOnCompleteListener(CadastroActivity.this, new OnCompleteListener<AuthResult>() {
+                                @Override
+                                public void onComplete(@NonNull Task<AuthResult> task) {
+                                    Log.d("Log: ", "createUserWithEmail:onComplete:" + task.isSuccessful());
+
+                                    // If sign in fails, display a message to the user. If sign in succeeds
+                                    // the auth state listener will be notified and logic to handle the
+                                    // signed in user can be handled in the listener.
+                                    if (!task.isSuccessful()) {
+                                        Toast.makeText(CadastroActivity.this, task.getException().getLocalizedMessage(),
+                                                Toast.LENGTH_SHORT).show();
+                                    } else {
+                                        Toast.makeText(CadastroActivity.this, R.string.cadastrosucesso,
+                                                Toast.LENGTH_SHORT).show();
+                                    }
+
                                 }
-
-                            }
-                        });
+                            });
+                }
             }
         });
     }

@@ -43,7 +43,9 @@ public class LoginActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 Intent it = new Intent(LoginActivity.this , CadastroActivity.class);
+                it.setFlags(Intent.FLAG_ACTIVITY_NO_HISTORY);
                 startActivity(it);
+                finish();
             }
         });
 
@@ -53,23 +55,29 @@ public class LoginActivity extends AppCompatActivity {
                 String email = loginEmailEditText.getText().toString();
                 String senha = senhaEmailEditText.getText().toString();
 
-                mAuth.signInWithEmailAndPassword(email, senha)
-                        .addOnCompleteListener(LoginActivity.this, new OnCompleteListener<AuthResult>() {
-                            @Override
-                            public void onComplete(@NonNull Task<AuthResult> task) {
-                                Log.d("Logado", "signInWithEmail:onComplete:" + task.isSuccessful());
+                if (email.isEmpty() || email == null || senha.isEmpty() || senha == null) {
+                    Toast.makeText(LoginActivity.this, R.string.mensagemVazio,
+                            Toast.LENGTH_SHORT).show();
+                } else {
 
-                                // If sign in fails, display a message to the user. If sign in succeeds
-                                // the auth state listener will be notified and logic to handle the
-                                // signed in user can be handled in the listener.
-                                if (!task.isSuccessful()) {
-                                    Log.w("Falhou", "signInWithEmail:failed", task.getException());
-                                    Toast.makeText(LoginActivity.this, task.getException().getLocalizedMessage(),
-                                            Toast.LENGTH_SHORT).show();
+                    mAuth.signInWithEmailAndPassword(email, senha)
+                            .addOnCompleteListener(LoginActivity.this, new OnCompleteListener<AuthResult>() {
+                                @Override
+                                public void onComplete(@NonNull Task<AuthResult> task) {
+                                    Log.d("Logado", "signInWithEmail:onComplete:" + task.isSuccessful());
+
+                                    // If sign in fails, display a message to the user. If sign in succeeds
+                                    // the auth state listener will be notified and logic to handle the
+                                    // signed in user can be handled in the listener.
+                                    if (!task.isSuccessful()) {
+                                        Log.w("Falhou", "signInWithEmail:failed", task.getException());
+                                        Toast.makeText(LoginActivity.this, task.getException().getLocalizedMessage(),
+                                                Toast.LENGTH_SHORT).show();
+                                    }
+
                                 }
-
-                            }
-                        });
+                            });
+                }
             }
         });
 
@@ -82,6 +90,7 @@ public class LoginActivity extends AppCompatActivity {
                     // User is signed in
                     Log.d("Logado:", "onAuthStateChanged:signed_in:" + user.getUid());
                     Intent it = new Intent(LoginActivity.this, HomeActivity.class);
+                    it.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
                     startActivity(it);
                 } else {
                     // User is signed out

@@ -4,4 +4,5 @@
     <string name="logar">Logar</string>
     <string name="logout">Logout</string>
     <string name="cadastrosucesso">Cadastro realizado com sucesso</string>
+    <string name="mensagemVazio">Campo de email ou senha vazio.</string>
 </resources>

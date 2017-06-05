@@ -41,10 +41,8 @@ public class CadastroActivity extends AppCompatActivity {
                 FirebaseUser user = firebaseAuth.getCurrentUser();
                 if (user != null) {
                     // User is signed in
-                    Intent it = new Intent(CadastroActivity.this, LoginActivity.class);
                     FirebaseAuth.getInstance().signOut();
-                    it.setFlags(Intent.FLAG_ACTIVITY_NO_HISTORY);
-                    startActivity(it);
+                    finish();
                     Log.d("Signed in: ", "onAuthStateChanged:signed_in:" + user.getUid());
                 } else {
                     // User is signed out

@@ -45,7 +45,6 @@ public class LoginActivity extends AppCompatActivity {
                 Intent it = new Intent(LoginActivity.this , CadastroActivity.class);
                 it.setFlags(Intent.FLAG_ACTIVITY_NO_HISTORY);
                 startActivity(it);
-                finish();
             }
         });
 

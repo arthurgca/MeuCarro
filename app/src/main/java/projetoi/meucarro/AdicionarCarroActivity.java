@@ -73,7 +73,7 @@ public class AdicionarCarroActivity extends AppCompatActivity {
                 for (DataSnapshot carro : dataSnapshot.getChildren()) {
                     Carro carro1 = carro.getValue(Carro.class);
                     carrosList.add(carro1);
-                    carrosNomeList.add(carro1.nome);
+                    carrosNomeList.add(carro1.nome + " || " + carro1.motor + " || " + carro1.modelo);
                     adapter.notifyDataSetChanged();
                 }
             }

@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="projetoi.meucarro.AdicionarCarroActivity">
+
+    <Spinner
+        android:id="@+id/adicionarCarroSpinner"
+        android:layout_width="match_parent"
+        android:layout_height="?attr/actionBarSize"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentTop="true" />
+
+    <TextView
+        android:id="@+id/adicionarCarroNome"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/adicionarCarroSpinner"
+        android:textAppearance="@android:style/TextAppearance.Large"
+        android:layout_toEndOf="@+id/adicionarCarroModelo"
+        android:layout_alignParentStart="true" />
+
+    <TextView
+        android:id="@+id/adicionarCarroModelo"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentStart="true"
+        android:layout_below="@+id/adicionarCarroNome"
+        android:textAppearance="@android:style/TextAppearance.Large" />
+
+    <TextView
+        android:id="@+id/adicionarCarroMotor"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignEnd="@+id/adicionarCarroModelo"
+        android:layout_below="@+id/adicionarCarroModelo"
+        android:textAppearance="@android:style/TextAppearance.Large" />
+
+    <TextView
+        android:id="@+id/adicionarCarroAnoFabricacao"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignEnd="@+id/adicionarCarroMotor"
+        android:layout_below="@+id/adicionarCarroMotor"
+        android:textAppearance="@android:style/TextAppearance.Large" />
+
+    <TextView
+        android:id="@+id/adicionarCarroAnoModelo"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentStart="true"
+        android:layout_below="@+id/adicionarCarroAnoFabricacao"
+        android:textAppearance="@android:style/TextAppearance.Large" />
+
+    <TextView
+        android:id="@+id/adicionarCarroCombustivel"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignEnd="@+id/adicionarCarroAnoModelo"
+        android:layout_below="@+id/adicionarCarroAnoModelo"
+        android:textAppearance="@android:style/TextAppearance.Large" />
+
+    <Button
+        android:id="@+id/confirmaAdicionarCarro"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentStart="true"
+        android:text="Adicionar"
+        android:layout_alignParentEnd="true" />
+
+</RelativeLayout>

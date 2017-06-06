@@ -5,5 +5,5 @@
     <string name="logout">Logout</string>
     <string name="cadastrosucesso">Cadastro realizado com sucesso</string>
     <string name="mensagemVazio">Campo de email ou senha vazio.</string>
-    <string name="title_activity_home">Home</string>
+    <string name="title_activity_home">MeuCarro</string>
 </resources>

@@ -14,7 +14,10 @@ import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseAuthException;
 import com.google.firebase.auth.FirebaseUser;
+
+import projetoi.meucarro.utils.FormatadorErros;
 
 public class LoginActivity extends AppCompatActivity {
 
@@ -69,8 +72,9 @@ public class LoginActivity extends AppCompatActivity {
                                     // the auth state listener will be notified and logic to handle the
                                     // signed in user can be handled in the listener.
                                     if (!task.isSuccessful()) {
-                                        Log.w("Falhou", "signInWithEmail:failed", task.getException());
-                                        Toast.makeText(LoginActivity.this, task.getException().getLocalizedMessage(),
+                                        FirebaseAuthException erro = ((FirebaseAuthException) task.getException());
+                                        String errorMessage = FormatadorErros.getAuthMessage(erro);
+                                        Toast.makeText(LoginActivity.this, errorMessage,
                                                 Toast.LENGTH_SHORT).show();
                                     }
 

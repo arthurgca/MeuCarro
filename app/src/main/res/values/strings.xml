@@ -6,4 +6,10 @@
     <string name="cadastrosucesso">Cadastro realizado com sucesso</string>
     <string name="mensagemVazio">Campo de email ou senha vazio.</string>
     <string name="title_activity_home">MeuCarro</string>
+    <string name="calculate_text">Calcular</string>
+    <string name="alcohol_text">Álcool</string>
+    <string name="gas_text">Gasolina</string>
+    <string name="number_format_exception">Insira um valor válido</string>
+    <string name="brazilian_currency_symbol">R$</string>
+
 </resources>

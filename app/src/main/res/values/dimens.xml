@@ -1,3 +1,6 @@
 <resources>
     <dimen name="fab_margin">16dp</dimen>
+    <dimen name="number_text_field_size">120dp</dimen>
+    <dimen name="header_size">30sp</dimen>
+    <dimen name="subheader_size">18sp</dimen>
 </resources>

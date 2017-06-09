@@ -1,7 +1,10 @@
 package projetoi.meucarro;
 
+import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -47,8 +50,26 @@ public class GasCalculatorActivity extends AppCompatActivity {
         this.resultText = (TextView) findViewById(R.id.resultTextView);
         this.calculateButton = (Button) findViewById(R.id.buttonCalculate);
 
-        this.myGasStation = new GasStation(0.0, 0.0);
-        this.resultText.setText("");
+        this.myGasStation = new GasStation(0.000, 0.000);
+
+        //this.resultText.setText("");
+
+/*        TextWatcher textWatcher = new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+
+            }
+        };
+
+        gasValue.addTextChangedListener(textWatcher);*/
 
         calculateButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -71,8 +92,10 @@ public class GasCalculatorActivity extends AppCompatActivity {
                 if (validField) {
                     if (myGasStation.isGasCheaper()) {
                         resultText.setText(getResources().getText(R.string.gas_text));
+                        resultText.setTextColor(ContextCompat.getColor(getApplicationContext(), R.color.colorGas));
                     } else {
                         resultText.setText(getResources().getText(R.string.alcohol_text));
+                        resultText.setTextColor(ContextCompat.getColor(getApplicationContext(), R.color.colorAlcohol));
                     }
                 }
 

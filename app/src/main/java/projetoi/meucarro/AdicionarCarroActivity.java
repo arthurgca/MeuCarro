@@ -19,18 +19,17 @@ import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
 
-import projetoi.meucarro.models.Carro;
+
 import projetoi.meucarro.models.CarroUser;
+import projetoi.meucarro.models.Gasto;
 
 public class AdicionarCarroActivity extends AppCompatActivity {
 
-    private Spinner spinner;
-    private TextView nomeText;
+    private Spinner spinnerMarca;
+    private Spinner spinnerModelo;
+
+    private TextView marcaText;
     private TextView modeloText;
-    private TextView motorText;
-    private TextView anoFabricacaoText;
-    private TextView anoModeloText;
-    private TextView combustivelText;
     private Button adicionarButton;
     private FirebaseAuth mAuth;
 
@@ -40,42 +39,42 @@ public class AdicionarCarroActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_adicionar_carro);
 
-        spinner = (Spinner) findViewById(R.id.adicionarCarroSpinner);
+        spinnerMarca = (Spinner) findViewById(R.id.adicionarCarroSpinnerMarca);
+        spinnerModelo = (Spinner) findViewById(R.id.adicionarCarroSpinnerModelo);
+
         mAuth = FirebaseAuth.getInstance();
-
-
 
         adicionarButton = (Button) findViewById(R.id.confirmaAdicionarCarro);
 
-        nomeText = (TextView) findViewById(R.id.adicionarCarroNome);
+        marcaText = (TextView) findViewById(R.id.adicionarCarroMarca);
         modeloText = (TextView) findViewById(R.id.adicionarCarroModelo);
-        motorText = (TextView) findViewById(R.id.adicionarCarroMotor);
-        anoFabricacaoText = (TextView) findViewById(R.id.adicionarCarroAnoFabricacao);
-        anoModeloText = (TextView) findViewById(R.id.adicionarCarroAnoModelo);
-        combustivelText = (TextView) findViewById(R.id.adicionarCarroCombustivel);
+
+        final ArrayList<String> carrosModeloList = new ArrayList<>();
+        final ArrayList<String> carrosMarcaList = new ArrayList<>();
+
+        final ArrayAdapter<String> adapterMarca = new ArrayAdapter<>(this, android.R.layout.simple_spinner_item, carrosMarcaList);
+        final ArrayAdapter<String> adapterModelo = new ArrayAdapter<>(this, android.R.layout.simple_spinner_item, carrosModeloList);
 
 
+        adapterMarca.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        spinnerMarca.setAdapter(adapterMarca);
 
-        final ArrayList<String> carrosNomeList = new ArrayList<>();
-        final ArrayList<Carro> carrosList = new ArrayList<>();
-        final ArrayAdapter<String> adapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_item, carrosNomeList);
-        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        spinner.setAdapter(adapter);
+        adapterModelo.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        spinnerModelo.setAdapter(adapterModelo);
 
         FirebaseDatabase database = FirebaseDatabase.getInstance();
         final DatabaseReference carrosRef = database.getReference().child("carros");
         final DatabaseReference usersRef = database.getReference().child("users");
 
 
-        final ValueEventListener spinnerListener = new ValueEventListener() {
+        final ValueEventListener spinnerMarcaListener = new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
-                for (DataSnapshot carro : dataSnapshot.getChildren()) {
-                    Carro carro1 = carro.getValue(Carro.class);
-                    carrosList.add(carro1);
-                    carrosNomeList.add(carro1.nome + " || " + carro1.motor + " || " + carro1.modelo);
-                    adapter.notifyDataSetChanged();
+                for (DataSnapshot marcas : dataSnapshot.getChildren()) {
+                    carrosMarcaList.add(marcas.getKey());
+                    adapterMarca.notifyDataSetChanged();
                 }
+
             }
 
             @Override
@@ -84,30 +83,46 @@ public class AdicionarCarroActivity extends AppCompatActivity {
             }
         };
 
-        carrosRef.addValueEventListener(spinnerListener);
+        carrosRef.addValueEventListener(spinnerMarcaListener);
 
-        spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+        spinnerMarca.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
-            public void onItemSelected(AdapterView<?> parentView, View selectedItemView, int position, long id) {
-                nomeText.setText(carrosList.get(position).nome);
-                modeloText.setText(carrosList.get(position).modelo);
-                motorText.setText(carrosList.get(position).motor);
-                anoFabricacaoText.setText(carrosList.get(position).anoFabricacao);
-                anoModeloText.setText(carrosList.get(position).anoModelo);
-                combustivelText.setText(carrosList.get(position).combustivel);
+            public void onItemSelected(AdapterView<?> parent, View view, int position, final long id) {
+                carrosModeloList.clear();
+                DatabaseReference modelosRef = carrosRef.child(carrosMarcaList.get(position));
+                final ValueEventListener spinnerModeloListener = new ValueEventListener() {
+                    @Override
+                    public void onDataChange(DataSnapshot dataSnapshot) {
+                        for (DataSnapshot ids : dataSnapshot.getChildren()) {
+                            for (DataSnapshot modelo : ids.getChildren()) {
+                                carrosModeloList.add(modelo.getValue().toString());
+                                adapterModelo.notifyDataSetChanged();
+                            }
+                        }
+
+                    }
+
+                    @Override
+                    public void onCancelled(DatabaseError databaseError) {
+                        Log.w("Nome", "loadPost:onCancelled", databaseError.toException());
+                    }
+                };
+                modelosRef.addValueEventListener(spinnerModeloListener);
             }
 
             @Override
-            public void onNothingSelected(AdapterView<?> parentView) {
-                // your code here
-            }
+            public void onNothingSelected(AdapterView<?> parent) {
 
+            }
         });
+
+
 
         adicionarButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                CarroUser carroUser = new CarroUser(carrosList.get(spinner.getSelectedItemPosition()), 0);
+                String modeloCarroSelecionado = carrosModeloList.get(spinnerModelo.getSelectedItemPosition());
+                CarroUser carroUser = new CarroUser(modeloCarroSelecionado, 0, new ArrayList<Gasto>());
                 usersRef.child(mAuth.getCurrentUser().getUid()).child("carrosList").push().setValue(carroUser);
                 finish();
             }

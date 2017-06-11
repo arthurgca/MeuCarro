@@ -3,6 +3,10 @@
     xmlns:android="http://schemas.android.com/apk/res/android">
 
     <item
+        android:id="@+id/menu_trocar_carro"
+        android:title="@string/trocar_carro_string" />
+
+    <item
         android:id="@+id/menu_logout"
-        android:title="Logout" />
+        android:title="@string/logout_menu" />
 </menu>

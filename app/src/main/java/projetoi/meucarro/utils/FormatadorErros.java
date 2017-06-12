@@ -2,24 +2,22 @@ package projetoi.meucarro.utils;
 
 import com.google.firebase.auth.FirebaseAuthException;
 
-/**
- * Created by Arthur on 07/06/2017.
- */
 
 public class FormatadorErros {
 
     public static String getAuthMessage(FirebaseAuthException exc) {
         String errorCode = exc.getErrorCode();
-        if (errorCode.equals("ERROR_INVALID_EMAIL")) {
-            return "O endereço de email está mal formatado.";
-        } else if (errorCode.equals("ERROR_WRONG_PASSWORD")) {
-            return "A senha é inválida ou o usuário não tem uma senha";
-        } else if (errorCode.equals("ERROR_EMAIL_ALREADY_IN_USE")) {
-            return "O endereço de email ja está em uso por outra conta.";
-        } else if (errorCode.equals("ERROR_WEAK_PASSWORD")) {
-            return "A senha inserida é inválida.";
-        } else {
-            return exc.getLocalizedMessage();
+        switch (errorCode) {
+            case "ERROR_INVALID_EMAIL":
+                return "O endereço de email está mal formatado.";
+            case "ERROR_WRONG_PASSWORD":
+                return "A senha é inválida ou o usuário não tem uma senha";
+            case "ERROR_EMAIL_ALREADY_IN_USE":
+                return "O endereço de email ja está em uso por outra conta.";
+            case "ERROR_WEAK_PASSWORD":
+                return "A senha inserida é inválida.";
+            default:
+                return exc.getLocalizedMessage();
         }
     }
 

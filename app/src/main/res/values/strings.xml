@@ -2,7 +2,6 @@
     <string name="app_name">MeuCarro</string>
     <string name="cadastrar">Cadastrar</string>
     <string name="logar">Logar</string>
-    <string name="logout">Logout</string>
     <string name="cadastrosucesso">Cadastro realizado com sucesso</string>
     <string name="mensagemVazio">Campo de email ou senha vazio.</string>
     <string name="title_activity_home">MeuCarro</string>
@@ -14,5 +13,12 @@
     <string name="default_price">0.000</string>
     <string name="trocar_carro_string">Trocar carro</string>
     <string name="logout_string">Logout</string>
+    <string name="adicionar_carro_text_add">Adicionar</string>
+    <string name="adicionar_carro_text_1">Carros cadastados:</string>
+    <string name="adicionar_carro_text_2">Dados sobre o carro:</string>
+    <string name="email_hint">email</string>
+    <string name="senha_hint">senha</string>
+    <string name="home_text1">Seus carros</string>
+    <string name="login_activity_signuptext">Cadastro</string>
 
 </resources>

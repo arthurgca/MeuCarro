@@ -2,10 +2,6 @@ package projetoi.meucarro.models;
 
 import java.util.Date;
 
-/**
- * Created by Arthur on 11/06/2017.
- */
-
 public class Gasto {
 
     public String descricao;

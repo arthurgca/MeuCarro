@@ -2,9 +2,6 @@ package projetoi.meucarro.models;
 
 import java.util.List;
 
-/**
- * Created by Arthur on 05/06/2017.
- */
 
 public class CarroUser {
     public String modelo;

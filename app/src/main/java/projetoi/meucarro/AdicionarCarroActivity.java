@@ -1,5 +1,6 @@
 package projetoi.meucarro;
 
+import android.app.ProgressDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
@@ -67,6 +68,10 @@ public class AdicionarCarroActivity extends AppCompatActivity {
         final DatabaseReference usersRef = database.getReference().child("users");
 
 
+        final ProgressDialog progressDialog = new ProgressDialog(AdicionarCarroActivity.this);
+        progressDialog.setMessage("Carregando dados...");
+        progressDialog.show();
+
         final ValueEventListener spinnerMarcaListener = new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
@@ -74,7 +79,7 @@ public class AdicionarCarroActivity extends AppCompatActivity {
                     carrosMarcaList.add(marcas.getKey());
                     adapterMarca.notifyDataSetChanged();
                 }
-
+                progressDialog.hide();
             }
 
             @Override
@@ -84,6 +89,8 @@ public class AdicionarCarroActivity extends AppCompatActivity {
         };
 
         carrosRef.addValueEventListener(spinnerMarcaListener);
+
+
 
         spinnerMarca.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override

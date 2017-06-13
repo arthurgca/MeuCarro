@@ -34,7 +34,8 @@
         android:id="@+id/homeListView"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/textViewListGastos" />
+        android:layout_below="@+id/textViewListGastos"
+        android:layout_alignParentStart="true" />
 
     <TextView
         android:id="@+id/textViewListGastos"
@@ -42,7 +43,7 @@
         android:layout_height="wrap_content"
         android:text="@string/lista_de_gastos"
         android:textAppearance="@style/Base.TextAppearance.AppCompat.Large"
-        android:layout_below="@+id/textViewSeusCarros"
+        android:layout_below="@+id/kmsRodadosHomeText"
         android:layout_alignParentStart="true" />
 
     <android.support.design.widget.FloatingActionButton
@@ -64,6 +65,25 @@
         android:text=""
         android:textAppearance="@android:style/TextAppearance.Large"
         android:layout_toEndOf="@+id/textViewSeusCarros"
-        android:layout_above="@+id/textViewListGastos" />
+        android:layout_above="@+id/kmsRodadosHomeText" />
+
+    <TextView
+        android:id="@+id/kmsRodadosHomeText"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="@android:style/TextAppearance.Large"
+        android:text="@string/km_s_rodados_home"
+        android:layout_below="@+id/textViewSeusCarros"
+        android:layout_alignParentStart="true" />
+
+    <TextView
+        android:id="@+id/qteKmsRodados"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_above="@+id/textViewListGastos"
+        android:layout_alignParentEnd="true"
+        android:layout_below="@+id/home_nome_carro"
+        android:text=""
+        android:textAppearance="@android:style/TextAppearance.Large" />
 
 </RelativeLayout>

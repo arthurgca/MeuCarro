@@ -3,7 +3,6 @@ package projetoi.meucarro;
 import android.app.ProgressDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.RadioButton;
@@ -19,7 +18,6 @@ import com.google.firebase.database.ValueEventListener;
 import java.util.ArrayList;
 
 import projetoi.meucarro.models.CarroUser;
-import projetoi.meucarro.models.Gasto;
 
 public class TrocarCarroActivity extends AppCompatActivity {
 

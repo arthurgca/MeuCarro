@@ -35,8 +35,7 @@
         android:layout_height="wrap_content"
         android:layout_alignParentEnd="true"
         android:layout_below="@+id/dialogValorEdit"
-        android:ems="10"
-        android:inputType="date" />
+        android:ems="10" />
 
     <TextView
         android:id="@+id/dialogDataText"
@@ -52,8 +51,28 @@
         android:id="@+id/dialogAdicionar"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:text="@string/dialog_adicionar_button"
+        android:layout_below="@+id/quilometragemEdit"
+        android:layout_centerHorizontal="true" />
+
+    <TextView
+        android:id="@+id/quilometragemText"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/quilometragem_atual"
+        android:textAppearance="@android:style/TextAppearance.Large"
+        android:layout_alignBaseline="@+id/quilometragemEdit"
+        android:layout_alignBottom="@+id/quilometragemEdit"
+        android:layout_alignParentStart="true" />
+
+    <EditText
+        android:id="@+id/quilometragemEdit"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:ems="10"
+        android:inputType="number"
         android:layout_below="@+id/dialogDataButton"
-        android:layout_centerHorizontal="true"
-        android:text="@string/dialog_adicionar_button" />
+        android:layout_alignParentEnd="true"
+        android:layout_alignStart="@+id/dialogDataButton" />
 
 </RelativeLayout>

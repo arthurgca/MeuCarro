@@ -3,6 +3,7 @@ package projetoi.meucarro.models;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.Locale;
 
 public class Gasto {
 
@@ -22,7 +23,7 @@ public class Gasto {
 
     @Override
     public String toString() {
-        DateFormat df = new SimpleDateFormat("dd/MM/yyyy");
+        DateFormat df = new SimpleDateFormat("dd/MM/yyyy", Locale.US);
         return descricao + " || " + df.format(data) + " || " + valor;
     }
 }

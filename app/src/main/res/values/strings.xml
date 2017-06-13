@@ -20,7 +20,6 @@
     <string name="senha_hint">senha</string>
     <string name="home_text1">Carro atual:</string>
     <string name="login_activity_signuptext">Cadastro</string>
-    <string name="home_add_car">Adicione um carro para começar.</string>
     <string name="lista_de_gastos">Histórico de gastos</string>
     <string name="menu_adicionar_carro_string">Adicionar carro</string>
     <string name="trocar_carro">Trocar</string>
@@ -29,5 +28,9 @@
     <string name="dialog_data">Data</string>
     <string name="dialog_valor">Valor</string>
     <string name="dialog_adicionar_button">Adicionar</string>
+    <string name="valor_gasto_vazio">Valor do gasto ou quilometragem vazio.</string>
+    <string name="quilometragem_atual">Rodagem:</string>
+    <string name="erro_nova_quilometragem">Quilometragem nova não pode ser menor que já registrada.</string>
+    <string name="km_s_rodados_home">Km\'s Rodados</string>
 
 </resources>

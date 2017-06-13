@@ -1,7 +1,5 @@
 package projetoi.meucarro;
 
-import android.app.DatePickerDialog;
-import android.app.Dialog;
 import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.Bundle;
@@ -13,11 +11,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ArrayAdapter;
-import android.widget.Button;
-import android.widget.DatePicker;
-import android.widget.EditText;
 import android.widget.ListView;
-import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -29,12 +23,9 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Calendar;
 import java.util.Date;
-import java.util.GregorianCalendar;
-import java.util.List;
 
+import projetoi.meucarro.dialog.AdicionarGastoDialog;
 import projetoi.meucarro.models.CarroUser;
 import projetoi.meucarro.models.Gasto;
 
@@ -53,6 +44,7 @@ public class HomeActivity extends AppCompatActivity {
     private DatabaseReference carrosUserRef;
     private String lastCarId;
     private FloatingActionButton fab;
+    private TextView qteRodagem;
 
 
     @Override
@@ -75,6 +67,7 @@ public class HomeActivity extends AppCompatActivity {
         updateListView();
 
         nomeDoCarroTextView = (TextView) findViewById(R.id.home_nome_carro);
+        qteRodagem = (TextView) findViewById(R.id.qteKmsRodados);
 
         carrosUserRef.addValueEventListener(carrosUserListener);
 
@@ -101,10 +94,13 @@ public class HomeActivity extends AppCompatActivity {
                     lastCarId = dataSnapshot.child("lastCar").getValue().toString();
                     carroUser = dataSnapshot.child("carrosList").child(lastCarId).getValue(CarroUser.class);
                     nomeDoCarroTextView.setText(carroUser.modelo);
+                    qteRodagem.setText(String.valueOf(carroUser.kmRodados));
 
-                    for (Gasto gasto : carroUser.listaGastos) {
-                        carroGastosList.add(gasto);
-                        adapter.notifyDataSetChanged();
+                    if (carroUser.listaGastos != null) {
+                        for (Gasto gasto : carroUser.listaGastos) {
+                            carroGastosList.add(gasto);
+                            adapter.notifyDataSetChanged();
+                        }
                     }
 
 
@@ -123,56 +119,9 @@ public class HomeActivity extends AppCompatActivity {
     }
 
     private void adicionarGastoDialog() {
-        final Dialog dialog = new Dialog(HomeActivity.this);
-        dialog.setContentView(R.layout.adicionar_gasto_dialog);
-        final Calendar dataAtual = Calendar.getInstance();
-
-        final Button dataButton = (Button) dialog.findViewById(R.id.dialogDataButton);
-        Button adcButton = (Button) dialog.findViewById(R.id.dialogAdicionar);
-        final Spinner dialogSpinner = (Spinner) dialog.findViewById(R.id.dialogSpinner);
-        final EditText editTextValor = (EditText) dialog.findViewById(R.id.dialogValorEdit);
-
-        List<String> gastosList = Arrays.asList(new String[]{"Combustível", "Troca de Óleo", "Troca de Pneu"});
-        ArrayAdapter<String> dialogAdapter = new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, gastosList);
-
-        dialogSpinner.setAdapter(dialogAdapter);
-
-        dataButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                final DatePickerDialog.OnDateSetListener listener = new DatePickerDialog.OnDateSetListener() {
-                    @Override
-                    public void onDateSet(DatePicker view, int year, int month, int dayOfMonth) {
-                        dataButton.setText(dayOfMonth+"/"+month+"/"+year);
-                        Calendar pagamento = Calendar.getInstance();
-                        pagamento.set(year, month, dayOfMonth);
-                        dataEscolhida = pagamento.getTime();
-                    }
-                };
-
-                DatePickerDialog datePickerDialog = new DatePickerDialog(
-                        HomeActivity.this, listener, dataAtual.get(Calendar.YEAR), dataAtual.get(Calendar.MONTH),
-                        dataAtual.get(Calendar.DAY_OF_MONTH));
-                datePickerDialog.show();
-
-            }
-        });
-
-        adcButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Gasto novoGasto = new Gasto(dialogSpinner.getSelectedItem().toString(), dataEscolhida,
-                        Float.valueOf(editTextValor.getText().toString()));
-                if (carroUser.listaGastos == null) {
-                    carroUser.listaGastos = new ArrayList<>();
-                }
-                carroUser.listaGastos.add(novoGasto);
-                carrosUserRef.child("carrosList").child(lastCarId).setValue(carroUser);
-                dialog.dismiss();
-            }
-        });
-
-        dialog.show();
+        AdicionarGastoDialog adicionarGastoDialog = new AdicionarGastoDialog(HomeActivity.this);
+        adicionarGastoDialog.setInfo(carroUser, lastCarId);
+        adicionarGastoDialog.show();
     }
 
 

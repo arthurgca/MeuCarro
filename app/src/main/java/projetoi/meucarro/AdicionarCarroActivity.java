@@ -8,6 +8,7 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.Spinner;
 import android.widget.TextView;
 
@@ -28,6 +29,9 @@ public class AdicionarCarroActivity extends AppCompatActivity {
 
     private Spinner spinnerMarca;
     private Spinner spinnerModelo;
+    private Spinner spinnerAno;
+
+    private EditText placa;
 
     private TextView marcaText;
     private TextView modeloText;
@@ -42,6 +46,9 @@ public class AdicionarCarroActivity extends AppCompatActivity {
 
         spinnerMarca = (Spinner) findViewById(R.id.adicionarCarroSpinnerMarca);
         spinnerModelo = (Spinner) findViewById(R.id.adicionarCarroSpinnerModelo);
+        spinnerAno = (Spinner) findViewById(R.id.adicionarCarroSpinnerAno);
+
+        placa = (EditText) findViewById(R.id.editTextPlaca);
 
         mAuth = FirebaseAuth.getInstance();
 
@@ -55,13 +62,15 @@ public class AdicionarCarroActivity extends AppCompatActivity {
 
         final ArrayAdapter<String> adapterMarca = new ArrayAdapter<>(this, android.R.layout.simple_spinner_item, carrosMarcaList);
         final ArrayAdapter<String> adapterModelo = new ArrayAdapter<>(this, android.R.layout.simple_spinner_item, carrosModeloList);
-
+        final ArrayAdapter adapterAno =  ArrayAdapter.createFromResource(this, R.array.anoCarro, android.R.layout.simple_spinner_item);
 
         adapterMarca.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         spinnerMarca.setAdapter(adapterMarca);
 
         adapterModelo.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         spinnerModelo.setAdapter(adapterModelo);
+
+        spinnerAno.setAdapter(adapterAno);
 
         FirebaseDatabase database = FirebaseDatabase.getInstance();
         final DatabaseReference carrosRef = database.getReference().child("carros");
@@ -129,7 +138,9 @@ public class AdicionarCarroActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 String modeloCarroSelecionado = carrosModeloList.get(spinnerModelo.getSelectedItemPosition());
-                CarroUser carroUser = new CarroUser(modeloCarroSelecionado, 0, new ArrayList<Gasto>());
+                String modeloAnoSelecionado = spinnerAno.getSelectedItem().toString();
+                String placaCarro = placa.getText().toString();
+                CarroUser carroUser = new CarroUser(modeloCarroSelecionado, modeloAnoSelecionado, placaCarro, 0, new ArrayList<Gasto>());
                 String uidLastCar = usersRef.child(mAuth.getCurrentUser().getUid()).child("carrosList").push().getKey();
                 usersRef.child(mAuth.getCurrentUser().getUid()).child("carrosList").child(uidLastCar).setValue(carroUser);
                 usersRef.child(mAuth.getCurrentUser().getUid()).child("lastCar").setValue(uidLastCar);

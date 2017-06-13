@@ -79,7 +79,7 @@ public class AdicionarCarroActivity extends AppCompatActivity {
                     carrosMarcaList.add(marcas.getKey());
                     adapterMarca.notifyDataSetChanged();
                 }
-                progressDialog.hide();
+                progressDialog.dismiss();
             }
 
             @Override
@@ -130,7 +130,9 @@ public class AdicionarCarroActivity extends AppCompatActivity {
             public void onClick(View v) {
                 String modeloCarroSelecionado = carrosModeloList.get(spinnerModelo.getSelectedItemPosition());
                 CarroUser carroUser = new CarroUser(modeloCarroSelecionado, 0, new ArrayList<Gasto>());
-                usersRef.child(mAuth.getCurrentUser().getUid()).child("carrosList").push().setValue(carroUser);
+                String uidLastCar = usersRef.child(mAuth.getCurrentUser().getUid()).child("carrosList").push().getKey();
+                usersRef.child(mAuth.getCurrentUser().getUid()).child("carrosList").child(uidLastCar).setValue(carroUser);
+                usersRef.child(mAuth.getCurrentUser().getUid()).child("lastCar").setValue(uidLastCar);
                 finish();
             }
         });

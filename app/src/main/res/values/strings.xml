@@ -18,7 +18,13 @@
     <string name="adicionar_carro_text_2">Dados sobre o carro:</string>
     <string name="email_hint">email</string>
     <string name="senha_hint">senha</string>
-    <string name="home_text1">Seus carros</string>
+    <string name="home_text1">Carro atual:</string>
     <string name="login_activity_signuptext">Cadastro</string>
+    <string name="home_add_car">Adicione um carro para começar.</string>
+    <string name="lista_de_gastos">Lista de gastos</string>
+    <string name="menu_adicionar_carro_string">Adicionar carro</string>
+    <string name="trocar_carro">Trocar</string>
+    <string name="home_erro_nenhum_carro">Nenhum carro selecionado, adicione um carro para começar.</string>
+    <string name="menu_calculadora_bicombust">Calculadora Bicombustível</string>
 
 </resources>

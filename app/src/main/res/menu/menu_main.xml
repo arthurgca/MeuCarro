@@ -6,6 +6,14 @@
         android:title="@string/trocar_carro_string" />
 
     <item
+        android:id="@+id/menu_adicionar_carro"
+        android:title="@string/menu_adicionar_carro_string" />
+
+    <item
+        android:id="@+id/menu_calculadora"
+        android:title="@string/menu_calculadora_bicombust" />
+
+    <item
         android:id="@+id/menu_logout"
         android:title="@string/logout_string" />
 </menu>

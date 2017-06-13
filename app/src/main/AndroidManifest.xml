@@ -22,6 +22,7 @@
             android:theme="@style/AppTheme.NoActionBar" />
         <activity android:name=".AdicionarCarroActivity" />
         <activity android:name=".GasCalculatorActivity" />
+        <activity android:name=".TrocarCarroActivity"></activity>
     </application>
 
 </manifest>

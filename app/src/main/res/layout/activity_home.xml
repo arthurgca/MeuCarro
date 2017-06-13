@@ -28,14 +28,22 @@
         android:text="@string/home_text1"
         android:textAppearance="@android:style/TextAppearance.Large"
         android:layout_below="@+id/appBarLayout"
-        android:layout_alignParentEnd="true"
         android:layout_alignParentStart="true" />
 
     <ListView
         android:id="@+id/homeListView"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/textViewSeusCarros" />
+        android:layout_below="@+id/textViewListGastos" />
+
+    <TextView
+        android:id="@+id/textViewListGastos"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/lista_de_gastos"
+        android:textAppearance="@style/Base.TextAppearance.AppCompat.Large"
+        android:layout_below="@+id/textViewSeusCarros"
+        android:layout_alignParentStart="true" />
 
     <android.support.design.widget.FloatingActionButton
         android:id="@+id/fab"
@@ -46,5 +54,16 @@
         android:layout_alignParentBottom="true"
         android:layout_margin="@dimen/fab_margin"
         app:srcCompat="@drawable/ic_add_white_24dp" />
+
+
+    <TextView
+        android:id="@+id/home_nome_carro"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/appBarLayout"
+        android:text=""
+        android:textAppearance="@android:style/TextAppearance.Large"
+        android:layout_toEndOf="@+id/textViewSeusCarros"
+        android:layout_above="@+id/textViewListGastos" />
 
 </RelativeLayout>

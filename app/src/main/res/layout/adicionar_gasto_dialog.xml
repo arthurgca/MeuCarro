@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent" android:layout_height="match_parent">
+
+    <Spinner
+        android:id="@+id/dialogSpinner"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentTop="true" />
+
+    <TextView
+        android:id="@+id/dialogValorText"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/dialog_valor"
+        android:textAppearance="@android:style/TextAppearance.Large"
+        android:layout_alignBaseline="@+id/dialogValorEdit"
+        android:layout_alignBottom="@+id/dialogValorEdit"
+        android:layout_alignParentStart="true" />
+
+    <EditText
+        android:id="@+id/dialogValorEdit"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentEnd="true"
+        android:layout_alignStart="@+id/dialogDataButton"
+        android:layout_below="@+id/dialogSpinner"
+        android:ems="10"
+        android:inputType="numberDecimal" />
+
+    <Button
+        android:id="@+id/dialogDataButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentEnd="true"
+        android:layout_below="@+id/dialogValorEdit"
+        android:ems="10"
+        android:inputType="date" />
+
+    <TextView
+        android:id="@+id/dialogDataText"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/dialog_data"
+        android:textAppearance="@android:style/TextAppearance.Large"
+        android:layout_alignBaseline="@+id/dialogDataButton"
+        android:layout_alignBottom="@+id/dialogDataButton"
+        android:layout_alignParentStart="true" />
+
+    <Button
+        android:id="@+id/dialogAdicionar"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/dialogDataButton"
+        android:layout_centerHorizontal="true"
+        android:text="@string/dialog_adicionar_button" />
+
+</RelativeLayout>

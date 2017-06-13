@@ -60,9 +60,8 @@ public class AdicionarGastoDialog extends Dialog {
         final EditText editTextValor = (EditText) findViewById(R.id.dialogValorEdit);
         final EditText editTextKm = (EditText) findViewById(R.id.quilometragemEdit);
 
-
-        List<String> gastosList = Arrays.asList("Combustível", "Troca de Óleo", "Troca de Pneu");
-        ArrayAdapter dialogAdapter = new ArrayAdapter<>(getContext(), android.R.layout.simple_list_item_1, gastosList);
+        ArrayAdapter dialogAdapter = ArrayAdapter.createFromResource(getContext(), R.array.gastos,
+                android.R.layout.simple_spinner_item);
 
         dialogSpinner.setAdapter(dialogAdapter);
 
@@ -78,10 +77,17 @@ public class AdicionarGastoDialog extends Dialog {
                 final DatePickerDialog.OnDateSetListener listener = new DatePickerDialog.OnDateSetListener() {
                     @Override
                     public void onDateSet(DatePicker view, int year, int month, int dayOfMonth) {
-                        dataButton.setText(dayOfMonth+"/"+month+"/"+year);
                         Calendar pagamento = Calendar.getInstance();
                         pagamento.set(year, month, dayOfMonth);
+                        if (pagamento.compareTo(dataAtual) > 0) {
+                            pagamento = Calendar.getInstance();
+                            Toast.makeText(getContext(), R.string.erro_data_gasto,
+                                    Toast.LENGTH_SHORT).show();
+                        } else {
+                            dataButton.setText(dayOfMonth+"/"+month+"/"+year);
+                        }
                         dataEscolhida = pagamento.getTime();
+
                     }
                 };
 

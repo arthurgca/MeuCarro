@@ -25,6 +25,15 @@
     <string name="trocar_carro">Trocar</string>
     <string name="home_erro_nenhum_carro">Nenhum carro selecionado, adicione um carro para começar.</string>
     <string name="menu_calculadora_bicombust">Calculadora Bicombustível</string>
+    <string name="dialog_data">Data</string>
+    <string name="dialog_valor">Valor</string>
+    <string name="dialog_adicionar_button">Adicionar</string>
+    <string name="valor_gasto_vazio">Valor do gasto ou quilometragem vazio.</string>
+    <string name="quilometragem_atual">Rodagem:</string>
+    <string name="erro_nova_quilometragem">Quilometragem nova não pode ser menor que já registrada.</string>
+    <string name="km_s_rodados_home">Km\'s Rodados</string>
+    <string name="erro_data_gasto">Data escolhida não pode ser posterior ao dia atual.</string>
+
     <string-array name="anoCarro">
         <item>1990</item>
         <item>1991</item>
@@ -55,12 +64,11 @@
         <item>2016</item>
         <item>2017</item>
     </string-array>
-    <string name="dialog_data">Data</string>
-    <string name="dialog_valor">Valor</string>
-    <string name="dialog_adicionar_button">Adicionar</string>
-    <string name="valor_gasto_vazio">Valor do gasto ou quilometragem vazio.</string>
-    <string name="quilometragem_atual">Rodagem:</string>
-    <string name="erro_nova_quilometragem">Quilometragem nova não pode ser menor que já registrada.</string>
-    <string name="km_s_rodados_home">Km\'s Rodados</string>
+    <string-array name="gastos">
+        <item>Combustível</item>
+        <item>Troca de Óleo</item>
+        <item>Troca de Pneu</item>
+    </string-array>
+
 
 </resources>

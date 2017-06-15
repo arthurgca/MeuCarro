@@ -10,6 +10,7 @@
     <string name="gas_text">Gasolina</string>
     <string name="number_format_exception">Insira um valor válido</string>
     <string name="brazilian_currency_symbol">R$</string>
+    <string name="efficiency_text">Eficiência</string>
     <string name="default_price">0.000</string>
     <string name="trocar_carro_string">Trocar carro</string>
     <string name="logout_string">Logout</string>

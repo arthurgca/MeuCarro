@@ -8,6 +8,12 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 
+import com.jjoe64.graphview.GraphView;
+import com.jjoe64.graphview.ValueDependentColor;
+import com.jjoe64.graphview.helper.StaticLabelsFormatter;
+import com.jjoe64.graphview.series.BarGraphSeries;
+import com.jjoe64.graphview.series.DataPoint;
+
 import projetoi.meucarro.R;
 
 public class GasCalculatorActivity extends AppCompatActivity {
@@ -27,16 +33,40 @@ public class GasCalculatorActivity extends AppCompatActivity {
         void setGasPrice(double gasPrice) { this.gasPrice = gasPrice; }
         void setAlcoholPrice(double alcoolPrice) { this.alcoholPrice = alcoolPrice; }
 
+        double getGasParameter() {
+            return this.gasPrice * 0.7;
+        }
+
+        double getAlcoholParameter() {
+            return this.alcoholPrice;
+        }
+
         boolean isGasCheaper() {
-            return this.gasPrice * 0.7 <= this.alcoholPrice;
+            return this.getGasParameter() <= this.alcoholPrice;
+        }
+
+        double getGasEfficiency() {
+            double fuel = (this.getGasParameter() + this.getAlcoholParameter());
+
+            if (fuel <= 0.001) return 0.0;
+            else return 100 - ((100 * this.getGasParameter()) / fuel);
+        }
+
+        double getAlcoholEfficiency() {
+            double fuel = (this.getGasParameter() + this.getAlcoholParameter());
+
+            if (fuel <= 0.001) return 0.0;
+            else return 100 - ((100 * this.getAlcoholParameter()) / fuel);
         }
     }
 
     private EditText gasValue;
     private EditText alcoolValue;
-    private TextView resultText;
     private Button calculateButton;
     private GasStation myGasStation;
+    private GraphView graphView;
+    private BarGraphSeries<DataPoint> series;
+    private StaticLabelsFormatter staticLabelsFormatter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -45,56 +75,73 @@ public class GasCalculatorActivity extends AppCompatActivity {
 
         this.gasValue = (EditText) findViewById(R.id.gasEditText);
         this.alcoolValue = (EditText) findViewById(R.id.alcoolEditText);
-        this.resultText = (TextView) findViewById(R.id.resultTextView);
         this.calculateButton = (Button) findViewById(R.id.buttonCalculate);
+        this.graphView = (GraphView) findViewById(R.id.gasCalculatorGraph);
 
         this.myGasStation = new GasStation(0.000, 0.000);
 
-        //this.resultText.setText("");
+        this.graphView.setTitle(getResources().getString(R.string.efficiency_text));
+        this.graphView.setTitleTextSize(getResources().getDimension(R.dimen.header_4));
 
-/*        TextWatcher textWatcher = new TextWatcher() {
-            @Override
-            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-            }
+        this.graphView.getGridLabelRenderer().setVerticalAxisTitle("%");
 
-            @Override
-            public void onTextChanged(CharSequence s, int start, int before, int count) {
-            }
+        this.graphView.getViewport().setYAxisBoundsManual(true);
+        this.graphView.getViewport().setMinY(0.0);
+        this.graphView.getViewport().setMaxY(100.0);
 
-            @Override
-            public void afterTextChanged(Editable s) {
+        this.staticLabelsFormatter = new StaticLabelsFormatter(graphView);
+        this.staticLabelsFormatter.setHorizontalLabels(new String[] {
+                getResources().getText(R.string.gas_text).toString(),
+                getResources().getText(R.string.alcohol_text).toString()});
 
-            }
-        };
+        this.graphView.getGridLabelRenderer().setLabelFormatter(staticLabelsFormatter);
+        this.graphView.getGridLabelRenderer().setPadding(50);
 
-        gasValue.addTextChangedListener(textWatcher);*/
-
-        calculateButton.setOnClickListener(new View.OnClickListener() {
+        this.calculateButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 boolean validField = true;
 
                 try {
-                    myGasStation.setGasPrice(Double.parseDouble(gasValue.getText().toString()));
+                    double gasPrice = Double.parseDouble(gasValue.getText().toString());
+                    myGasStation.setGasPrice(gasPrice);
                 } catch (NumberFormatException e) {
                     gasValue.setError(getResources().getString(R.string.number_format_exception));
                     validField = false;
                 }
                 try {
-                    myGasStation.setAlcoholPrice(Double.parseDouble(alcoolValue.getText().toString()));
+                    double alcoholPrice = Double.parseDouble(alcoolValue.getText().toString());
+                    myGasStation.setAlcoholPrice(alcoholPrice);
                 } catch (NumberFormatException e) {
                     alcoolValue.setError(getResources().getString(R.string.number_format_exception));
                     validField = false;
                 }
 
                 if (validField) {
-                    if (myGasStation.isGasCheaper()) {
-                        resultText.setText(getResources().getText(R.string.gas_text));
-                        resultText.setTextColor(ContextCompat.getColor(getApplicationContext(), R.color.colorGas));
-                    } else {
-                        resultText.setText(getResources().getText(R.string.alcohol_text));
-                        resultText.setTextColor(ContextCompat.getColor(getApplicationContext(), R.color.colorAlcohol));
-                    }
+                    graphView.removeAllSeries();
+                    series = new BarGraphSeries<>(new DataPoint[] {
+                            new DataPoint(1, myGasStation.getGasEfficiency()),
+                            new DataPoint(2, myGasStation.getAlcoholEfficiency())
+                    });
+
+                    series.setAnimated(true);
+                    series.setSpacing(0);
+                    series.setDrawValuesOnTop(true);
+                    series.setValuesOnTopColor(ContextCompat.getColor(getApplicationContext(), R.color.colorBlack));
+                    series.setValueDependentColor(new ValueDependentColor<DataPoint>() {
+                        @Override
+                        public int get(DataPoint data) {
+                            if (data.getX() == 1) {
+                                return ContextCompat.getColor(getApplicationContext(), R.color.colorGas);
+                            } else if (data.getX() == 2) {
+                                return ContextCompat.getColor(getApplicationContext(), R.color.colorAlcohol);
+                            } else {
+                                return ContextCompat.getColor(getApplicationContext(), R.color.colorBlack);
+                            }
+                        }
+                    });
+                    graphView.addSeries(series);
+
                 }
 
             }

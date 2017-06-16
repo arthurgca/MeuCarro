@@ -1,9 +1,16 @@
 package projetoi.meucarro;
 
-import android.support.v4.content.res.TypedArrayUtils;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
+import android.widget.Toast;
 
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 import com.jjoe64.graphview.GraphView;
 import com.jjoe64.graphview.helper.DateAsXAxisLabelFormatter;
 import com.jjoe64.graphview.helper.StaticLabelsFormatter;
@@ -28,41 +35,51 @@ public class ExpensesDataActivity extends AppCompatActivity {
 
     private GraphView expenseByDateGraph;
     private CarroUser currentCar;
+    private DatabaseReference carrosUserRef;
+    private ValueEventListener carrosUserListener;
+    private String lastCarId;
+    private FirebaseAuth mAuth;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_expenses_data);
+        mAuth = FirebaseAuth.getInstance();
 
-        //BEGIN TEST !!!
-        // generate Dates
-        Calendar calendar = Calendar.getInstance();
-        Date d1 = calendar.getTime();
-        calendar.add(Calendar.DATE, 1);
-        Date d2 = calendar.getTime();
-        calendar.add(Calendar.DATE, 1);
-        Date d3 = calendar.getTime();
-        calendar.add(Calendar.DATE, 1);
-        Date d4 = calendar.getTime();
-        calendar.add(Calendar.DATE, 1);
-        Date d5 = calendar.getTime();
-        calendar.add(Calendar.DATE, 1);
-        Date d6 = calendar.getTime();
+        carrosUserListener = new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                if (dataSnapshot.child("lastCar").getValue() != null) {
+                    lastCarId = dataSnapshot.child("lastCar").getValue().toString();
+                    currentCar = dataSnapshot.child("carrosList").child(lastCarId).getValue(CarroUser.class);
 
-        //create expenses
-        List<Gasto> gastos = new ArrayList<Gasto>();
-        gastos.add(new Gasto("a", d1, 10));
-        gastos.add(new Gasto("b", d2, 60));
-        gastos.add(new Gasto("c", d3, 25));
-        gastos.add(new Gasto("d", d4, 80));
-        gastos.add(new Gasto("e", d5, 88));
-        gastos.add(new Gasto("f", d6, 15));
+                    if (currentCar.listaGastos != null) {
+                        initGraph(expenseByDateGraph);
+                    }
 
-        this.currentCar = new CarroUser("modelo", "ano", "placa", 100, gastos);
-        //END TEST !!!
+                    else {
+                        Toast.makeText(ExpensesDataActivity.this, R.string.erro_nenhum_gasto,
+                                Toast.LENGTH_LONG).show();
+                    }
+                }
+
+                else {
+                    Toast.makeText(ExpensesDataActivity.this, R.string.home_erro_nenhum_carro,
+                            Toast.LENGTH_LONG).show();
+                }
+            }
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+                Log.w("Nome", "loadPost:onCancelled", databaseError.toException());
+            }
+        };
+
+        FirebaseDatabase database = FirebaseDatabase.getInstance();
+        carrosUserRef = database.getReference().child("users").child(mAuth.getCurrentUser().getUid());
+        carrosUserRef.addValueEventListener(carrosUserListener);
+
 
         this.expenseByDateGraph = (GraphView) findViewById(R.id.expenseByDateGraphView);
-        this.initGraph(expenseByDateGraph);
     }
 
     private void initGraph(GraphView graphView) {

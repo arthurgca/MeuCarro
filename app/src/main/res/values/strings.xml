@@ -35,6 +35,7 @@
     <string name="erro_nova_quilometragem">Quilometragem nova não pode ser menor que já registrada.</string>
     <string name="km_s_rodados_home">Km\'s Rodados</string>
     <string name="erro_data_gasto">Data escolhida não pode ser posterior ao dia atual.</string>
+    <string name="erro_nenhum_gasto">Nenhum gasto registrado.</string>
 
     <string-array name="anoCarro">
         <item>1990</item>

@@ -23,6 +23,7 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Date;
 
 import projetoi.meucarro.dialog.AdicionarGastoDialog;
@@ -38,7 +39,6 @@ public class HomeActivity extends AppCompatActivity {
     private ArrayAdapter<Gasto> adapter;
     private ValueEventListener carrosUserListener;
     private TextView nomeDoCarroTextView;
-    private Date dataEscolhida;
     private CarroUser carroUser;
     private FirebaseDatabase database;
     private DatabaseReference carrosUserRef;
@@ -99,6 +99,7 @@ public class HomeActivity extends AppCompatActivity {
                     if (carroUser.listaGastos != null) {
                         for (Gasto gasto : carroUser.listaGastos) {
                             carroGastosList.add(gasto);
+                            Collections.sort(carroGastosList, Gasto.compareByData());
                             adapter.notifyDataSetChanged();
                         }
                     }

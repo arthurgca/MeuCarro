@@ -99,7 +99,6 @@ public class HomeActivity extends AppCompatActivity {
                     if (carroUser.listaGastos != null) {
                         for (Gasto gasto : carroUser.listaGastos) {
                             carroGastosList.add(gasto);
-                            Collections.sort(carroGastosList, Gasto.compareByData());
                             adapter.notifyDataSetChanged();
                         }
                     }

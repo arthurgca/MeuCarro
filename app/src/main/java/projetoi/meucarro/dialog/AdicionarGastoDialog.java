@@ -17,12 +17,10 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Calendar;
+import java.util.Collections;
 import java.util.Date;
-import java.util.List;
 
-import projetoi.meucarro.LoginActivity;
 import projetoi.meucarro.R;
 import projetoi.meucarro.models.CarroUser;
 import projetoi.meucarro.models.Gasto;
@@ -118,6 +116,7 @@ public class AdicionarGastoDialog extends Dialog {
                         }
                         carroUser.kmRodados = quilometragemNova;
                         carroUser.listaGastos.add(novoGasto);
+                        Collections.sort(carroUser.listaGastos, Gasto.compareByData());
                         carrosUserRef.child("carrosList").child(lastCarId).setValue(carroUser);
                         dismiss();
                     }

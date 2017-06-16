@@ -13,14 +13,16 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 import com.jjoe64.graphview.GraphView;
 import com.jjoe64.graphview.helper.DateAsXAxisLabelFormatter;
-import com.jjoe64.graphview.helper.StaticLabelsFormatter;
 import com.jjoe64.graphview.series.DataPoint;
 import com.jjoe64.graphview.series.LineGraphSeries;
+
+import java.util.Calendar;
+import java.util.Date;
 
 import projetoi.meucarro.models.CarroUser;
 import projetoi.meucarro.models.Gasto;
 
-public class ExpensesDataActivity extends AppCompatActivity {
+public class ExpensesReportActivity extends AppCompatActivity {
 
     private static int MAX_DAYS = 99999;
 
@@ -34,7 +36,7 @@ public class ExpensesDataActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_expenses_data);
+        setContentView(R.layout.activity_expenses_report);
         mAuth = FirebaseAuth.getInstance();
 
         carrosUserListener = new ValueEventListener() {
@@ -49,13 +51,13 @@ public class ExpensesDataActivity extends AppCompatActivity {
                     }
 
                     else {
-                        Toast.makeText(ExpensesDataActivity.this, R.string.erro_nenhum_gasto,
+                        Toast.makeText(ExpensesReportActivity.this, R.string.erro_nenhum_gasto,
                                 Toast.LENGTH_LONG).show();
                     }
                 }
 
                 else {
-                    Toast.makeText(ExpensesDataActivity.this, R.string.home_erro_nenhum_carro,
+                    Toast.makeText(ExpensesReportActivity.this, R.string.home_erro_nenhum_carro,
                             Toast.LENGTH_LONG).show();
                 }
             }
@@ -75,8 +77,10 @@ public class ExpensesDataActivity extends AppCompatActivity {
 
     private void initGraph(GraphView graphView) {
         graphView.setTitle(getResources().getString(R.string.expanse_by_time));
-        graphView.setTitleTextSize(getResources().getDimension(R.dimen.header_4));
+        graphView.setTitleTextSize(50);
         graphView.getGridLabelRenderer().setVerticalAxisTitle(getResources().getString(R.string.brazilian_currency_symbol));
+        graphView.getGridLabelRenderer().setHumanRounding(false);
+        graphView.getGridLabelRenderer().setHorizontalLabelsAngle(45);
 
         LineGraphSeries<DataPoint> series = new LineGraphSeries<>(new DataPoint[] {});
 
@@ -85,6 +89,8 @@ public class ExpensesDataActivity extends AppCompatActivity {
         }
 
         series.setAnimated(true);
+        series.setDrawBackground(true);
+        series.setDrawDataPoints(true);
         graphView.addSeries(series);
 
         // set date label formatter
@@ -93,11 +99,19 @@ public class ExpensesDataActivity extends AppCompatActivity {
 
         // set manual x bounds to have nice steps
         graphView.getViewport().setXAxisBoundsManual(true);
-        graphView.getViewport().setMinX(this.currentCar.listaGastos.get(0).data.getTime());
-        graphView.getViewport().setMaxX(this.currentCar.listaGastos.get(this.currentCar.listaGastos.size() - 1).data.getTime());
+        if (!this.currentCar.listaGastos.isEmpty()) {
+            Date dt = this.currentCar.listaGastos.get(0).data;
+            Calendar c = Calendar.getInstance();
+            c.setTime(dt);
+            c.add(Calendar.DATE, 30); //30 days on X value each screen space
+            Date dt2 = c.getTime();
+
+            graphView.getViewport().setMinX(dt.getTime());
+            graphView.getViewport().setMaxX(dt2.getTime());
+        }
 
         // enables horizontal scrolling
-        graphView.getViewport().setScalable(true);
+        graphView.getViewport().setScrollable(true);
     }
 
 }

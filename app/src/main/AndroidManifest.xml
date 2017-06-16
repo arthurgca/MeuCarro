@@ -24,7 +24,7 @@
         <activity android:name=".AdicionarCarroActivity" />
         <activity android:name=".GasCalculatorActivity"></activity>
         <activity android:name=".TrocarCarroActivity" />
-        <activity android:name=".ExpensesDataActivity"></activity>
+        <activity android:name=".ExpensesReportActivity"></activity>
     </application>
 
 </manifest>

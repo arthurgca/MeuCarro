@@ -112,7 +112,7 @@ public class GasCalculatorActivity extends AppCompatActivity {
 
     private void initGraph(GraphView graphView) {
         graphView.setTitle(getResources().getString(R.string.efficiency_text));
-        graphView.setTitleTextSize(getResources().getDimension(R.dimen.header_4));
+        graphView.setTitleTextSize(50);
 
         graphView.getGridLabelRenderer().setVerticalAxisTitle("%");
 
@@ -151,6 +151,7 @@ public class GasCalculatorActivity extends AppCompatActivity {
                 }
             }
         });
+
         graphView.addSeries(series);
     }
 }

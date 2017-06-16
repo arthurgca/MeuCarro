@@ -141,22 +141,20 @@ public class HomeActivity extends AppCompatActivity {
             startActivity(it);
             mAuth.signOut();
             finish();
-        }
-
-        if (id == R.id.menu_adicionar_carro) {
+        } else if (id == R.id.menu_adicionar_carro) {
             Intent it = new Intent(HomeActivity.this, AdicionarCarroActivity.class);
             it.setFlags(Intent.FLAG_ACTIVITY_NO_HISTORY);
             startActivity(it);
-        }
-
-        if (id == R.id.menu_trocar_carro) {
+        } else if (id == R.id.menu_trocar_carro) {
             Intent it = new Intent(HomeActivity.this, TrocarCarroActivity.class);
             it.setFlags(Intent.FLAG_ACTIVITY_NO_HISTORY);
             startActivity(it);
-        }
-
-        if (id == R.id.menu_calculadora) {
+        } else if (id == R.id.menu_calculadora) {
             Intent it = new Intent(HomeActivity.this, GasCalculatorActivity.class);
+            it.setFlags(Intent.FLAG_ACTIVITY_NO_HISTORY);
+            startActivity(it);
+        } else if (id == R.id.expenses_report_menu) {
+            Intent it = new Intent(HomeActivity.this, ExpensesReportActivity.class);
             it.setFlags(Intent.FLAG_ACTIVITY_NO_HISTORY);
             startActivity(it);
         }

@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
-<menu xmlns:android="http://schemas.android.com/apk/res/android">
+<menu xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:android="http://schemas.android.com/apk/res/android">
 
     <item
         android:id="@+id/menu_trocar_carro"
@@ -13,6 +14,9 @@
         android:id="@+id/menu_calculadora"
         android:title="@string/menu_calculadora_bicombust" />
 
+    <item
+        android:id="@+id/expenses_report_menu"
+        android:title="Relatório de gastos" />
     <item
         android:id="@+id/menu_logout"
         android:title="@string/logout_string" />

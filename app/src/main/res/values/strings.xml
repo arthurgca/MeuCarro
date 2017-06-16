@@ -12,6 +12,7 @@
     <string name="brazilian_currency_symbol">R$</string>
     <string name="efficiency_text">Eficiência</string>
     <string name="default_price">0.000</string>
+    <string name="expanse_by_time">Despesas/tempo</string>
     <string name="trocar_carro_string">Trocar carro</string>
     <string name="logout_string">Logout</string>
     <string name="adicionar_carro_text_add">Adicionar</string>

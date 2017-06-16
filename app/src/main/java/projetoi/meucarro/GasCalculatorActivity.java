@@ -1,5 +1,6 @@
 package projetoi.meucarro;
 
+import android.graphics.Color;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -76,26 +77,10 @@ public class GasCalculatorActivity extends AppCompatActivity {
         this.gasValue = (EditText) findViewById(R.id.gasEditText);
         this.alcoolValue = (EditText) findViewById(R.id.alcoolEditText);
         this.calculateButton = (Button) findViewById(R.id.buttonCalculate);
-        this.graphView = (GraphView) findViewById(R.id.gasCalculatorGraph);
+        this.graphView = (GraphView) findViewById(R.id.gasCalculatorGraphView);
 
         this.myGasStation = new GasStation(0.000, 0.000);
-
-        this.graphView.setTitle(getResources().getString(R.string.efficiency_text));
-        this.graphView.setTitleTextSize(getResources().getDimension(R.dimen.header_4));
-
-        this.graphView.getGridLabelRenderer().setVerticalAxisTitle("%");
-
-        this.graphView.getViewport().setYAxisBoundsManual(true);
-        this.graphView.getViewport().setMinY(0.0);
-        this.graphView.getViewport().setMaxY(100.0);
-
-        this.staticLabelsFormatter = new StaticLabelsFormatter(graphView);
-        this.staticLabelsFormatter.setHorizontalLabels(new String[] {
-                getResources().getText(R.string.gas_text).toString(),
-                getResources().getText(R.string.alcohol_text).toString()});
-
-        this.graphView.getGridLabelRenderer().setLabelFormatter(staticLabelsFormatter);
-        this.graphView.getGridLabelRenderer().setPadding(50);
+        this.initGraph(this.graphView);
 
         this.calculateButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -118,34 +103,54 @@ public class GasCalculatorActivity extends AppCompatActivity {
                 }
 
                 if (validField) {
-                    graphView.removeAllSeries();
-                    series = new BarGraphSeries<>(new DataPoint[] {
-                            new DataPoint(1, myGasStation.getGasEfficiency()),
-                            new DataPoint(2, myGasStation.getAlcoholEfficiency())
-                    });
-
-                    series.setAnimated(true);
-                    series.setSpacing(0);
-                    series.setDrawValuesOnTop(true);
-                    series.setValuesOnTopColor(ContextCompat.getColor(getApplicationContext(), R.color.colorBlack));
-                    series.setValueDependentColor(new ValueDependentColor<DataPoint>() {
-                        @Override
-                        public int get(DataPoint data) {
-                            if (data.getX() == 1) {
-                                return ContextCompat.getColor(getApplicationContext(), R.color.colorGas);
-                            } else if (data.getX() == 2) {
-                                return ContextCompat.getColor(getApplicationContext(), R.color.colorAlcohol);
-                            } else {
-                                return ContextCompat.getColor(getApplicationContext(), R.color.colorBlack);
-                            }
-                        }
-                    });
-                    graphView.addSeries(series);
-
+                    GasCalculatorActivity.this.setGraph(GasCalculatorActivity.this.graphView);
                 }
 
             }
         });
     }
 
+    private void initGraph(GraphView graphView) {
+        graphView.setTitle(getResources().getString(R.string.efficiency_text));
+        graphView.setTitleTextSize(getResources().getDimension(R.dimen.header_4));
+
+        graphView.getGridLabelRenderer().setVerticalAxisTitle("%");
+
+        graphView.getViewport().setYAxisBoundsManual(true);
+        graphView.getViewport().setMinY(0.0);
+        graphView.getViewport().setMaxY(100.0);
+
+        staticLabelsFormatter = new StaticLabelsFormatter(graphView);
+        staticLabelsFormatter.setHorizontalLabels(new String[] {
+                getResources().getText(R.string.gas_text).toString(),
+                getResources().getText(R.string.alcohol_text).toString()});
+
+        graphView.getGridLabelRenderer().setLabelFormatter(staticLabelsFormatter);
+        graphView.getGridLabelRenderer().setPadding(50);
+    }
+
+    private void setGraph(GraphView graphView) {
+        graphView.removeAllSeries();
+        series = new BarGraphSeries<>(new DataPoint[] {
+                new DataPoint(1, this.myGasStation.getGasEfficiency()),
+                new DataPoint(2, this.myGasStation.getAlcoholEfficiency())
+        });
+
+        series.setAnimated(true);
+        series.setDrawValuesOnTop(true);
+        series.setValuesOnTopColor(ContextCompat.getColor(getApplicationContext(), R.color.colorBlack));
+        series.setValueDependentColor(new ValueDependentColor<DataPoint>() {
+            @Override
+            public int get(DataPoint data) {
+                if (data.getX() == 1) {
+                    return ContextCompat.getColor(getApplicationContext(), R.color.colorGas);
+                } else if (data.getX() == 2) {
+                    return ContextCompat.getColor(getApplicationContext(), R.color.colorAlcohol);
+                } else {
+                    return ContextCompat.getColor(getApplicationContext(), R.color.colorBlack);
+                }
+            }
+        });
+        graphView.addSeries(series);
+    }
 }

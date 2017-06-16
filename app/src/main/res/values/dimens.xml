@@ -3,4 +3,5 @@
     <dimen name="header_2">24sp</dimen>
     <dimen name="header_3">18sp</dimen>
     <dimen name="header_4">14sp</dimen>
+    <dimen name="graph_height">200dp</dimen>
 </resources>

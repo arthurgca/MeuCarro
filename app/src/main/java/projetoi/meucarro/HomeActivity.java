@@ -23,8 +23,6 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Date;
 
 import projetoi.meucarro.dialog.AdicionarGastoDialog;
 import projetoi.meucarro.models.CarroUser;
@@ -113,7 +111,7 @@ public class HomeActivity extends AppCompatActivity {
 
                 } else {
                     fab.setVisibility(View.INVISIBLE);
-                    Toast.makeText(HomeActivity.this, R.string.home_erro_nenhum_carro,
+                    Toast.makeText(HomeActivity.this, R.string.msg_home_listacarrosvazia,
                             Toast.LENGTH_LONG).show();
                 }
                 progressDialog.dismiss();

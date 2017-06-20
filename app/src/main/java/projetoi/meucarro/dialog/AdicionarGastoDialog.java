@@ -27,10 +27,6 @@ import projetoi.meucarro.models.CarroUser;
 import projetoi.meucarro.models.Gasto;
 import projetoi.meucarro.models.GastoCombustivel;
 
-/**
- * Created by Arthur on 13/06/2017.
- */
-
 public class AdicionarGastoDialog extends Dialog {
 
 
@@ -62,7 +58,7 @@ public class AdicionarGastoDialog extends Dialog {
         final EditText editTextValorUnidadeCombustivel = (EditText) findViewById(R.id.dialogValorUnidadeCombustivelEditText);
 
 
-        ArrayAdapter dialogAdapter = ArrayAdapter.createFromResource(getContext(), R.array.gastos,
+        ArrayAdapter dialogAdapter = ArrayAdapter.createFromResource(getContext(), R.array.adicionardialog_gastosarray,
                 android.R.layout.simple_spinner_item);
 
         dialogSpinner.setAdapter(dialogAdapter);
@@ -83,7 +79,7 @@ public class AdicionarGastoDialog extends Dialog {
                         pagamento.set(year, month, dayOfMonth);
                         if (pagamento.compareTo(dataAtual) > 0) {
                             pagamento = Calendar.getInstance();
-                            Toast.makeText(getContext(), R.string.erro_data_gasto,
+                            Toast.makeText(getContext(), R.string.erro_adicionargasto_dataposterior,
                                     Toast.LENGTH_SHORT).show();
                         } else {
                             dataButton.setText(dayOfMonth+"/"+month+"/"+year);
@@ -105,12 +101,12 @@ public class AdicionarGastoDialog extends Dialog {
             @Override
             public void onClick(View v) {
                 if (editTextValor.getText().toString().isEmpty() || editTextKm.getText().toString().isEmpty()) {
-                    Toast.makeText(getContext(), R.string.valor_gasto_vazio,
+                    Toast.makeText(getContext(), R.string.erro_adicionargasto_vazio,
                             Toast.LENGTH_SHORT).show();
                 } else {
                     int quilometragemNova = Integer.valueOf(editTextKm.getText().toString());
                     if (quilometragemNova <= carroUser.kmRodados) {
-                        Toast.makeText(getContext(), R.string.erro_nova_quilometragem,
+                        Toast.makeText(getContext(), R.string.erro_adicionargasto_quilometragem_menor,
                                 Toast.LENGTH_SHORT).show();
                     } else {
                         Gasto novoGasto;
@@ -138,7 +134,7 @@ public class AdicionarGastoDialog extends Dialog {
         dialogSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                String combustivelString = getContext().getResources().getStringArray(R.array.gastos)[0];
+                String combustivelString = getContext().getResources().getStringArray(R.array.adicionardialog_gastosarray)[0];
                 if (dialogSpinner.getSelectedItem().toString().equals(combustivelString)) {
                     editTextValorUnidadeCombustivel.setEnabled(true);
                 } else {

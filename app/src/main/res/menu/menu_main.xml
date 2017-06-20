@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
-<menu xmlns:app="http://schemas.android.com/apk/res-auto"
+<menu
     xmlns:android="http://schemas.android.com/apk/res/android">
 
     <item
         android:id="@+id/menu_trocar_carro"
-        android:title="@string/trocar_carro_string" />
+        android:title="@string/menu_trocarcarro" />
 
     <item
         android:id="@+id/menu_adicionar_carro"
@@ -16,8 +16,8 @@
 
     <item
         android:id="@+id/expenses_report_menu"
-        android:title="Relatório de gastos" />
+        android:title="@string/menu_relatoriogastos" />
     <item
         android:id="@+id/menu_logout"
-        android:title="@string/logout_string" />
+        android:title="@string/menu_logout" />
 </menu>

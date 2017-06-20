@@ -5,7 +5,7 @@
     <application
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
-        android:label="@string/app_name"
+        android:label="@string/all_app_name"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
@@ -19,12 +19,12 @@
         </activity>
         <activity
             android:name=".HomeActivity"
-            android:label="@string/title_activity_home"
+            android:label="@string/all_title_activity"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity android:name=".AdicionarCarroActivity" />
-        <activity android:name=".GasCalculatorActivity"></activity>
+        <activity android:name=".GasCalculatorActivity" />
         <activity android:name=".TrocarCarroActivity" />
-        <activity android:name=".ExpensesReportActivity"></activity>
+        <activity android:name=".ExpensesReportActivity" />
     </application>
 
 </manifest>

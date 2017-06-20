@@ -20,7 +20,6 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 
@@ -36,8 +35,6 @@ public class AdicionarCarroActivity extends AppCompatActivity {
 
     private EditText placa;
 
-    private TextView marcaText;
-    private TextView modeloText;
     private Button adicionarButton;
     private FirebaseAuth mAuth;
     private ArrayList<Integer> anoCarroList;
@@ -59,9 +56,6 @@ public class AdicionarCarroActivity extends AppCompatActivity {
         mAuth = FirebaseAuth.getInstance();
 
         adicionarButton = (Button) findViewById(R.id.confirmaAdicionarCarro);
-
-        marcaText = (TextView) findViewById(R.id.adicionarCarroMarca);
-        modeloText = (TextView) findViewById(R.id.adicionarCarroModelo);
 
         final ArrayList<String> carrosModeloList = new ArrayList<>();
         anoCarroList = new ArrayList<>();

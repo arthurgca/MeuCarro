@@ -57,7 +57,7 @@ public class ExpensesReportActivity extends AppCompatActivity {
                 }
 
                 else {
-                    Toast.makeText(ExpensesReportActivity.this, R.string.home_erro_nenhum_carro,
+                    Toast.makeText(ExpensesReportActivity.this, R.string.msg_home_listacarrosvazia,
                             Toast.LENGTH_LONG).show();
                 }
             }
@@ -76,9 +76,9 @@ public class ExpensesReportActivity extends AppCompatActivity {
     }
 
     private void initGraph(GraphView graphView) {
-        graphView.setTitle(getResources().getString(R.string.expanse_by_time));
+        graphView.setTitle(getResources().getString(R.string.gascalculator_expanse_by_time));
         graphView.setTitleTextSize(50);
-        graphView.getGridLabelRenderer().setVerticalAxisTitle(getResources().getString(R.string.brazilian_currency_symbol));
+        graphView.getGridLabelRenderer().setVerticalAxisTitle(getResources().getString(R.string.gascalculator_brazilian_currency_symbol));
         graphView.getGridLabelRenderer().setHumanRounding(false);
         graphView.getGridLabelRenderer().setHorizontalLabelsAngle(45);
 

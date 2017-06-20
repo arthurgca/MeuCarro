@@ -25,7 +25,7 @@
         android:id="@+id/textViewSeusCarros"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="@string/home_text1"
+        android:text="@string/home_carroatualtext"
         android:textAppearance="@android:style/TextAppearance.Large"
         android:layout_below="@+id/appBarLayout"
         android:layout_alignParentStart="true" />
@@ -41,7 +41,7 @@
         android:id="@+id/textViewListGastos"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="@string/lista_de_gastos"
+        android:text="@string/home_listadegastostext"
         android:textAppearance="@style/Base.TextAppearance.AppCompat.Large"
         android:layout_below="@+id/kmsRodadosHomeText"
         android:layout_alignParentStart="true" />
@@ -72,7 +72,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:textAppearance="@android:style/TextAppearance.Large"
-        android:text="@string/km_s_rodados_home"
+        android:text="@string/home_kmsrodadostext"
         android:layout_below="@+id/textViewSeusCarros"
         android:layout_alignParentStart="true" />
 

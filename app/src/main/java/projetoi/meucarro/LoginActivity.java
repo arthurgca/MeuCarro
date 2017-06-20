@@ -57,8 +57,8 @@ public class LoginActivity extends AppCompatActivity {
                 String email = loginEmailEditText.getText().toString();
                 String senha = senhaEmailEditText.getText().toString();
 
-                if (email.isEmpty() || email == null || senha.isEmpty() || senha == null) {
-                    Toast.makeText(LoginActivity.this, R.string.mensagemVazio,
+                if (email.isEmpty() || senha.isEmpty()) {
+                    Toast.makeText(LoginActivity.this, R.string.erro_email_senha_vazio,
                             Toast.LENGTH_SHORT).show();
                 } else {
 

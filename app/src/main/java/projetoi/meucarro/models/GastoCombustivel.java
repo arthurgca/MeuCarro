@@ -2,9 +2,6 @@ package projetoi.meucarro.models;
 
 import java.util.Date;
 
-/**
- * Created by Arthur on 20/06/2017.
- */
 
 public class GastoCombustivel extends Gasto {
 

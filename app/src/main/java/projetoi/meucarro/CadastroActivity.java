@@ -61,8 +61,8 @@ public class CadastroActivity extends AppCompatActivity {
                 String email = emailEditText.getText().toString();
                 String senha = senhaEditText.getText().toString();
 
-                if (email.isEmpty() || email == null || senha.isEmpty() || senha == null) {
-                    Toast.makeText(CadastroActivity.this, R.string.mensagemVazio,
+                if (email.isEmpty() || senha.isEmpty()) {
+                    Toast.makeText(CadastroActivity.this, R.string.erro_email_senha_vazio,
                             Toast.LENGTH_SHORT).show();
                 } else {
 
@@ -81,7 +81,7 @@ public class CadastroActivity extends AppCompatActivity {
                                         Toast.makeText(CadastroActivity.this, errorMessage,
                                                 Toast.LENGTH_SHORT).show();
                                     } else {
-                                        Toast.makeText(CadastroActivity.this, R.string.cadastrosucesso,
+                                        Toast.makeText(CadastroActivity.this, R.string.msg_cadastro_sucesso,
                                                 Toast.LENGTH_SHORT).show();
                                     }
 

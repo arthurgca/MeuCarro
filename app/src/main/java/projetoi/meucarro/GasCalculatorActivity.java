@@ -1,21 +1,17 @@
 package projetoi.meucarro;
 
-import android.graphics.Color;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.TextView;
 
 import com.jjoe64.graphview.GraphView;
 import com.jjoe64.graphview.ValueDependentColor;
 import com.jjoe64.graphview.helper.StaticLabelsFormatter;
 import com.jjoe64.graphview.series.BarGraphSeries;
 import com.jjoe64.graphview.series.DataPoint;
-
-import projetoi.meucarro.R;
 
 public class GasCalculatorActivity extends AppCompatActivity {
 
@@ -91,14 +87,14 @@ public class GasCalculatorActivity extends AppCompatActivity {
                     double gasPrice = Double.parseDouble(gasValue.getText().toString());
                     myGasStation.setGasPrice(gasPrice);
                 } catch (NumberFormatException e) {
-                    gasValue.setError(getResources().getString(R.string.number_format_exception));
+                    gasValue.setError(getResources().getString(R.string.erro_formato_valor));
                     validField = false;
                 }
                 try {
                     double alcoholPrice = Double.parseDouble(alcoolValue.getText().toString());
                     myGasStation.setAlcoholPrice(alcoholPrice);
                 } catch (NumberFormatException e) {
-                    alcoolValue.setError(getResources().getString(R.string.number_format_exception));
+                    alcoolValue.setError(getResources().getString(R.string.erro_formato_valor));
                     validField = false;
                 }
 
@@ -111,7 +107,7 @@ public class GasCalculatorActivity extends AppCompatActivity {
     }
 
     private void initGraph(GraphView graphView) {
-        graphView.setTitle(getResources().getString(R.string.efficiency_text));
+        graphView.setTitle(getResources().getString(R.string.gascalculator_efficiency_text));
         graphView.setTitleTextSize(50);
 
         graphView.getGridLabelRenderer().setVerticalAxisTitle("%");
@@ -122,8 +118,8 @@ public class GasCalculatorActivity extends AppCompatActivity {
 
         staticLabelsFormatter = new StaticLabelsFormatter(graphView);
         staticLabelsFormatter.setHorizontalLabels(new String[] {
-                getResources().getText(R.string.gas_text).toString(),
-                getResources().getText(R.string.alcohol_text).toString()});
+                getResources().getText(R.string.all_gastext).toString(),
+                getResources().getText(R.string.all_alchooltext).toString()});
 
         graphView.getGridLabelRenderer().setLabelFormatter(staticLabelsFormatter);
         graphView.getGridLabelRenderer().setPadding(50);

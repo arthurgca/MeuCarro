@@ -31,11 +31,12 @@
     <string name="dialog_valor">Valor</string>
     <string name="dialog_adicionar_button">Adicionar</string>
     <string name="valor_gasto_vazio">Valor do gasto ou quilometragem vazio.</string>
-    <string name="quilometragem_atual">Rodagem:</string>
+    <string name="quilometragem_atual">Quilometragem</string>
     <string name="erro_nova_quilometragem">Quilometragem nova não pode ser menor que já registrada.</string>
     <string name="km_s_rodados_home">Km\'s Rodados</string>
     <string name="erro_data_gasto">Data escolhida não pode ser posterior ao dia atual.</string>
     <string name="erro_nenhum_gasto">Nenhum gasto registrado.</string>
+    <string name="valor_unidade_combustivel_dialog">Valor por Litros ou m³</string>
 
     <string-array name="anoCarro">
         <item>1990</item>

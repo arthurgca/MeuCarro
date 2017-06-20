@@ -29,11 +29,13 @@ import java.util.Date;
 import projetoi.meucarro.dialog.AdicionarGastoDialog;
 import projetoi.meucarro.models.CarroUser;
 import projetoi.meucarro.models.Gasto;
+import projetoi.meucarro.models.GastoCombustivel;
 
 
 public class HomeActivity extends AppCompatActivity {
 
     private FirebaseAuth mAuth;
+    private float autonomia = 0;
     private ListView carrosListView;
     private ArrayList<Gasto> carroGastosList;
     private ArrayAdapter<Gasto> adapter;
@@ -90,6 +92,8 @@ public class HomeActivity extends AppCompatActivity {
             public void onDataChange(DataSnapshot dataSnapshot) {
                 carroGastosList.clear();
                 if (dataSnapshot.child("lastCar").getValue() != null) {
+                    int numCombustivel = 0;
+                    int qtdeCombustivel = 0;
                     fab.setVisibility(View.VISIBLE);
                     lastCarId = dataSnapshot.child("lastCar").getValue().toString();
                     carroUser = dataSnapshot.child("carrosList").child(lastCarId).getValue(CarroUser.class);
@@ -98,6 +102,9 @@ public class HomeActivity extends AppCompatActivity {
 
                     if (carroUser.listaGastos != null) {
                         for (Gasto gasto : carroUser.listaGastos) {
+                            if (gasto instanceof GastoCombustivel) {
+                                numCombustivel++;
+                            }
                             carroGastosList.add(gasto);
                             adapter.notifyDataSetChanged();
                         }

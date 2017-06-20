@@ -1,77 +1,70 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="match_parent" android:layout_height="match_parent">
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:layout_editor_absoluteY="81dp"
+    tools:layout_editor_absoluteX="0dp">
 
     <Spinner
         android:id="@+id/dialogSpinner"
-        android:layout_width="match_parent"
-        android:layout_height="?android:attr/actionBarSize"
-        android:layout_alignParentStart="true" />
-
-    <TextView
-        android:id="@+id/dialogValorText"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="@string/dialog_valor"
-        android:textAppearance="@android:style/TextAppearance.Large"
-        android:layout_alignBaseline="@+id/dialogValorEdit"
-        android:layout_alignBottom="@+id/dialogValorEdit"
-        android:layout_alignParentStart="true" />
+        android:layout_width="214dp"
+        android:layout_height="42dp"
+        tools:layout_editor_absoluteY="5dp"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintLeft_toLeftOf="parent" />
 
     <EditText
         android:id="@+id/dialogValorEdit"
+        android:hint="@string/dialog_valor"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignParentEnd="true"
-        android:layout_alignStart="@+id/dialogDataButton"
-        android:layout_below="@+id/dialogSpinner"
         android:ems="10"
-        android:inputType="numberDecimal" />
+        android:inputType="numberDecimal"
+        app:layout_constraintTop_toBottomOf="@+id/dialogSpinner"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent" />
 
     <Button
         android:id="@+id/dialogDataButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignParentEnd="true"
-        android:layout_below="@+id/dialogValorEdit"
-        android:ems="10" />
-
-    <TextView
-        android:id="@+id/dialogDataText"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="@string/dialog_data"
-        android:textAppearance="@android:style/TextAppearance.Large"
-        android:layout_alignBaseline="@+id/dialogDataButton"
-        android:layout_alignBottom="@+id/dialogDataButton"
-        android:layout_alignParentStart="true" />
+        android:ems="10"
+        app:layout_constraintTop_toBottomOf="@+id/dialogValorEdit"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent" />
 
     <Button
         android:id="@+id/dialogAdicionar"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="@string/dialog_adicionar_button"
-        android:layout_below="@+id/quilometragemEdit"
-        android:layout_centerHorizontal="true" />
-
-    <TextView
-        android:id="@+id/quilometragemText"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="@string/quilometragem_atual"
-        android:textAppearance="@android:style/TextAppearance.Large"
-        android:layout_alignBaseline="@+id/quilometragemEdit"
-        android:layout_alignBottom="@+id/quilometragemEdit"
-        android:layout_alignParentStart="true" />
+        app:layout_constraintTop_toBottomOf="@+id/dialogValorUnidadeCombustivelEditText"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent" />
 
     <EditText
         android:id="@+id/quilometragemEdit"
         android:layout_width="wrap_content"
+        android:hint="@string/quilometragem_atual"
         android:layout_height="wrap_content"
         android:ems="10"
         android:inputType="number"
-        android:layout_below="@+id/dialogDataButton"
-        android:layout_alignParentEnd="true"
-        android:layout_alignStart="@+id/dialogDataButton" />
+        app:layout_constraintTop_toBottomOf="@+id/dialogDataButton"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent" />
 
-</RelativeLayout>
+    <EditText
+        android:id="@+id/dialogValorUnidadeCombustivelEditText"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:ems="10"
+        android:enabled="false"
+        android:hint="@string/valor_unidade_combustivel_dialog"
+        android:inputType="numberDecimal"
+        app:layout_constraintTop_toBottomOf="@+id/quilometragemEdit"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent" />
+
+</android.support.constraint.ConstraintLayout>

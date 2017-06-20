@@ -20,6 +20,9 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.List;
 
 
 import projetoi.meucarro.models.CarroUser;
@@ -37,6 +40,9 @@ public class AdicionarCarroActivity extends AppCompatActivity {
     private TextView modeloText;
     private Button adicionarButton;
     private FirebaseAuth mAuth;
+    private ArrayList<Integer> anoCarroList;
+    private ArrayAdapter<Integer> adapterAno;
+    private HashMap<String, List<Integer>> modeloMap;
 
 
     @Override
@@ -58,11 +64,13 @@ public class AdicionarCarroActivity extends AppCompatActivity {
         modeloText = (TextView) findViewById(R.id.adicionarCarroModelo);
 
         final ArrayList<String> carrosModeloList = new ArrayList<>();
+        anoCarroList = new ArrayList<>();
         final ArrayList<String> carrosMarcaList = new ArrayList<>();
+        modeloMap = new HashMap<>();
 
         final ArrayAdapter<String> adapterMarca = new ArrayAdapter<>(this, android.R.layout.simple_spinner_item, carrosMarcaList);
         final ArrayAdapter<String> adapterModelo = new ArrayAdapter<>(this, android.R.layout.simple_spinner_item, carrosModeloList);
-        final ArrayAdapter adapterAno =  ArrayAdapter.createFromResource(this, R.array.anoCarro, android.R.layout.simple_spinner_item);
+        adapterAno =  new ArrayAdapter<>(this, android.R.layout.simple_spinner_item, anoCarroList);
 
         adapterMarca.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         spinnerMarca.setAdapter(adapterMarca);
@@ -104,20 +112,22 @@ public class AdicionarCarroActivity extends AppCompatActivity {
         spinnerMarca.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, final long id) {
+                modeloMap.clear();
                 carrosModeloList.clear();
                 DatabaseReference modelosRef = carrosRef.child(carrosMarcaList.get(position));
                 final ValueEventListener spinnerModeloListener = new ValueEventListener() {
                     @Override
                     public void onDataChange(DataSnapshot dataSnapshot) {
                         for (DataSnapshot ids : dataSnapshot.getChildren()) {
-                            for (DataSnapshot modelo : ids.getChildren()) {
-                                carrosModeloList.add(modelo.getValue().toString());
-                                adapterModelo.notifyDataSetChanged();
+                            String modeloString = ids.child("Modelo").getValue().toString();
+                            carrosModeloList.add(modeloString);
+                            adapterModelo.notifyDataSetChanged();
+                            int anoLancamento = Integer.valueOf(String.valueOf(ids.child("Ano Lançamento").getValue()));
+                            int anoFim = Integer.valueOf(String.valueOf(ids.child("Até").getValue()));
+                            modeloMap.put(modeloString, buildAnoList(anoLancamento, anoFim));
+                            updateAnoSpinner(modeloString);
                             }
                         }
-
-                    }
-
                     @Override
                     public void onCancelled(DatabaseError databaseError) {
                         Log.w("Nome", "loadPost:onCancelled", databaseError.toException());
@@ -132,7 +142,17 @@ public class AdicionarCarroActivity extends AppCompatActivity {
             }
         });
 
+        spinnerModelo.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                updateAnoSpinner(carrosModeloList.get(position));
+            }
 
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+
+            }
+        });
 
         adicionarButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -147,5 +167,20 @@ public class AdicionarCarroActivity extends AppCompatActivity {
                 finish();
             }
         });
+    }
+
+    private void updateAnoSpinner(String modelo) {
+        anoCarroList.clear();
+        anoCarroList.addAll(modeloMap.get(modelo));
+        adapterAno.notifyDataSetChanged();
+    }
+
+
+    private List<Integer> buildAnoList(int startDate, int finishDate) {
+        List<Integer> anoList = new ArrayList<>();
+        for (int i = startDate; i <= finishDate; i++) {
+            anoList.add(i);
+        }
+        return anoList;
     }
 }

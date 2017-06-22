@@ -6,4 +6,16 @@
     <color name="colorGas">#F0E68C</color>
     <color name="colorAlcohol">#6495ED</color>
     <color name="colorBlack">#000000</color>
+
+    <string-array name="color_expense">
+        <item>#011efe</item>
+        <item>#38eeff</item>
+        <item>#fe0000</item>
+        <item>#fdfe02</item>
+        <item>#0bff01</item>
+        <item>#FFA500</item>
+        <item>#fe00f6</item>
+    </string-array>
+
+
 </resources>

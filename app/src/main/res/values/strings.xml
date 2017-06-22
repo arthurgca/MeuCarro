@@ -23,7 +23,7 @@
     <string name="gascalculator_brazilian_currency_symbol">R$</string>
     <string name="gascalculator_efficiency_text">Eficiência</string>
     <string name="gascalculator_default_price">0.000</string>
-    <string name="gascalculator_expanse_by_time">Despesas/tempo</string>
+    <string name="gascalculator_expense_by_time">Despesas/tempo</string>
 
     <!--TrocarCarroActivity-->
     <string name="trocarcarro_trocartext">Trocar</string>

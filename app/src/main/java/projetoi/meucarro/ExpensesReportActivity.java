@@ -1,5 +1,7 @@
 package projetoi.meucarro;
 
+import android.graphics.Color;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
@@ -12,10 +14,12 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 import com.jjoe64.graphview.GraphView;
+import com.jjoe64.graphview.LegendRenderer;
 import com.jjoe64.graphview.helper.DateAsXAxisLabelFormatter;
 import com.jjoe64.graphview.series.DataPoint;
 import com.jjoe64.graphview.series.LineGraphSeries;
 
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 
@@ -24,9 +28,14 @@ import projetoi.meucarro.models.Gasto;
 
 public class ExpensesReportActivity extends AppCompatActivity {
 
-    private static int MAX_DAYS = 99999;
+    private static final String EXPENSES_SUM = "Total";
+    private static int MAX_DAYS = 55555;
+    private static int DAYS_INTERVAL = 30;
+    private static int X_LABEL_ANGLE = 45;
 
-    private GraphView expenseByDateGraph;
+    private GraphView expenseGraph;
+    private ArrayList<LineGraphSeries<DataPoint>> seriesByExpenses;
+    private LineGraphSeries<DataPoint> seriesTotal;
     private CarroUser currentCar;
     private DatabaseReference carrosUserRef;
     private ValueEventListener carrosUserListener;
@@ -47,7 +56,7 @@ public class ExpensesReportActivity extends AppCompatActivity {
                     currentCar = dataSnapshot.child("carrosList").child(lastCarId).getValue(CarroUser.class);
 
                     if (currentCar.listaGastos != null) {
-                        initGraph(expenseByDateGraph);
+                        initGraph();
                     }
 
                     else {
@@ -68,50 +77,109 @@ public class ExpensesReportActivity extends AppCompatActivity {
         };
 
         FirebaseDatabase database = FirebaseDatabase.getInstance();
-        carrosUserRef = database.getReference().child("users").child(mAuth.getCurrentUser().getUid());
-        carrosUserRef.addValueEventListener(carrosUserListener);
+        this.carrosUserRef = database.getReference().child("users").child(mAuth.getCurrentUser().getUid());
+        this.carrosUserRef.addValueEventListener(carrosUserListener);
 
-
-        this.expenseByDateGraph = (GraphView) findViewById(R.id.expenseByDateGraphView);
+        this.expenseGraph = (GraphView) findViewById(R.id.expenseByDateGraphView);
     }
 
-    private void initGraph(GraphView graphView) {
-        graphView.setTitle(getResources().getString(R.string.gascalculator_expanse_by_time));
-        graphView.setTitleTextSize(50);
-        graphView.getGridLabelRenderer().setVerticalAxisTitle(getResources().getString(R.string.gascalculator_brazilian_currency_symbol));
-        graphView.getGridLabelRenderer().setHumanRounding(false);
-        graphView.getGridLabelRenderer().setHorizontalLabelsAngle(45);
-
-        LineGraphSeries<DataPoint> series = new LineGraphSeries<>(new DataPoint[] {});
-
-        for (Gasto gasto : this.currentCar.listaGastos) {
-            series.appendData(new DataPoint(gasto.data, gasto.valor), true, MAX_DAYS);
-        }
-
-        series.setAnimated(true);
-        series.setDrawBackground(true);
-        series.setDrawDataPoints(true);
-        graphView.addSeries(series);
+    private void initGraph() {
+        this.expenseGraph.setTitle(getResources().getString(R.string.gascalculator_expense_by_time));
+        this.expenseGraph.setTitleTextSize(50);
+        this.expenseGraph.getGridLabelRenderer().setVerticalAxisTitle(getResources().getString(R.string.gascalculator_brazilian_currency_symbol));
+        this.expenseGraph.getGridLabelRenderer().setHumanRounding(false);
+        this.expenseGraph.getGridLabelRenderer().setHorizontalLabelsAngle(X_LABEL_ANGLE);
 
         // set date label formatter
-        graphView.getGridLabelRenderer().setLabelFormatter(new DateAsXAxisLabelFormatter(graphView.getContext()));
-        graphView.getGridLabelRenderer().setNumHorizontalLabels(this.currentCar.listaGastos.size() + 1);
+        this.expenseGraph.getGridLabelRenderer().setLabelFormatter(new DateAsXAxisLabelFormatter(this.expenseGraph.getContext()));
+        this.expenseGraph.getGridLabelRenderer().setNumHorizontalLabels(this.currentCar.listaGastos.size() + 1);
 
         // set manual x bounds to have nice steps
-        graphView.getViewport().setXAxisBoundsManual(true);
+        this.expenseGraph.getViewport().setXAxisBoundsManual(true);
         if (!this.currentCar.listaGastos.isEmpty()) {
             Date dt = this.currentCar.listaGastos.get(0).data;
             Calendar c = Calendar.getInstance();
             c.setTime(dt);
-            c.add(Calendar.DATE, 30); //30 days on X value each screen space
+            c.add(Calendar.DATE, DAYS_INTERVAL); //30 days on X value each screen space
             Date dt2 = c.getTime();
 
-            graphView.getViewport().setMinX(dt.getTime());
-            graphView.getViewport().setMaxX(dt2.getTime());
+            this.expenseGraph.getViewport().setMinX(dt.getTime());
+            this.expenseGraph.getViewport().setMaxX(dt2.getTime());
         }
 
+        // legend
+        this.expenseGraph.getLegendRenderer().setVisible(true);
+        this.expenseGraph.getLegendRenderer().setAlign(LegendRenderer.LegendAlign.TOP);
+
         // enables horizontal scrolling
-        graphView.getViewport().setScrollable(true);
+        this.expenseGraph.getViewport().setScrollable(true);
+
+        this.loadSeries();
     }
+
+    private void loadSeries() {
+        String[] typesOfExpenses = getResources().getStringArray(R.array.adicionardialog_gastosarray);
+        String[] seriesColors = getResources().getStringArray(R.array.color_expense);
+
+        // Initializing series
+        this.seriesTotal = new LineGraphSeries<>(new DataPoint[]{});
+
+        this.seriesTotal.setTitle(EXPENSES_SUM);
+        this.seriesTotal.setAnimated(true);
+        this.seriesTotal.setDrawBackground(true);
+        this.seriesTotal.setDrawDataPoints(true);
+        this.seriesTotal.setColor(Color.parseColor(seriesColors[0]));
+
+        this.seriesByExpenses = new ArrayList<>();
+
+        for (int serieIndex = 0; serieIndex < typesOfExpenses.length; serieIndex++) {
+            LineGraphSeries<DataPoint> serie = new LineGraphSeries(new DataPoint[] {});
+
+            //Setting attributes
+            serie.setTitle(typesOfExpenses[serieIndex].toString());
+            serie.setAnimated(true);
+            //serie.setDrawBackground(true);
+            serie.setDrawDataPoints(true);
+            serie.setColor(Color.parseColor(seriesColors[serieIndex + 1]));
+
+            this.seriesByExpenses.add(serie);
+        }
+
+        // Adding expenses to the series
+        for (Gasto expense : this.currentCar.listaGastos) {
+            DataPoint dp = new DataPoint(expense.data, expense.valor);
+
+            this.seriesTotal.appendData(dp, true, MAX_DAYS);
+
+            if (expense.descricao.equals(typesOfExpenses[0])) {
+                this.seriesByExpenses.get(0).appendData(dp, true, MAX_DAYS);
+
+            } else if (expense.descricao.equals(typesOfExpenses[1])) {
+                this.seriesByExpenses.get(1).appendData(dp, true, MAX_DAYS);
+
+            } else if (expense.descricao.equals(typesOfExpenses[2])) {
+                this.seriesByExpenses.get(2).appendData(dp, true, MAX_DAYS);
+
+            } else if (expense.descricao.equals(typesOfExpenses[3])) {
+                this.seriesByExpenses.get(3).appendData(dp, true, MAX_DAYS);
+
+            } else if (expense.descricao.equals(typesOfExpenses[4])) {
+                this.seriesByExpenses.get(4).appendData(dp, true, MAX_DAYS);
+
+            } else if (expense.descricao.equals(typesOfExpenses[5])) {
+                this.seriesByExpenses.get(5).appendData(dp, true, MAX_DAYS);
+
+            }
+        }
+
+        // Adding series to the graph
+        this.expenseGraph.addSeries(this.seriesTotal);
+
+        for (int serieIndex = 0; serieIndex < typesOfExpenses.length; serieIndex++) {
+            this.expenseGraph.addSeries(this.seriesByExpenses.get(serieIndex));
+        }
+
+    }
+
 
 }

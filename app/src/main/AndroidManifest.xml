@@ -24,7 +24,10 @@
         <activity android:name=".AdicionarCarroActivity" />
         <activity android:name=".GasCalculatorActivity" />
         <activity android:name=".TrocarCarroActivity" />
-        <activity android:name=".ExpensesReportActivity" />
+        <activity
+            android:name=".ExpensesReportActivity"
+            android:label="@string/all_title_activity"
+            android:theme="@style/AppTheme.NoActionBar"/>
     </application>
 
 </manifest>

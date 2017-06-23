@@ -8,11 +8,14 @@
     <!--All-->
     <string name="all_alchooltext">Álcool</string>
     <string name="all_gastext">Gasolina</string>
+    <string name="all_day_text">Dia</string>
+    <string name="all_month_text">Mês</string>
+    <string name="all_year_text">Ano</string>
 
     <!--Login Scren-->
     <string name="login_logar">Logar</string>
-    <string name="logincadastro_emailhint">email</string>
-    <string name="logincadastro_senhahint">senha</string>
+    <string name="logincadastro_emailhint">Email</string>
+    <string name="logincadastro_senhahint">Senha</string>
     <string name="login_cadastratext">Cadastro</string>
 
     <!--CadastroActivity-->
@@ -24,6 +27,9 @@
     <string name="gascalculator_efficiency_text">Eficiência</string>
     <string name="gascalculator_default_price">0.000</string>
     <string name="gascalculator_expense_by_time">Despesas/tempo</string>
+
+    <!--ExpenseReportActivity-->
+    <string name="choose_expense_type">Escolha o tipo de despesa</string>
 
     <!--TrocarCarroActivity-->
     <string name="trocarcarro_trocartext">Trocar</string>

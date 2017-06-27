@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.app.DatePickerDialog;
 import android.app.Dialog;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
@@ -27,6 +28,8 @@ import projetoi.meucarro.models.CarroUser;
 import projetoi.meucarro.models.Gasto;
 import projetoi.meucarro.models.GastoCombustivel;
 
+import static projetoi.meucarro.R.id.dialogSpinner;
+
 public class AdicionarGastoDialog extends Dialog {
 
 
@@ -36,6 +39,10 @@ public class AdicionarGastoDialog extends Dialog {
     private String lastCarId;
     private FirebaseDatabase database;
     private FirebaseAuth mAuth;
+    private EditText editTextValor;
+    private EditText editTextKm;
+    private EditText editTextValorUnidadeCombustivel;
+    private Spinner dialogSpinner;
 
     public AdicionarGastoDialog(Activity activity) {
         super(activity);
@@ -52,10 +59,10 @@ public class AdicionarGastoDialog extends Dialog {
 
         final Button dataButton = (Button) findViewById(R.id.dialogDataButton);
         Button adcButton = (Button) findViewById(R.id.dialogAdicionar);
-        final Spinner dialogSpinner = (Spinner) findViewById(R.id.dialogSpinner);
-        final EditText editTextValor = (EditText) findViewById(R.id.dialogValorEdit);
-        final EditText editTextKm = (EditText) findViewById(R.id.quilometragemEdit);
-        final EditText editTextValorUnidadeCombustivel = (EditText) findViewById(R.id.dialogValorUnidadeCombustivelEditText);
+        dialogSpinner = (Spinner) findViewById(R.id.dialogSpinner);
+        editTextValor = (EditText) findViewById(R.id.dialogValorEdit);
+        editTextKm = (EditText) findViewById(R.id.quilometragemEdit);
+        editTextValorUnidadeCombustivel = (EditText) findViewById(R.id.dialogValorUnidadeCombustivelEditText);
 
 
         ArrayAdapter dialogAdapter = ArrayAdapter.createFromResource(getContext(), R.array.adicionardialog_gastosarray,
@@ -76,7 +83,9 @@ public class AdicionarGastoDialog extends Dialog {
                     @Override
                     public void onDateSet(DatePicker view, int year, int month, int dayOfMonth) {
                         Calendar pagamento = Calendar.getInstance();
-                        pagamento.set(year, month, dayOfMonth);
+                        pagamento.set(year, month, dayOfMonth + 1);
+                        pagamento.set(Calendar.HOUR_OF_DAY, 0);
+                        pagamento.set(Calendar.MINUTE, 0);
                         if (pagamento.compareTo(dataAtual) > 0) {
                             pagamento = Calendar.getInstance();
                             Toast.makeText(getContext(), R.string.erro_adicionargasto_dataposterior,
@@ -104,28 +113,28 @@ public class AdicionarGastoDialog extends Dialog {
                     Toast.makeText(getContext(), R.string.erro_adicionargasto_vazio,
                             Toast.LENGTH_SHORT).show();
                 } else {
-                    int quilometragemNova = Integer.valueOf(editTextKm.getText().toString());
-                    if (quilometragemNova < carroUser.kmRodados) {
-                        Toast.makeText(getContext(), R.string.erro_adicionargasto_quilometragem_menor,
-                                Toast.LENGTH_SHORT).show();
-                    } else {
-                        Gasto novoGasto;
-                        if (editTextValorUnidadeCombustivel.isEnabled() && !editTextValorUnidadeCombustivel.getText().toString().isEmpty()) {
-                            novoGasto = new GastoCombustivel(dialogSpinner.getSelectedItem().toString(), dataEscolhida,
-                                    Float.valueOf(editTextValor.getText().toString()), quilometragemNova,
-                                    Float.valueOf(editTextValorUnidadeCombustivel.getText().toString()));
+                    Calendar dia = Calendar.getInstance();
+                    dia.set(Calendar.HOUR_OF_DAY, 0);
+                    dia.set(Calendar.MINUTE, 0);
+                    Log.d("dia", String.valueOf(dia.getTime()));
+                    Log.d("dia2", String.valueOf(dataEscolhida));
+
+                    if (dia.getTime().compareTo(dataEscolhida) > 0) {
+                        int quilometragemNova = Integer.valueOf(editTextKm.getText().toString());
+                            if (quilometragemNova >= carroUser.kmRodados) {
+                            Toast.makeText(getContext(), R.string.erro_adicionargasto_quilmetragem_maior,
+                                    Toast.LENGTH_SHORT).show();
                         } else {
-                            novoGasto = new Gasto(dialogSpinner.getSelectedItem().toString(), dataEscolhida,
-                                    Float.valueOf(editTextValor.getText().toString()), quilometragemNova);
+                            adicionaGasto(quilometragemNova);
                         }
-                        if (carroUser.listaGastos == null) {
-                            carroUser.listaGastos = new ArrayList<>();
+                    } else {
+                        int quilometragemNova = Integer.valueOf(editTextKm.getText().toString());
+                        if (quilometragemNova < carroUser.kmRodados) {
+                            Toast.makeText(getContext(), R.string.erro_adicionargasto_quilometragem_menor,
+                                    Toast.LENGTH_SHORT).show();
+                        } else {
+                            adicionaGasto(quilometragemNova);
                         }
-                        carroUser.kmRodados = quilometragemNova;
-                        carroUser.listaGastos.add(novoGasto);
-                        Collections.sort(carroUser.listaGastos, Gasto.compareByData());
-                        carrosUserRef.child("carrosList").child(lastCarId).setValue(carroUser);
-                        dismiss();
                     }
                 }
             }
@@ -149,6 +158,29 @@ public class AdicionarGastoDialog extends Dialog {
         });
 
         super.onCreate(savedInstanceState);
+    }
+
+    private void adicionaGasto(int quilometragemNova) {
+        Gasto novoGasto;
+        if (editTextValorUnidadeCombustivel.isEnabled() && !editTextValorUnidadeCombustivel.getText().toString().isEmpty()) {
+            novoGasto = new GastoCombustivel(dialogSpinner.getSelectedItem().toString(), dataEscolhida,
+                    Float.valueOf(editTextValor.getText().toString()), quilometragemNova,
+                    Float.valueOf(editTextValorUnidadeCombustivel.getText().toString()));
+        } else {
+            novoGasto = new Gasto(dialogSpinner.getSelectedItem().toString(), dataEscolhida,
+                    Float.valueOf(editTextValor.getText().toString()), quilometragemNova);
+        }
+
+        if (carroUser.listaGastos == null) {
+            carroUser.listaGastos = new ArrayList<>();
+        }
+        if (quilometragemNova >= carroUser.kmRodados) {
+            carroUser.kmRodados = quilometragemNova;
+        }
+        carroUser.listaGastos.add(novoGasto);
+        Collections.sort(carroUser.listaGastos, Gasto.compareByData());
+        carrosUserRef.child("carrosList").child(lastCarId).setValue(carroUser);
+        dismiss();
     }
 
     public void setInfo(CarroUser carroUser, String lastCarId) {

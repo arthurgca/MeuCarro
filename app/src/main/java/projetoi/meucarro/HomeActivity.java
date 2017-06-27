@@ -24,6 +24,7 @@ import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
 
+import projetoi.meucarro.adapters.HomeGastosAdapter;
 import projetoi.meucarro.dialog.AdicionarGastoDialog;
 import projetoi.meucarro.models.CarroUser;
 import projetoi.meucarro.models.Gasto;
@@ -58,7 +59,7 @@ public class HomeActivity extends AppCompatActivity {
         carrosListView = (ListView) findViewById(R.id.homeListView);
 
         carroGastosList = new ArrayList<>();
-        adapter = new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, carroGastosList);
+        adapter = new HomeGastosAdapter(this, carroGastosList);
 
         database = FirebaseDatabase.getInstance();
         carrosUserRef = database.getReference().child("users").child(mAuth.getCurrentUser().getUid());

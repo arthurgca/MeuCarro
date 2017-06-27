@@ -47,4 +47,9 @@ public class Gasto {
             }
         };
     }
+
+    public String getFormattedData () {
+        DateFormat df = new SimpleDateFormat("dd/MM/yyyy", Locale.US);
+        return df.format(data);
+    }
 }

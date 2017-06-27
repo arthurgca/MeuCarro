@@ -1,11 +1,11 @@
 package projetoi.meucarro.adapters;
 
 import android.content.Context;
-import android.graphics.Color;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import java.util.ArrayList;
@@ -28,9 +28,11 @@ public class StatusRowAdapter extends ArrayAdapter<StatusAdapterPlaceholder> {
 
         TextView manutencaoText = (TextView) convertView.findViewById(R.id.status_custom_adapter_manutencao);
         TextView descricaoText = (TextView) convertView.findViewById(R.id.status_custom_adapter_descricao);
+        ImageView alertImg = (ImageView) convertView.findViewById(R.id.status_custom_adapter_alertimg);
+
 
         if (placeholder.isAtrasado()) {
-            convertView.setBackgroundColor(Color.RED);
+            alertImg.setVisibility(View.VISIBLE);
         }
 
         manutencaoText.setText(placeholder.getManutencao());

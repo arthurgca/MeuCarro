@@ -15,6 +15,8 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.HashMap;
 
 import projetoi.meucarro.adapters.StatusRowAdapter;
@@ -64,7 +66,6 @@ public class CarroStatusActivity extends AppCompatActivity {
                                 Toast.LENGTH_LONG).show();
                     }
                 } else {
-
                     Toast.makeText(CarroStatusActivity.this, R.string.msg_home_listacarrosvazia,
                             Toast.LENGTH_LONG).show();
                 }
@@ -84,7 +85,7 @@ public class CarroStatusActivity extends AppCompatActivity {
     private void checaStatus(HashMap manutencao) {
         for (Object i : manutencao.keySet()) {
             StatusAdapterPlaceholder placeholder;
-            String mensagem;
+            String mensagem = "";
 
             Gasto ultimoGasto = null;
             int quantidadeTrocas = 0;
@@ -98,30 +99,39 @@ public class CarroStatusActivity extends AppCompatActivity {
                 }
             }
 
+            boolean atrasado = false;
+            String dataManutencao = (String) ((HashMap) manutencao.get(i)).get("Tempo");
+
             if (ultimoGasto != null) {
                 long diferenca = (valorKm - (currentCar.kmRodados - ultimoGasto.registroKm));
 
+                if (dataManutencao != null)
+                    if (checkAtrasoData(ultimoGasto.data, dataManutencao)) {
+                        atrasado = true;
+                        mensagem = mensagem.concat("Atraso por data \n");
+                        Log.d("mensagem", mensagem);
+                    }
+
                 if (diferenca <= 0) {
-                    mensagem = "Manutenção deveria ter sido efetuada" + "\n" +
-                            "Já se passaram " + -diferenca + " km's.";
+                    mensagem = mensagem.concat("Manutenção deveria ter sido efetuada" + "\n" +
+                            "Já se passaram " + -diferenca + " km's.");
                     placeholder = new StatusAdapterPlaceholder(i.toString(), mensagem, true);
                     list.add(placeholder);
                 } else {
-                    mensagem =
-                            "Quantidade efetuada: " + quantidadeTrocas + "\n" +
-                            "Faltam: " + diferenca + " km's.";
-                    placeholder = new StatusAdapterPlaceholder(i.toString(), mensagem, false);
+                    mensagem = mensagem.concat("Quantidade efetuada: " + quantidadeTrocas + "\n" +
+                            "Faltam: " + diferenca + " km's.");
+                    placeholder = new StatusAdapterPlaceholder(i.toString(), mensagem, atrasado);
                     list.add(placeholder);
                 }
             } else {
                 long diferenca = (valorKm - currentCar.kmRodados);
                 if (diferenca <= 0) {
-                    mensagem = "Manutenção deveria ter sido efetuada" + "\n" +
-                            "Já se passaram " + -diferenca + " km's.";
+                    mensagem = mensagem.concat("Manutenção deveria ter sido efetuada" + "\n" +
+                            "Já se passaram " + -diferenca + " km's.");
                     placeholder = new StatusAdapterPlaceholder(i.toString(), mensagem, true);
                     list.add(placeholder);
                 } else {
-                    mensagem = "Faltam: " + diferenca + " km's.";
+                    mensagem = mensagem.concat("Faltam: " + diferenca + " km's.");
                     placeholder = new StatusAdapterPlaceholder(i.toString(), mensagem, false);
                     list.add(placeholder);
                 }
@@ -131,4 +141,26 @@ public class CarroStatusActivity extends AppCompatActivity {
         adapter.notifyDataSetChanged();
     }
 
-}
+    private boolean checkAtrasoData(Date data, String dataString) {
+        Calendar dataAtual = Calendar.getInstance();
+        Calendar dataManutencao = Calendar.getInstance();
+        dataManutencao.setTime(data);
+
+        if (dataString.equals("3 anos")) {
+            dataManutencao.add(Calendar.YEAR, 3);
+        } else if (dataString.equals("1 ano")) {
+            dataManutencao.add(Calendar.YEAR, 1);
+        } else if (dataString.equals("6 meses")) {
+            dataManutencao.add(Calendar.MONTH, 6);
+        }
+
+        if (dataAtual.compareTo(dataManutencao) > 0) {
+            Log.d("dataAtual", dataAtual.toString());
+            Log.d("dataManutencao", dataManutencao.toString());
+            return true;
+        } else
+            return false;
+        }
+    }
+
+

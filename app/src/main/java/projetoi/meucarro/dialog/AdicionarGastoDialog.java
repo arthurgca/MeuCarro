@@ -100,8 +100,7 @@ public class AdicionarGastoDialog extends Dialog {
         adcButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (editTextValor.getText().toString().isEmpty() || editTextKm.getText().toString().isEmpty() ||
-                        editTextValorUnidadeCombustivel.getText().toString().isEmpty()) {
+                if (editTextValor.getText().toString().isEmpty() || editTextKm.getText().toString().isEmpty()) {
                     Toast.makeText(getContext(), R.string.erro_adicionargasto_vazio,
                             Toast.LENGTH_SHORT).show();
                 } else {
@@ -111,7 +110,7 @@ public class AdicionarGastoDialog extends Dialog {
                                 Toast.LENGTH_SHORT).show();
                     } else {
                         Gasto novoGasto;
-                        if (editTextValorUnidadeCombustivel.isEnabled()) {
+                        if (editTextValorUnidadeCombustivel.isEnabled() && !editTextValorUnidadeCombustivel.getText().toString().isEmpty()) {
                             novoGasto = new GastoCombustivel(dialogSpinner.getSelectedItem().toString(), dataEscolhida,
                                     Float.valueOf(editTextValor.getText().toString()), quilometragemNova,
                                     Float.valueOf(editTextValorUnidadeCombustivel.getText().toString()));

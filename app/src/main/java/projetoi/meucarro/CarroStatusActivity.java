@@ -14,10 +14,12 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.Locale;
 
 import projetoi.meucarro.adapters.StatusRowAdapter;
 import projetoi.meucarro.models.CarroUser;
@@ -104,39 +106,41 @@ public class CarroStatusActivity extends AppCompatActivity {
 
             if (ultimoGasto != null) {
                 long diferenca = (valorKm - (currentCar.kmRodados - ultimoGasto.registroKm));
+                Log.d("valorKm", String.valueOf(valorKm));
+                Log.d("currentCar.kmRodados", String.valueOf(currentCar.kmRodados));
+                Log.d("ultimoGasto.registroKm", String.valueOf(ultimoGasto.registroKm));
+
+
+                if (diferenca <= 0) {
+                    atrasado = true;
+                    mensagem = mensagem.concat("Manutenção deveria ter sido efetuada" + "\n" +
+                            "Já se passaram " + -diferenca + " km's.");
+                } else {
+                    mensagem = mensagem.concat("Quantidade efetuada: " + quantidadeTrocas + "\n" +
+                            "Faltam: " + diferenca + " km's.");
+                }
 
                 if (dataManutencao != null)
                     if (checkAtrasoData(ultimoGasto.data, dataManutencao)) {
                         atrasado = true;
-                        mensagem = mensagem.concat("Atraso por data \n");
-                        Log.d("mensagem", mensagem);
+                        SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy", Locale.US);
+                        String ultimaManutencao = dateFormat.format(ultimoGasto.data);
+                        mensagem = "Atraso por data \n" +
+                                "Última manutenção: " + ultimaManutencao + "\nPrazo: " + dataManutencao;
                     }
 
-                if (diferenca <= 0) {
-                    mensagem = mensagem.concat("Manutenção deveria ter sido efetuada" + "\n" +
-                            "Já se passaram " + -diferenca + " km's.");
-                    placeholder = new StatusAdapterPlaceholder(i.toString(), mensagem, true);
-                    list.add(placeholder);
-                } else {
-                    mensagem = mensagem.concat("Quantidade efetuada: " + quantidadeTrocas + "\n" +
-                            "Faltam: " + diferenca + " km's.");
-                    placeholder = new StatusAdapterPlaceholder(i.toString(), mensagem, atrasado);
-                    list.add(placeholder);
-                }
             } else {
                 long diferenca = (valorKm - currentCar.kmRodados);
                 if (diferenca <= 0) {
+                    atrasado = true;
                     mensagem = mensagem.concat("Manutenção deveria ter sido efetuada" + "\n" +
                             "Já se passaram " + -diferenca + " km's.");
-                    placeholder = new StatusAdapterPlaceholder(i.toString(), mensagem, true);
-                    list.add(placeholder);
                 } else {
                     mensagem = mensagem.concat("Faltam: " + diferenca + " km's.");
-                    placeholder = new StatusAdapterPlaceholder(i.toString(), mensagem, false);
-                    list.add(placeholder);
                 }
             }
-
+            placeholder = new StatusAdapterPlaceholder(i.toString(), mensagem, atrasado);
+            list.add(placeholder);
         }
         adapter.notifyDataSetChanged();
     }

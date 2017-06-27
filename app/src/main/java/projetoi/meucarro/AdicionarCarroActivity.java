@@ -82,6 +82,8 @@ public class AdicionarCarroActivity extends AppCompatActivity {
         final ProgressDialog progressDialog = new ProgressDialog(AdicionarCarroActivity.this);
         progressDialog.setMessage("Carregando dados...");
         progressDialog.show();
+        progressDialog.setCancelable(false);
+
 
         final ValueEventListener spinnerMarcaListener = new ValueEventListener() {
             @Override

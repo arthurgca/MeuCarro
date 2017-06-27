@@ -43,6 +43,8 @@ public class AdicionarGastoDialog extends Dialog {
     private EditText editTextKm;
     private EditText editTextValorUnidadeCombustivel;
     private Spinner dialogSpinner;
+    private Button dataButton;
+    private Button adcButton;
 
     public AdicionarGastoDialog(Activity activity) {
         super(activity);
@@ -57,8 +59,8 @@ public class AdicionarGastoDialog extends Dialog {
         database = FirebaseDatabase.getInstance();
         carrosUserRef = database.getReference().child("users").child(mAuth.getCurrentUser().getUid());
 
-        final Button dataButton = (Button) findViewById(R.id.dialogDataButton);
-        Button adcButton = (Button) findViewById(R.id.dialogAdicionar);
+        dataButton = (Button) findViewById(R.id.dialogDataButton);
+        adcButton = (Button) findViewById(R.id.dialogAdicionar);
         dialogSpinner = (Spinner) findViewById(R.id.dialogSpinner);
         editTextValor = (EditText) findViewById(R.id.dialogValorEdit);
         editTextKm = (EditText) findViewById(R.id.quilometragemEdit);
@@ -112,6 +114,10 @@ public class AdicionarGastoDialog extends Dialog {
                 if (editTextValor.getText().toString().isEmpty() || editTextKm.getText().toString().isEmpty()) {
                     Toast.makeText(getContext(), R.string.erro_adicionargasto_vazio,
                             Toast.LENGTH_SHORT).show();
+                } else if (editTextValorUnidadeCombustivel.isEnabled() &&
+                        editTextValorUnidadeCombustivel.getText().toString().isEmpty()) {
+                    Toast.makeText(getContext(), "Valor do litro/m³ do combustível não pode ser vazio",
+                            Toast.LENGTH_SHORT).show();
                 } else {
                     Calendar dia = Calendar.getInstance();
                     dia.set(Calendar.HOUR_OF_DAY, 0);
@@ -162,7 +168,7 @@ public class AdicionarGastoDialog extends Dialog {
 
     private void adicionaGasto(int quilometragemNova) {
         Gasto novoGasto;
-        if (editTextValorUnidadeCombustivel.isEnabled() && !editTextValorUnidadeCombustivel.getText().toString().isEmpty()) {
+        if (editTextValorUnidadeCombustivel.isEnabled()) {
             novoGasto = new GastoCombustivel(dialogSpinner.getSelectedItem().toString(), dataEscolhida,
                     Float.valueOf(editTextValor.getText().toString()), quilometragemNova,
                     Float.valueOf(editTextValorUnidadeCombustivel.getText().toString()));

@@ -85,7 +85,6 @@ public class HomeActivity extends AppCompatActivity {
         final ProgressDialog progressDialog = new ProgressDialog(HomeActivity.this);
         progressDialog.setMessage("Carregando dados...");
         progressDialog.show();
-        progressDialog.setCancelable(false);
 
 
         carrosUserListener = new ValueEventListener() {

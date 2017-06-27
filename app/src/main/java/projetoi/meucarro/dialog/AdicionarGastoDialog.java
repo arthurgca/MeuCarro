@@ -22,6 +22,7 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Collections;
 import java.util.Date;
+import java.util.List;
 
 import projetoi.meucarro.R;
 import projetoi.meucarro.models.CarroUser;
@@ -72,7 +73,7 @@ public class AdicionarGastoDialog extends Dialog {
 
         dialogSpinner.setAdapter(dialogAdapter);
 
-        int mesCorrigido = dataAtual.get(Calendar.MONTH) + 1;
+        final int mesCorrigido = dataAtual.get(Calendar.MONTH) + 1;
 
         dataButton.setText(dataAtual.get(Calendar.DAY_OF_MONTH) +"/"+mesCorrigido+"/"+
                 dataAtual.get(Calendar.YEAR));
@@ -85,15 +86,15 @@ public class AdicionarGastoDialog extends Dialog {
                     @Override
                     public void onDateSet(DatePicker view, int year, int month, int dayOfMonth) {
                         Calendar pagamento = Calendar.getInstance();
-                        pagamento.set(year, month, dayOfMonth + 1);
+                        pagamento.set(year, month, dayOfMonth);
                         pagamento.set(Calendar.HOUR_OF_DAY, 0);
-                        pagamento.set(Calendar.MINUTE, 0);
+                        pagamento.set(Calendar.MINUTE, 30);
                         if (pagamento.compareTo(dataAtual) > 0) {
                             pagamento = Calendar.getInstance();
                             Toast.makeText(getContext(), R.string.erro_adicionargasto_dataposterior,
                                     Toast.LENGTH_SHORT).show();
                         } else {
-                            dataButton.setText(dayOfMonth+"/"+month+"/"+year);
+                            dataButton.setText(dayOfMonth+"/"+ (month + 1)+"/"+year);
                         }
                         dataEscolhida = pagamento.getTime();
 
@@ -121,9 +122,8 @@ public class AdicionarGastoDialog extends Dialog {
                 } else {
                     Calendar dia = Calendar.getInstance();
                     dia.set(Calendar.HOUR_OF_DAY, 0);
-                    dia.set(Calendar.MINUTE, 0);
-                    Log.d("dia", String.valueOf(dia.getTime()));
-                    Log.d("dia2", String.valueOf(dataEscolhida));
+                    dia.set(Calendar.MINUTE, 30);
+
 
                     if (dia.getTime().compareTo(dataEscolhida) > 0) {
                         int quilometragemNova = Integer.valueOf(editTextKm.getText().toString());
@@ -176,22 +176,52 @@ public class AdicionarGastoDialog extends Dialog {
             novoGasto = new Gasto(dialogSpinner.getSelectedItem().toString(), dataEscolhida,
                     Float.valueOf(editTextValor.getText().toString()), quilometragemNova);
         }
+        Log.d("checa", String.valueOf(checaGastoMenor(novoGasto, carroUser.listaGastos)));
+        if (!checaGastoMenor(novoGasto, carroUser.listaGastos)){
+            Toast.makeText(getContext(), "Já existe um registro com quilometragem maior em dia anterior.",
+                    Toast.LENGTH_SHORT).show();
+        } else {
 
-        if (carroUser.listaGastos == null) {
-            carroUser.listaGastos = new ArrayList<>();
+            if (carroUser.listaGastos == null) {
+                carroUser.listaGastos = new ArrayList<>();
+            }
+            if (quilometragemNova >= carroUser.kmRodados) {
+                carroUser.kmRodados = quilometragemNova;
+            }
+            carroUser.listaGastos.add(novoGasto);
+            Collections.sort(carroUser.listaGastos, Gasto.compareByData());
+            carrosUserRef.child("carrosList").child(lastCarId).setValue(carroUser);
+            dismiss();
         }
-        if (quilometragemNova >= carroUser.kmRodados) {
-            carroUser.kmRodados = quilometragemNova;
-        }
-        carroUser.listaGastos.add(novoGasto);
-        Collections.sort(carroUser.listaGastos, Gasto.compareByData());
-        carrosUserRef.child("carrosList").child(lastCarId).setValue(carroUser);
-        dismiss();
     }
 
     public void setInfo(CarroUser carroUser, String lastCarId) {
         this.carroUser = carroUser;
         this.lastCarId = lastCarId;
+    }
+
+    private boolean checaGastoMenor(Gasto gasto, List<Gasto> listGastos) {
+        boolean podeAdicionar = true;
+        Gasto ultimoGasto = null;
+
+        if (listGastos != null) {
+            for (Gasto g : listGastos) {
+                if (g.data.compareTo(gasto.data) < 0) {
+                    ultimoGasto = g;
+                }
+            }
+        }
+
+        if (ultimoGasto != null) {
+            if (gasto.registroKm < ultimoGasto.registroKm) {
+                Log.d("gastoRegistro", String.valueOf(gasto.registroKm));
+                Log.d("ultimoRegistro", String.valueOf(ultimoGasto.registroKm));
+
+                podeAdicionar = false;
+            }
+        }
+
+        return podeAdicionar;
     }
 
 

@@ -9,6 +9,8 @@
 
     <string-array name="color_expense">
         <item>#011efe</item>
+        <item>#607D8B</item>
+        <item>#795548</item>
         <item>#38eeff</item>
         <item>#fe0000</item>
         <item>#fdfe02</item>

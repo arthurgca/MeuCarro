@@ -176,7 +176,7 @@ public class ExpensesReportActivity extends AppCompatActivity {
             //serie.setDrawBackground(true);
             serie.setDrawDataPoints(true);
             Log.d("serieIndex", String.valueOf(serieIndex));
-            serie.setColor(Color.parseColor(seriesColors[serieIndex]));
+            serie.setColor(Color.parseColor(seriesColors[serieIndex + 1]));
 
             this.seriesByExpenses.add(serie);
         }

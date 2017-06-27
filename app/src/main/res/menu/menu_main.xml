@@ -17,6 +17,11 @@
     <item
         android:id="@+id/expenses_report_menu"
         android:title="@string/menu_relatoriogastos" />
+
+    <item
+        android:id="@+id/menu_status_carro"
+        android:title="@string/menu_status_do_carro" />
+
     <item
         android:id="@+id/menu_logout"
         android:title="@string/menu_logout" />

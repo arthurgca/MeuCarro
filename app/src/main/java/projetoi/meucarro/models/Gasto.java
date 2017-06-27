@@ -11,15 +11,17 @@ public class Gasto {
     public String descricao;
     public Date data;
     public float valor;
+    public long registroKm;
 
     public Gasto() {
         // Default constructor required for calls to DataSnapshot.getValue(User.class)
     }
 
-    public Gasto(String descricao, Date data, float valor) {
+    public Gasto(String descricao, Date data, float valor, long registroKm) {
         this.descricao = descricao;
         this.data = data;
         this.valor = valor;
+        this.registroKm = registroKm;
     }
 
     @Override

@@ -100,23 +100,24 @@ public class AdicionarGastoDialog extends Dialog {
         adcButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (editTextValor.getText().toString().isEmpty() || editTextKm.getText().toString().isEmpty()) {
+                if (editTextValor.getText().toString().isEmpty() || editTextKm.getText().toString().isEmpty() ||
+                        editTextValorUnidadeCombustivel.getText().toString().isEmpty()) {
                     Toast.makeText(getContext(), R.string.erro_adicionargasto_vazio,
                             Toast.LENGTH_SHORT).show();
                 } else {
                     int quilometragemNova = Integer.valueOf(editTextKm.getText().toString());
-                    if (quilometragemNova <= carroUser.kmRodados) {
+                    if (quilometragemNova < carroUser.kmRodados) {
                         Toast.makeText(getContext(), R.string.erro_adicionargasto_quilometragem_menor,
                                 Toast.LENGTH_SHORT).show();
                     } else {
                         Gasto novoGasto;
                         if (editTextValorUnidadeCombustivel.isEnabled()) {
                             novoGasto = new GastoCombustivel(dialogSpinner.getSelectedItem().toString(), dataEscolhida,
-                                    Float.valueOf(editTextValor.getText().toString()),
+                                    Float.valueOf(editTextValor.getText().toString()), quilometragemNova,
                                     Float.valueOf(editTextValorUnidadeCombustivel.getText().toString()));
                         } else {
                             novoGasto = new Gasto(dialogSpinner.getSelectedItem().toString(), dataEscolhida,
-                                    Float.valueOf(editTextValor.getText().toString()));
+                                    Float.valueOf(editTextValor.getText().toString()), quilometragemNova);
                         }
                         if (carroUser.listaGastos == null) {
                             carroUser.listaGastos = new ArrayList<>();

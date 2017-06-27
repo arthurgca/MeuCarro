@@ -162,6 +162,10 @@ public class HomeActivity extends AppCompatActivity {
             Intent it = new Intent(HomeActivity.this, ExpensesReportActivity.class);
             it.setFlags(Intent.FLAG_ACTIVITY_NO_HISTORY);
             startActivity(it);
+        } else if (id == R.id.menu_status_carro) {
+            Intent it = new Intent(HomeActivity.this, CarroStatusActivity.class);
+            it.setFlags(Intent.FLAG_ACTIVITY_NO_HISTORY);
+            startActivity(it);
         }
 
         return super.onOptionsItemSelected(item);

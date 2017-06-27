@@ -151,10 +151,11 @@ public class AdicionarCarroActivity extends AppCompatActivity {
         adicionarButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                String marcaSelecionada = carrosMarcaList.get(spinnerMarca.getSelectedItemPosition());
                 String modeloCarroSelecionado = carrosModeloList.get(spinnerModelo.getSelectedItemPosition());
                 String modeloAnoSelecionado = spinnerAno.getSelectedItem().toString();
                 String placaCarro = placa.getText().toString();
-                CarroUser carroUser = new CarroUser(modeloCarroSelecionado, modeloAnoSelecionado, placaCarro, 0, new ArrayList<Gasto>());
+                CarroUser carroUser = new CarroUser(marcaSelecionada, modeloCarroSelecionado, modeloAnoSelecionado, placaCarro, 0, new ArrayList<Gasto>());
                 String uidLastCar = usersRef.child(mAuth.getCurrentUser().getUid()).child("carrosList").push().getKey();
                 usersRef.child(mAuth.getCurrentUser().getUid()).child("carrosList").child(uidLastCar).setValue(carroUser);
                 usersRef.child(mAuth.getCurrentUser().getUid()).child("lastCar").setValue(uidLastCar);

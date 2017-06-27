@@ -71,6 +71,7 @@
     <string name="erro_trocarcarro_zero_carros">Adicione um carro para poder trocar.</string>
     <string name="erro_trocarcarro_nenhumaselecao">Selecione um carro para trocar.</string>
     <string name="adicionarcarro_placahint">Placa</string>
+    <string name="menu_status_do_carro">Status do Carro</string>
 
     <!--Arrays-->
     <string-array name="adicionardialog_gastosarray">
@@ -79,9 +80,12 @@
         <item>Troca de Pneu</item>
         <item>IPVA</item>
         <item>Compra de Peças</item>
+        <item>Correia Dentada</item>
+        <item>Filtro Ar Condicionado</item>
+        <item>Filtro de Ar</item>
+        <item>Velas</item>
         <item>Revisão</item>
     </string-array>
-
 
 
 </resources>

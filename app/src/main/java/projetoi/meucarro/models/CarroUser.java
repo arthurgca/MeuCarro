@@ -4,6 +4,7 @@ import java.util.List;
 
 
 public class CarroUser {
+    public String marca;
     public String modelo;
     public String ano;
     public String placa;
@@ -14,7 +15,8 @@ public class CarroUser {
         // Default constructor required for calls to DataSnapshot.getValue(User.class)
     }
 
-    public CarroUser(String modelo, String ano, String placa, int kmRodados, List<Gasto> listaGastos) {
+    public CarroUser(String marca, String modelo, String ano, String placa, int kmRodados, List<Gasto> listaGastos) {
+        this.marca = marca;
         this.modelo = modelo;
         this.ano = ano;
         this.placa = placa;

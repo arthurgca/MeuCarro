@@ -127,7 +127,7 @@ public class AdicionarGastoDialog extends Dialog {
 
                     if (dia.getTime().compareTo(dataEscolhida) > 0) {
                         int quilometragemNova = Integer.valueOf(editTextKm.getText().toString());
-                            if (quilometragemNova >= carroUser.kmRodados) {
+                            if (quilometragemNova > carroUser.kmRodados && carroUser.kmRodados != 0) {
                             Toast.makeText(getContext(), R.string.erro_adicionargasto_quilmetragem_maior,
                                     Toast.LENGTH_SHORT).show();
                         } else {
@@ -193,4 +193,6 @@ public class AdicionarGastoDialog extends Dialog {
         this.carroUser = carroUser;
         this.lastCarId = lastCarId;
     }
+
+
 }

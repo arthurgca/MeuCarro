@@ -17,8 +17,10 @@ import com.google.firebase.database.ValueEventListener;
 import java.util.ArrayList;
 import java.util.HashMap;
 
+import projetoi.meucarro.adapters.StatusRowAdapter;
 import projetoi.meucarro.models.CarroUser;
 import projetoi.meucarro.models.Gasto;
+import projetoi.meucarro.utils.StatusAdapterPlaceholder;
 
 public class CarroStatusActivity extends AppCompatActivity {
 
@@ -27,7 +29,7 @@ public class CarroStatusActivity extends AppCompatActivity {
     private CarroUser currentCar;
     private FirebaseAuth mAuth;
     private ArrayAdapter adapter;
-    private ArrayList<String> list;
+    private ArrayList<StatusAdapterPlaceholder> list;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -38,7 +40,7 @@ public class CarroStatusActivity extends AppCompatActivity {
         list = new ArrayList<>();
 
         ListView listView = (ListView) findViewById(R.id.carro_status_listview);
-        adapter = new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, list);
+        adapter = new StatusRowAdapter(this, list);
 
         listView.setAdapter(adapter);
 
@@ -81,6 +83,9 @@ public class CarroStatusActivity extends AppCompatActivity {
 
     private void checaStatus(HashMap manutencao) {
         for (Object i : manutencao.keySet()) {
+            StatusAdapterPlaceholder placeholder;
+            String mensagem;
+
             Gasto ultimoGasto = null;
             int quantidadeTrocas = 0;
 
@@ -97,30 +102,33 @@ public class CarroStatusActivity extends AppCompatActivity {
                 long diferenca = (valorKm - (currentCar.kmRodados - ultimoGasto.registroKm));
 
                 if (diferenca <= 0) {
-                    list.add(i + "\n" +
-                            "Troca deveria ter sido efetuada" + "\n" +
-                            "Já se passaram " + -diferenca + " km's.");
+                    mensagem = "Manutenção deveria ter sido efetuada" + "\n" +
+                            "Já se passaram " + -diferenca + " km's.";
+                    placeholder = new StatusAdapterPlaceholder(i.toString(), mensagem, true);
+                    list.add(placeholder);
                 } else {
-                    list.add(i + "\n" +
-                            "Trocas: " + quantidadeTrocas + "\n" +
-                            "Faltam: " + diferenca + " km's.");
+                    mensagem =
+                            "Quantidade efetuada: " + quantidadeTrocas + "\n" +
+                            "Faltam: " + diferenca + " km's.";
+                    placeholder = new StatusAdapterPlaceholder(i.toString(), mensagem, false);
+                    list.add(placeholder);
                 }
             } else {
                 long diferenca = (valorKm - currentCar.kmRodados);
                 if (diferenca <= 0) {
-                    list.add(i + "\n" +
-                            "Troca deveria ter sido efetuada" + "\n" +
-                            "Já se passaram " + -diferenca + " km's.");
+                    mensagem = "Manutenção deveria ter sido efetuada" + "\n" +
+                            "Já se passaram " + -diferenca + " km's.";
+                    placeholder = new StatusAdapterPlaceholder(i.toString(), mensagem, true);
+                    list.add(placeholder);
                 } else {
-                    list.add(i + "\n" +
-                            "Faltam: " + diferenca + " km's.");
+                    mensagem = "Faltam: " + diferenca + " km's.";
+                    placeholder = new StatusAdapterPlaceholder(i.toString(), mensagem, false);
+                    list.add(placeholder);
                 }
             }
 
         }
         adapter.notifyDataSetChanged();
-
     }
-
 
 }

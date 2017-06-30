@@ -2,11 +2,12 @@ package projetoi.meucarro.models;
 
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
+import java.util.Calendar;
 import java.util.Comparator;
 import java.util.Date;
 import java.util.Locale;
 
-public class Gasto {
+public class Gasto  {
 
     public String descricao;
     public Date data;
@@ -26,8 +27,46 @@ public class Gasto {
 
     @Override
     public String toString() {
-        DateFormat df = new SimpleDateFormat("dd/MM/yyyy", Locale.US);
+        DateFormat df = new SimpleDateFormat("dd/MM/yyyy", new Locale("pt", "BR"));
         return descricao + " || " + df.format(data) + " || " + valor;
+    }
+
+    public int getDataFormatada(int dateOption) {
+        Calendar c = Calendar.getInstance();
+        c.setTime(this.data);
+        return c.get(dateOption);
+    }
+
+    public String getDescricao() {
+        return descricao;
+    }
+
+    public void setDescricao(String descricao) {
+        this.descricao = descricao;
+    }
+
+    public Date getData() {
+        return data;
+    }
+
+    public void setData(Date data) {
+        this.data = data;
+    }
+
+    public float getValor() {
+        return valor;
+    }
+
+    public void setValor(float valor) {
+        this.valor = valor;
+    }
+
+    public long getRegistroKm() {
+        return registroKm;
+    }
+
+    public void setRegistroKm(long registroKm) {
+        this.registroKm = registroKm;
     }
 
     public static Comparator<Gasto> compareByData() {
@@ -49,7 +88,7 @@ public class Gasto {
     }
 
     public String getFormattedData () {
-        DateFormat df = new SimpleDateFormat("dd/MM/yyyy", Locale.US);
+        DateFormat df = new SimpleDateFormat("dd/MM/yyyy", new Locale("pt", "BR"));
         return df.format(data);
     }
 }

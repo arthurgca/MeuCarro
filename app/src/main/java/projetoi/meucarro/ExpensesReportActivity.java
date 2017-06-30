@@ -6,6 +6,7 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Color;
 import android.support.v4.content.ContextCompat;
+import android.support.v4.content.res.TypedArrayUtils;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -25,26 +26,28 @@ import com.google.firebase.database.ValueEventListener;
 import com.jjoe64.graphview.GraphView;
 import com.jjoe64.graphview.LegendRenderer;
 import com.jjoe64.graphview.helper.DateAsXAxisLabelFormatter;
+import com.jjoe64.graphview.helper.StaticLabelsFormatter;
+import com.jjoe64.graphview.series.BarGraphSeries;
 import com.jjoe64.graphview.series.DataPoint;
 import com.jjoe64.graphview.series.LineGraphSeries;
 
+import java.text.DateFormatSymbols;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.Locale;
 
 import projetoi.meucarro.models.CarroUser;
 import projetoi.meucarro.models.Gasto;
 
 public class ExpensesReportActivity extends AppCompatActivity {
 
-    private static final String EXPENSES_SUM = "Total";
-    private static int MAX_DAYS = 55555;
-    private static int DAYS_INTERVAL = 30;
-    private static int X_LABEL_ANGLE = 45;
+    private static int MAX = 366;
 
     private GraphView expenseGraph;
-    private ArrayList<LineGraphSeries<DataPoint>> seriesByExpenses;
-    private LineGraphSeries<DataPoint> seriesTotal;
+    private ArrayList<BarGraphSeries<DataPoint>> series;
 
     private String[] typesOfExpenses;
     private boolean[] checkedItens;
@@ -61,11 +64,14 @@ public class ExpensesReportActivity extends AppCompatActivity {
         setContentView(R.layout.activity_expenses_report);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbarExpenseReport);
         setSupportActionBar(toolbar);
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true); //TODO
 
         mAuth = FirebaseAuth.getInstance();
 
-        this.typesOfExpenses = getResources().getStringArray(R.array.adicionardialog_gastosarray);
+        ArrayList<String> typesOfExpensesList = new ArrayList<>();
+        typesOfExpensesList.add("Total");
+        typesOfExpensesList.addAll(Arrays.asList(getResources().getStringArray(R.array.adicionardialog_gastosarray)));
+        this.typesOfExpenses = typesOfExpensesList.toArray(new String[typesOfExpensesList.size()]);
+
         this.checkedItens = new boolean[this.typesOfExpenses.length];
 
         carrosUserListener = new ValueEventListener() {
@@ -104,101 +110,53 @@ public class ExpensesReportActivity extends AppCompatActivity {
     }
 
     private void initGraph() {
-        // Format date for X axis label
-        String dayText = getResources().getString(R.string.all_day_text);
-        String monthText = getResources().getString(R.string.all_month_text);
-        String yearText = getResources().getString(R.string.all_year_text);
-
-        String dateFormat = monthText + "/" + dayText + "/" + yearText;
-
-        //this.expenseGraph.setTitle(getResources().getString(R.string.gascalculator_expense_by_time));
-        //this.expenseGraph.setTitleTextSize(50);
-        this.expenseGraph.getGridLabelRenderer().setVerticalAxisTitle(getResources().getString(R.string.gascalculator_brazilian_currency_symbol));
-        this.expenseGraph.getGridLabelRenderer().setHorizontalAxisTitle(dateFormat);
-        this.expenseGraph.getGridLabelRenderer().setHumanRounding(false);
-        this.expenseGraph.getGridLabelRenderer().setHorizontalLabelsAngle(X_LABEL_ANGLE);
-        this.expenseGraph.getGridLabelRenderer().setPadding(50);
-
-
-        // set date label formatter
-        this.expenseGraph.getGridLabelRenderer().setLabelFormatter(new DateAsXAxisLabelFormatter(this.expenseGraph.getContext()));
-        this.expenseGraph.getGridLabelRenderer().setNumHorizontalLabels(this.currentCar.listaGastos.size() + 1);
-
-        // set manual x bounds to have nice steps
-        this.expenseGraph.getViewport().setXAxisBoundsManual(true);
-        if (!this.currentCar.listaGastos.isEmpty()) {
-            int amountExpenses = this.currentCar.listaGastos.size();
-
-            Date lastExpenseDate = this.currentCar.listaGastos.get(amountExpenses - 1).data;
-
-            Calendar c = Calendar.getInstance();
-            c.setTime(lastExpenseDate);
-
-            Date maxDate = c.getTime();
-
-            c.add(Calendar.DATE, -DAYS_INTERVAL); //30 days of space on X axis
-            Date minDate = c.getTime();
-
-            this.expenseGraph.getViewport().setMinX(minDate.getTime());
-            this.expenseGraph.getViewport().setMaxX(maxDate.getTime());
-        }
+        this.setGridRenderer(0, 50);
+        this.setStaticLabelsByMonth("pt", "BR");
 
         // set legend
         this.expenseGraph.getLegendRenderer().setVisible(true);
         this.expenseGraph.getLegendRenderer().setAlign(LegendRenderer.LegendAlign.TOP);
 
-        // enables horizontal scrolling
-        this.expenseGraph.getViewport().setScrollable(true);
-
+        this.initSeries();
         this.loadSeries();
     }
 
-    private void loadSeries() {
+    private void initSeries() {
         String[] seriesColors = getResources().getStringArray(R.array.color_expense);
-
-        // Initializing series
-        this.seriesTotal = new LineGraphSeries<>(new DataPoint[]{});
-
-        this.seriesTotal.setTitle(EXPENSES_SUM);
-        this.seriesTotal.setAnimated(true);
-        this.seriesTotal.setDrawBackground(true);
-        this.seriesTotal.setDrawDataPoints(true);
-        this.seriesTotal.setColor(Color.parseColor(seriesColors[0]));
-
-        this.seriesByExpenses = new ArrayList<>();
+        this.series = new ArrayList<>();
 
         for (int serieIndex = 0; serieIndex < this.typesOfExpenses.length; serieIndex++) {
-            LineGraphSeries<DataPoint> serie = new LineGraphSeries(new DataPoint[] {});
+            BarGraphSeries serie = new BarGraphSeries<>(new DataPoint[]{});
 
-            //Setting attributes
-            serie.setTitle(typesOfExpenses[serieIndex].toString());
+            serie.setTitle(this.typesOfExpenses[serieIndex].toString());
             serie.setAnimated(true);
-            //serie.setDrawBackground(true);
-            serie.setDrawDataPoints(true);
-            Log.d("serieIndex", String.valueOf(serieIndex));
-            serie.setColor(Color.parseColor(seriesColors[serieIndex + 1]));
+            serie.setDrawValuesOnTop(true);
+            serie.setColor(Color.parseColor(seriesColors[serieIndex]));
+            serie.setValuesOnTopColor(ContextCompat.getColor(getApplicationContext(), R.color.colorBlack));
 
-            this.seriesByExpenses.add(serie);
+            this.series.add(serie);
         }
+    }
 
-        // Adding expenses to the series
-        for (Gasto expense : this.currentCar.listaGastos) {
-            DataPoint dp = new DataPoint(expense.data, expense.valor);
-
-            this.seriesTotal.appendData(dp, true, MAX_DAYS);
-
-            for (int expenseIndex = 0; expenseIndex < this.typesOfExpenses.length; expenseIndex++) {
-                if (expense.descricao.equals(typesOfExpenses[expenseIndex])) {
-                    this.seriesByExpenses.get(expenseIndex).appendData(dp, true, MAX_DAYS);
-                    break;
-                }
-            }
-        }
-
-        // Adding series to the graph
-        this.expenseGraph.addSeries(this.seriesTotal);
+    private void loadSeries() {
 
     }
+
+    private void setGridRenderer(int labelAngle, int padding) {
+        this.expenseGraph.getGridLabelRenderer().setVerticalAxisTitle(getResources().getString(R.string.gascalculator_brazilian_currency_symbol));
+        this.expenseGraph.getGridLabelRenderer().setHumanRounding(false);
+        this.expenseGraph.getGridLabelRenderer().setHorizontalLabelsAngle(labelAngle);
+        this.expenseGraph.getGridLabelRenderer().setPadding(padding);
+    }
+
+    private void setStaticLabelsByMonth(String language, String country) {
+        String[] monthsNames = new DateFormatSymbols(new Locale(language, country)).getShortMonths();
+
+        StaticLabelsFormatter staticLabelsFormatter = new StaticLabelsFormatter(this.expenseGraph);
+        staticLabelsFormatter.setHorizontalLabels(monthsNames);
+        this.expenseGraph.getGridLabelRenderer().setLabelFormatter(staticLabelsFormatter);
+    }
+
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -207,7 +165,7 @@ public class ExpensesReportActivity extends AppCompatActivity {
     }
 
     @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
+    public boolean onOptionsItemSelected(final MenuItem item) {
 
         int id = item.getItemId();
 
@@ -220,35 +178,20 @@ public class ExpensesReportActivity extends AppCompatActivity {
                 @Override
                 public void onClick(DialogInterface dialog, int which, boolean isChecked) {
                     if (isChecked) {
-                        expenseGraph.addSeries(seriesByExpenses.get(which));
+                        expenseGraph.addSeries(series.get(which));
                     } else {
-                        expenseGraph.removeSeries(seriesByExpenses.get(which));
+                        expenseGraph.removeSeries(series.get(which));
                     }
                 }
             });
 
             mBuilder.setCancelable(false);
             mBuilder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
-
                 @Override
                 public void onClick(DialogInterface dialog, int which) {
-                    LegendRenderer mLegendRenderer = new LegendRenderer(expenseGraph);
-
-                    expenseGraph.setLegendRenderer(mLegendRenderer);
-                    expenseGraph.getLegendRenderer().setVisible(true);
-                    expenseGraph.getLegendRenderer().setAlign(LegendRenderer.LegendAlign.TOP);
                 }
 
             });
-
-            mBuilder.setNegativeButton("Cancelar", new DialogInterface.OnClickListener() {
-
-                @Override
-                public void onClick(DialogInterface dialog, int which) {
-                    dialog.dismiss();
-                }
-            });
-
             AlertDialog mDialog = mBuilder.create();
             mDialog.show();
         }

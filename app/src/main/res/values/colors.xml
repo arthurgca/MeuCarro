@@ -8,20 +8,18 @@
     <color name="colorBlack">#000000</color>
 
     <string-array name="color_expense">
-        <item>#011efe</item>
-        <item>#607D8B</item>
-        <item>#795548</item>
-        <item>#38eeff</item>
-        <item>#fe0000</item>
-        <item>#fdfe02</item>
-        <item>#0bff01</item>
-        <item>#FFA500</item>
-        <item>#fe00f6</item>
-        <item>#AAA5D2</item>
-        <item>#999D12</item>
-        <item>#111D12</item>
-
-
+        <item>#0000FF</item>
+        <item>#FF0000</item>
+        <item>#FFFF00</item>
+        <item>#008000</item>
+        <item>#00FFFF</item>
+        <item>#000080</item>
+        <item>#FF00FF</item>
+        <item>#800080</item>
+        <item>#808000</item>
+        <item>#00FF00</item>
+        <item>#C0C0C0</item>
+        <item>#800000</item>
 
     </string-array>
 

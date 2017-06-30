@@ -93,12 +93,8 @@ public class CarroUser {
         this.kmRodados = kmRodados;
     }
 
-    public Double getSomaTotalDeGastos() {
+    public Double getSomaDeGastos() {
         return somaDeGastos;
-    }
-
-    public void setSomaTotalDeGastos(Double somaTotalDeGastos) {
-        this.somaDeGastos = somaTotalDeGastos;
     }
 
     public Double getSomaDeGastoPorTipo(String descricao) {

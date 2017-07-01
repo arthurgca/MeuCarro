@@ -188,7 +188,7 @@ public class AdicionarGastoDialog extends Dialog {
             if (quilometragemNova >= carroUser.kmRodados) {
                 carroUser.kmRodados = quilometragemNova;
             }
-            carroUser.listaGastos.add(novoGasto);
+            carroUser.adicionaGasto(novoGasto);
             Collections.sort(carroUser.listaGastos, Gasto.compareByData());
             carrosUserRef.child("carrosList").child(lastCarId).setValue(carroUser);
             dismiss();

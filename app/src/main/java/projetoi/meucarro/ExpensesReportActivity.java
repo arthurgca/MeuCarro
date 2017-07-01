@@ -68,6 +68,7 @@ public class ExpensesReportActivity extends AppCompatActivity {
         mAuth = FirebaseAuth.getInstance();
 
         ArrayList<String> typesOfExpensesList = new ArrayList<>();
+
         typesOfExpensesList.add("Total");
         typesOfExpensesList.addAll(Arrays.asList(getResources().getStringArray(R.array.adicionardialog_gastosarray)));
         this.typesOfExpenses = typesOfExpensesList.toArray(new String[typesOfExpensesList.size()]);
@@ -118,7 +119,7 @@ public class ExpensesReportActivity extends AppCompatActivity {
         this.expenseGraph.getLegendRenderer().setAlign(LegendRenderer.LegendAlign.TOP);
 
         this.initSeries();
-        this.loadSeries();
+        //this.loadSeries();
     }
 
     private void initSeries() {
@@ -139,6 +140,32 @@ public class ExpensesReportActivity extends AppCompatActivity {
     }
 
     private void loadSeries() {
+        int thisYear = Calendar.getInstance().get(Calendar.YEAR);
+
+        for (Gasto expense : this.currentCar.getListaGastos()) {
+            int expanseYear = expense.getDataFormatada(Calendar.YEAR);
+
+            if (expanseYear == thisYear) {
+                int month = expense.getDataFormatada(Calendar.MONTH);
+                //Log.e(month + "   SUM : "  +  this.currentCar.getSomaDeGastos(), "XXXXXXXXXXXXX");
+
+                DataPoint dp = new DataPoint(month, this.currentCar.getSomaDeGastos());
+                series.get(0).appendData(dp, true, MAX);
+
+                for (int serieIndex = 0; serieIndex < series.size(); serieIndex++){
+                    String expenseType = expense.getDescricao();
+
+                    if (expense.getDescricao().equals(expenseType)) {
+                        DataPoint dpType = new DataPoint(month,
+                                this.currentCar.getSomaDeGastoPorTipo(expense.getDescricao()));
+
+                        series.get(serieIndex).appendData(dpType, true, MAX);
+                    }
+                }
+
+            }
+        }
+
 
     }
 

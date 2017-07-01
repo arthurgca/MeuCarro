@@ -27,14 +27,21 @@ public class CarroUser {
         this.placa = placa;
         this.kmRodados = kmRodados;
         this.listaGastos = listaGastos;
-        this.initSomaDeGastos();
+        this.somaDeGastosPorTipo = new HashMap<>();
         this.somaDeGastos = 0.0;
-
+        this.initSomaDeGastos();
     }
 
     private void initSomaDeGastos() {
-        this.somaDeGastosPorTipo = new HashMap<>();
-        String[] tipoDeGastos = new String[]{
+        String[] tipoDeGastos = this.getListaTipoDeGastos();
+
+        for (int i = 0; i < tipoDeGastos.length; i++) {
+            this.somaDeGastosPorTipo.put(tipoDeGastos[i], 0.0);
+        }
+    }
+
+    public String[] getListaTipoDeGastos() {
+        return new String[]{
                 "Combustível",
                 "Troca de Óleo",
                 "Troca de Pneu",
@@ -46,15 +53,10 @@ public class CarroUser {
                 "Velas",
                 "Revisão"
         };
-
-        for (int i = 0; i < tipoDeGastos.length; i++) {
-            this.somaDeGastosPorTipo.put(tipoDeGastos[i], 0.0);
-        }
-
     }
 
     public String getMarca() {
-        return marca;
+        return this.marca;
     }
 
     public void setMarca(String marca) {
@@ -62,7 +64,7 @@ public class CarroUser {
     }
 
     public String getModelo() {
-        return modelo;
+        return this.modelo;
     }
 
     public void setModelo(String modelo) {
@@ -70,7 +72,7 @@ public class CarroUser {
     }
 
     public String getAno() {
-        return ano;
+        return this.ano;
     }
 
     public void setAno(String ano) {
@@ -78,7 +80,7 @@ public class CarroUser {
     }
 
     public String getPlaca() {
-        return placa;
+        return this.placa;
     }
 
     public void setPlaca(String placa) {
@@ -86,15 +88,19 @@ public class CarroUser {
     }
 
     public int getKmRodados() {
-        return kmRodados;
+        return this.kmRodados;
     }
 
     public void setKmRodados(int kmRodados) {
         this.kmRodados = kmRodados;
     }
 
+    public List<Gasto> getListaGastos() {
+        return this.listaGastos;
+    }
+
     public Double getSomaDeGastos() {
-        return somaDeGastos;
+        return this.somaDeGastos;
     }
 
     public Double getSomaDeGastoPorTipo(String descricao) {
@@ -103,7 +109,7 @@ public class CarroUser {
 
     public void adicionaGasto(Gasto gasto) {
         this.somaDeGastosPorTipo.put(
-                gasto.getDescricao(), this.somaDeGastosPorTipo.get(gasto.descricao) + gasto.getValor());
+                gasto.getDescricao(), this.somaDeGastosPorTipo.get(gasto.getDescricao()) + gasto.getValor());
         this.somaDeGastos += gasto.getValor();
         this.listaGastos.add(gasto);
 
@@ -111,13 +117,13 @@ public class CarroUser {
 
     public void removeGasto(Gasto gasto) {
         this.somaDeGastosPorTipo.put(
-                gasto.getDescricao(), this.somaDeGastosPorTipo.get(gasto.descricao) - gasto.getValor());
+                gasto.getDescricao(), this.somaDeGastosPorTipo.get(gasto.getDescricao()) - gasto.getValor());
         this.somaDeGastos -= gasto.getValor();
         this.listaGastos.remove(gasto);
     }
 
     @Override
     public String toString() {
-        return "Nome: " + modelo + "Ano: " + ano + "Placa: " + placa + " Km's Rodados: " + this.kmRodados;
+        return "Nome: " + this.modelo + "Ano: " + this.ano + "Placa: " + this.placa + " Km's Rodados: " + this.kmRodados;
     }
 }

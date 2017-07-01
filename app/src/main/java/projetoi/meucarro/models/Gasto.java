@@ -38,7 +38,7 @@ public class Gasto  {
     }
 
     public String getDescricao() {
-        return descricao;
+        return this.descricao;
     }
 
     public void setDescricao(String descricao) {
@@ -46,7 +46,7 @@ public class Gasto  {
     }
 
     public Date getData() {
-        return data;
+        return this.data;
     }
 
     public void setData(Date data) {
@@ -54,7 +54,7 @@ public class Gasto  {
     }
 
     public float getValor() {
-        return valor;
+        return this.valor;
     }
 
     public void setValor(float valor) {
@@ -62,7 +62,7 @@ public class Gasto  {
     }
 
     public long getRegistroKm() {
-        return registroKm;
+        return this.registroKm;
     }
 
     public void setRegistroKm(long registroKm) {
@@ -89,6 +89,6 @@ public class Gasto  {
 
     public String getFormattedData () {
         DateFormat df = new SimpleDateFormat("dd/MM/yyyy", new Locale("pt", "BR"));
-        return df.format(data);
+        return df.format(this.data);
     }
 }

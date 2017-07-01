@@ -33,15 +33,7 @@ public class CarroUser {
     }
 
     private void initSomaDeGastos() {
-        String[] tipoDeGastos = this.getListaTipoDeGastos();
-
-        for (int i = 0; i < tipoDeGastos.length; i++) {
-            this.somaDeGastosPorTipo.put(tipoDeGastos[i], 0.0);
-        }
-    }
-
-    public String[] getListaTipoDeGastos() {
-        return new String[]{
+        String[] tipoDeGastos = new String[]{
                 "Combustível",
                 "Troca de Óleo",
                 "Troca de Pneu",
@@ -53,6 +45,10 @@ public class CarroUser {
                 "Velas",
                 "Revisão"
         };
+
+        for (int i = 0; i < tipoDeGastos.length; i++) {
+            this.somaDeGastosPorTipo.put(tipoDeGastos[i], 0.0);
+        }
     }
 
     public String getMarca() {

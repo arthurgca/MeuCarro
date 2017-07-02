@@ -30,6 +30,7 @@
 
     <!--ExpenseReportActivity-->
     <string name="choose_expense_type">Escolha o tipo de despesa</string>
+    <string name="choose_expense_year">Escolha o ano</string>
 
     <!--TrocarCarroActivity-->
     <string name="trocarcarro_trocartext">Trocar</string>

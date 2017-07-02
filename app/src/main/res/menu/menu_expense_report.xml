@@ -5,13 +5,13 @@
     <item
         android:id="@+id/time_interval"
         android:icon="@android:drawable/ic_menu_day"
-        android:title="Show"
+        android:title="@string/choose_expense_year"
         app:showAsAction="always"/>
 
     <item
         android:id="@+id/choose_type_of_expense"
         android:icon="@android:drawable/ic_menu_preferences"
-        android:title="Show"
+        android:title="@string/choose_expense_type"
         app:showAsAction="always"/>
 
 </menu>

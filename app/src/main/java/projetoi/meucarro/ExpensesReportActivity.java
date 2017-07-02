@@ -1,12 +1,8 @@
 package projetoi.meucarro;
 
-import android.app.Dialog;
-import android.app.TimePickerDialog;
 import android.content.DialogInterface;
-import android.content.Intent;
 import android.graphics.Color;
 import android.support.v4.content.ContextCompat;
-import android.support.v4.content.res.TypedArrayUtils;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -14,7 +10,6 @@ import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.widget.ArrayAdapter;
 import android.widget.Toast;
 
 import com.google.firebase.auth.FirebaseAuth;
@@ -25,18 +20,15 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 import com.jjoe64.graphview.GraphView;
 import com.jjoe64.graphview.LegendRenderer;
-import com.jjoe64.graphview.helper.DateAsXAxisLabelFormatter;
 import com.jjoe64.graphview.helper.StaticLabelsFormatter;
 import com.jjoe64.graphview.series.BarGraphSeries;
 import com.jjoe64.graphview.series.DataPoint;
-import com.jjoe64.graphview.series.LineGraphSeries;
 
 import java.text.DateFormatSymbols;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Calendar;
-import java.util.Date;
+import java.util.List;
 import java.util.Locale;
 
 import projetoi.meucarro.models.CarroUser;
@@ -110,16 +102,21 @@ public class ExpensesReportActivity extends AppCompatActivity {
         this.expenseGraph = (GraphView) findViewById(R.id.expenseByDateGraphView);
     }
 
+    private void setLegendRenderer() {
+        LegendRenderer legendRenderer = new LegendRenderer(this.expenseGraph);
+
+        this.expenseGraph.setLegendRenderer(legendRenderer);
+        this.expenseGraph.getLegendRenderer().setVisible(true);
+        this.expenseGraph.getLegendRenderer().setAlign(LegendRenderer.LegendAlign.TOP);
+    }
+
     private void initGraph() {
         this.setGridRenderer(0, 50);
         this.setStaticLabelsByMonth("pt", "BR");
-
-        // set legend
-        this.expenseGraph.getLegendRenderer().setVisible(true);
-        this.expenseGraph.getLegendRenderer().setAlign(LegendRenderer.LegendAlign.TOP);
+        this.setLegendRenderer();
 
         this.initSeries();
-        //this.loadSeries();
+        this.loadSeries();
     }
 
     private void initSeries() {
@@ -141,32 +138,24 @@ public class ExpensesReportActivity extends AppCompatActivity {
 
     private void loadSeries() {
         int thisYear = Calendar.getInstance().get(Calendar.YEAR);
+        ArrayList<ArrayList<Gasto>> expensesByYear = this.currentCar.getExpensesByYear(thisYear);
 
-        for (Gasto expense : this.currentCar.getListaGastos()) {
-            int expanseYear = expense.getDataFormatada(Calendar.YEAR);
+        for (int month = 0; month < expensesByYear.size(); month++) {
+            ArrayList<Gasto> expensesMonth = expensesByYear.get(month);
+            Double expensesSum = this.currentCar.calculateExpensesSum(expensesMonth);
 
-            if (expanseYear == thisYear) {
-                int month = expense.getDataFormatada(Calendar.MONTH);
-                //Log.e(month + "   SUM : "  +  this.currentCar.getSomaDeGastos(), "XXXXXXXXXXXXX");
+            DataPoint dp = new DataPoint(month + 1, expensesSum);
+            this.series.get(0).appendData(dp, true, MAX);
 
-                DataPoint dp = new DataPoint(month, this.currentCar.getSomaDeGastos());
-                series.get(0).appendData(dp, true, MAX);
+            for (int i = 1; i < this.typesOfExpenses.length; i++) {
+                ArrayList<Gasto> expensesByType = this.currentCar.getExpensesByType(expensesMonth, this.typesOfExpenses[i]);
+                Double expensesTypeSum = this.currentCar.calculateExpensesSum(expensesByType);
 
-                for (int serieIndex = 0; serieIndex < series.size(); serieIndex++){
-                    String expenseType = expense.getDescricao();
-
-                    if (expense.getDescricao().equals(expenseType)) {
-                        DataPoint dpType = new DataPoint(month,
-                                this.currentCar.getSomaDeGastoPorTipo(expense.getDescricao()));
-
-                        series.get(serieIndex).appendData(dpType, true, MAX);
-                    }
-                }
-
+                DataPoint dpType = new DataPoint(month + 1, expensesTypeSum);
+                this.series.get(i).appendData(dpType, true, MAX);
             }
         }
-
-
+        this.expenseGraph.addSeries(series.get(0));
     }
 
     private void setGridRenderer(int labelAngle, int padding) {
@@ -201,14 +190,13 @@ public class ExpensesReportActivity extends AppCompatActivity {
         } else if (id == R.id.choose_type_of_expense) {
             AlertDialog.Builder mBuilder = new AlertDialog.Builder(ExpensesReportActivity.this);
             mBuilder.setTitle(getResources().getString(R.string.choose_expense_type));
-            mBuilder.setMultiChoiceItems(this.typesOfExpenses, this.checkedItens, new DialogInterface.OnMultiChoiceClickListener() {
+
+            mBuilder.setSingleChoiceItems(this.typesOfExpenses, -1, new DialogInterface.OnClickListener() {
+
                 @Override
-                public void onClick(DialogInterface dialog, int which, boolean isChecked) {
-                    if (isChecked) {
-                        expenseGraph.addSeries(series.get(which));
-                    } else {
-                        expenseGraph.removeSeries(series.get(which));
-                    }
+                public void onClick(DialogInterface dialog, int which) {
+                    expenseGraph.removeAllSeries();
+                    expenseGraph.addSeries(series.get(which));
                 }
             });
 
@@ -216,6 +204,7 @@ public class ExpensesReportActivity extends AppCompatActivity {
             mBuilder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
                 @Override
                 public void onClick(DialogInterface dialog, int which) {
+                    setLegendRenderer();
                 }
 
             });

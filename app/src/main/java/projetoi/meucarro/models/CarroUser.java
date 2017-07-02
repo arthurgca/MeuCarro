@@ -1,5 +1,7 @@
 package projetoi.meucarro.models;
 
+import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -116,6 +118,48 @@ public class CarroUser {
                 gasto.getDescricao(), this.somaDeGastosPorTipo.get(gasto.getDescricao()) - gasto.getValor());
         this.somaDeGastos -= gasto.getValor();
         this.listaGastos.remove(gasto);
+    }
+
+    public ArrayList<ArrayList<Gasto>> getExpensesByYear(int year) {
+        int MONTHS = 12;
+        ArrayList<ArrayList<Gasto>> expensesByYear = new ArrayList<>();
+
+        for (int m = 0; m < MONTHS; m++) {
+            expensesByYear.add(new ArrayList<Gasto>());
+        }
+
+        for (Gasto expense : this.getListaGastos()) {
+            int expanseYear = expense.getDataFormatada(Calendar.YEAR);
+
+            if (expanseYear == year) {
+                int expanseMonth = expense.getDataFormatada(Calendar.MONTH);
+                expensesByYear.get(expanseMonth).add(expense);
+            }
+        }
+
+        return expensesByYear;
+    }
+
+    public Double calculateExpensesSum (List<Gasto> expensesList) {
+        Double sum = 0.0;
+
+        for (Gasto expense : expensesList) {
+            sum += expense.getValor();
+        }
+
+        return sum;
+    }
+
+    public ArrayList<Gasto> getExpensesByType (List<Gasto> expensesList, String type) {
+        ArrayList<Gasto> expensesByType = new ArrayList<>();
+
+        for (Gasto expense : expensesList) {
+            if (expense.getDescricao().equals(type)) {
+                expensesByType.add(expense);
+            }
+        }
+
+        return expensesByType;
     }
 
     @Override

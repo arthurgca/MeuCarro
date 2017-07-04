@@ -3,7 +3,10 @@ package projetoi.meucarro.dialog;
 import android.app.Activity;
 import android.app.DatePickerDialog;
 import android.app.Dialog;
+import android.app.NotificationManager;
+import android.content.Context;
 import android.os.Bundle;
+import android.support.v4.app.NotificationCompat;
 import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
@@ -22,12 +25,15 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Collections;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
 
 import projetoi.meucarro.R;
 import projetoi.meucarro.models.CarroUser;
 import projetoi.meucarro.models.Gasto;
 import projetoi.meucarro.models.GastoCombustivel;
+import projetoi.meucarro.utils.CheckStatus;
+import projetoi.meucarro.utils.StatusAdapterPlaceholder;
 
 import static projetoi.meucarro.R.id.dialogSpinner;
 
@@ -46,6 +52,7 @@ public class AdicionarGastoDialog extends Dialog {
     private Spinner dialogSpinner;
     private Button dataButton;
     private Button adcButton;
+    private HashMap manutencaoHash;
 
     public AdicionarGastoDialog(Activity activity) {
         super(activity);
@@ -166,7 +173,25 @@ public class AdicionarGastoDialog extends Dialog {
         super.onCreate(savedInstanceState);
     }
 
+    private void showNotif(CarroUser carroUser, HashMap manutencaoHash) {
+        ArrayList<StatusAdapterPlaceholder> list = new ArrayList<>();
+        list.addAll(CheckStatus.checaStatus(manutencaoHash, carroUser));
+        for (StatusAdapterPlaceholder i : list) {
+            Log.d("Atraso", String.valueOf(i.isAtrasado()));
+            if (i.isAtrasado()) {
+                NotificationCompat.Builder mBuilder =
+                        new NotificationCompat.Builder(getContext())
+                                .setContentTitle("MeuCarro - Atraso")
+                                .setSmallIcon(android.R.drawable.ic_popup_reminder)
+                                .setContentText(i.getManutencao()   );
+                NotificationManager mNotificationManager = (NotificationManager) getContext().getSystemService(Context.NOTIFICATION_SERVICE);
+                mNotificationManager.notify(0, mBuilder.build());
+            }
+        }
+    }
+
     private void adicionaGasto(int quilometragemNova) {
+
         Gasto novoGasto;
         if (editTextValorUnidadeCombustivel.isEnabled()) {
             novoGasto = new GastoCombustivel(dialogSpinner.getSelectedItem().toString(), dataEscolhida,
@@ -191,13 +216,15 @@ public class AdicionarGastoDialog extends Dialog {
             carroUser.adicionaGasto(novoGasto);
             Collections.sort(carroUser.listaGastos, Gasto.compareByData());
             carrosUserRef.child("carrosList").child(lastCarId).setValue(carroUser);
+            showNotif(carroUser, manutencaoHash);
             dismiss();
         }
     }
 
-    public void setInfo(CarroUser carroUser, String lastCarId) {
+    public void setInfo(CarroUser carroUser, String lastCarId, HashMap manutencaoHash) {
         this.carroUser = carroUser;
         this.lastCarId = lastCarId;
+        this.manutencaoHash = manutencaoHash;
     }
 
     private boolean checaGastoMenor(Gasto gasto, List<Gasto> listGastos) {

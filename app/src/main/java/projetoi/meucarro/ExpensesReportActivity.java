@@ -69,7 +69,7 @@ public class ExpensesReportActivity extends AppCompatActivity {
                     typeOfExpenses = generateTypeOfExpanses();
                     yearsOfExpanses = generateYearsOfExpanses();
 
-                    if (currentCar.listaGastos != null) {
+                    if (!currentCar.getListaGastos().isEmpty()) {
                         initGraph();
                     } else {
                         Toast.makeText(ExpensesReportActivity.this, R.string.erro_nenhum_gasto,
@@ -117,7 +117,6 @@ public class ExpensesReportActivity extends AppCompatActivity {
         return years.toArray(new String[years.size()]);
     }
 
-
     private void setLegendRenderer() {
         LegendRenderer legendRenderer = new LegendRenderer(this.expenseGraph);
 
@@ -129,7 +128,8 @@ public class ExpensesReportActivity extends AppCompatActivity {
     private void initGraph() {
         int thisYear = Calendar.getInstance().get(Calendar.YEAR);
         this.setGridRenderer(0, 50);
-        this.setStaticLabelsByMonth("pt", "BR");
+        this.setXLabels("pt", "BR");
+        this.setYLabels(10);
         this.setLegendRenderer();
 
         this.initSeries();
@@ -167,7 +167,6 @@ public class ExpensesReportActivity extends AppCompatActivity {
             for (int i = 1; i < this.typeOfExpenses.length; i++) {
                 ArrayList<Gasto> expensesByType = this.currentCar.getExpensesByType(expensesMonth, this.typeOfExpenses[i]);
                 Double expensesTypeSum = this.currentCar.calculateExpensesSum(expensesByType);
-
                 DataPoint dpType = new DataPoint(month + 1, expensesTypeSum);
                 this.series.get(i).appendData(dpType, true, MAX);
             }
@@ -180,9 +179,10 @@ public class ExpensesReportActivity extends AppCompatActivity {
         this.expenseGraph.getGridLabelRenderer().setHumanRounding(false);
         this.expenseGraph.getGridLabelRenderer().setHorizontalLabelsAngle(labelAngle);
         this.expenseGraph.getGridLabelRenderer().setPadding(padding);
+
     }
 
-    private void setStaticLabelsByMonth(String language, String country) {
+    private void setXLabels(String language, String country) {
         String[] monthsNames = new DateFormatSymbols(new Locale(language, country)).getShortMonths();
 
         StaticLabelsFormatter staticLabelsFormatter = new StaticLabelsFormatter(this.expenseGraph);
@@ -190,6 +190,12 @@ public class ExpensesReportActivity extends AppCompatActivity {
         this.expenseGraph.getGridLabelRenderer().setLabelFormatter(staticLabelsFormatter);
     }
 
+    private void setYLabels(int percentage) {
+        double max = this.currentCar.calculateExpensesSum(this.currentCar.getListaGastos());
+        this.expenseGraph.getViewport().setYAxisBoundsManual(true);
+        this.expenseGraph.getViewport().setMinY(0);
+        this.expenseGraph.getViewport().setMaxY(max + max/percentage);
+    }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {

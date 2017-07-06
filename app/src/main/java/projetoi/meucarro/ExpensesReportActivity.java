@@ -50,6 +50,7 @@ public class ExpensesReportActivity extends AppCompatActivity {
     private ValueEventListener carrosUserListener;
     private String lastCarId;
     private FirebaseAuth mAuth;
+    private ArrayList<CarroUser> userCarrosList;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -68,6 +69,14 @@ public class ExpensesReportActivity extends AppCompatActivity {
                     currentCar = dataSnapshot.child("carrosList").child(lastCarId).getValue(CarroUser.class);
                     typeOfExpenses = generateTypeOfExpanses();
                     yearsOfExpanses = generateYearsOfExpanses();
+
+                    //itera sobre os nós da lista de carros
+                    for (DataSnapshot dsCarro :  dataSnapshot.child("carrosList").getChildren()) {
+                        //pega o carro e adiciona numa lista
+                        CarroUser carro = dsCarro.getValue(CarroUser.class);
+                        userCarrosList.add(carro);
+                        Log.d("carro", carro.toString());
+                    }
 
                     if (!currentCar.getListaGastos().isEmpty()) {
                         initGraph();

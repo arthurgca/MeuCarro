@@ -74,6 +74,7 @@
     <string name="adicionarcarro_placahint">Placa</string>
     <string name="menu_status_do_carro">Status do Carro</string>
     <string name="erro_adicionargasto_quilmetragem_maior">Quilometragem em data passada tem que ser menor</string>
+    <string name="choose_car">Escolha o carro</string>
 
     <!--Arrays-->
     <string-array name="adicionardialog_gastosarray">

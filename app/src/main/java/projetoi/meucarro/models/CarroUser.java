@@ -97,6 +97,10 @@ public class CarroUser {
         return this.listaGastos;
     }
 
+    public boolean estaSemGastos() {
+        return this.listaGastos == null;
+    }
+
     public Double getSomaDeGastos() {
         return this.somaDeGastos;
     }

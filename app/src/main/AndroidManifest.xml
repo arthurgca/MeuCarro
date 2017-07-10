@@ -28,9 +28,10 @@
         <activity
             android:name=".ExpensesReportActivity"
             android:label="@string/all_title_activity"
-            android:theme="@style/AppTheme.NoActionBar"
-            android:screenOrientation="landscape"/>
-        <activity android:name=".CarroStatusActivity"></activity>
+            android:screenOrientation="landscape"
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity android:name=".CarroStatusActivity" />
+        <activity android:name=".CompararCarroActivity"></activity>
     </application>
 
 </manifest>

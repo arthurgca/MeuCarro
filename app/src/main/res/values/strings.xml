@@ -58,6 +58,12 @@
     <string name="adicionardialog_kmatualtext">Quilometragem</string>
     <string name="valor_unidade_combustivel_dialog">Valor por Litros ou m³</string>
 
+    <!--AdicionarOficinaDialog-->
+    <string name="adicionardialog_oficinaname">Nome da Oficina</string>
+    <string name="adicionardialog_oficinaend">Endereço da Oficina</string>
+    <string name="adicionardialog_oficinatel">Telefone da Oficina</string>
+
+
     <!--Mensagens do sistema-->
     <string name="msg_cadastro_sucesso">Cadastro realizado com sucesso</string>
     <string name="msg_home_listacarrosvazia">Nenhum carro selecionado, adicione um carro para começar.</string>
@@ -74,6 +80,9 @@
     <string name="adicionarcarro_placahint">Placa</string>
     <string name="menu_status_do_carro">Status do Carro</string>
     <string name="erro_adicionargasto_quilmetragem_maior">Quilometragem em data passada tem que ser menor</string>
+    <string name="erro_oficina_nome">Insira um nome para a oficina</string>
+    <string name="erro_oficina_endereco">Insira um endereço para a oficina</string>
+    <string name="erro_oficina_telefone">Insira um telefone para a oficina</string>
 
     <!--Arrays-->
     <string-array name="adicionardialog_gastosarray">

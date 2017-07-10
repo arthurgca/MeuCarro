@@ -23,12 +23,14 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 
 import projetoi.meucarro.adapters.HomeGastosAdapter;
 import projetoi.meucarro.dialog.AdicionarGastoDialog;
 import projetoi.meucarro.models.CarroUser;
 import projetoi.meucarro.models.Gasto;
 import projetoi.meucarro.models.GastoCombustivel;
+import projetoi.meucarro.utils.CheckStatus;
 
 
 public class HomeActivity extends AppCompatActivity {
@@ -46,6 +48,7 @@ public class HomeActivity extends AppCompatActivity {
     private String lastCarId;
     private FloatingActionButton fab;
     private TextView qteRodagem;
+    private HashMap manutencaoHash;
 
 
     @Override
@@ -62,7 +65,7 @@ public class HomeActivity extends AppCompatActivity {
         adapter = new HomeGastosAdapter(this, carroGastosList);
 
         database = FirebaseDatabase.getInstance();
-        carrosUserRef = database.getReference().child("users").child(mAuth.getCurrentUser().getUid());
+        carrosUserRef = database.getReference();
         carrosListView.setAdapter(adapter);
 
         updateListView();
@@ -91,22 +94,25 @@ public class HomeActivity extends AppCompatActivity {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 carroGastosList.clear();
-                if (dataSnapshot.child("lastCar").getValue() != null) {
-                    int numCombustivel = 0;
-                    int qtdeCombustivel = 0;
+                DataSnapshot carSnapshot = dataSnapshot.child("users").child(mAuth.getCurrentUser().getUid());
+                if (carSnapshot.child("lastCar").getValue() != null) {
                     fab.setVisibility(View.VISIBLE);
-                    lastCarId = dataSnapshot.child("lastCar").getValue().toString();
-                    carroUser = dataSnapshot.child("carrosList").child(lastCarId).getValue(CarroUser.class);
+                    lastCarId = carSnapshot.child("lastCar").getValue().toString();
+                    carroUser = carSnapshot.child("carrosList").child(lastCarId).getValue(CarroUser.class);
                     nomeDoCarroTextView.setText(carroUser.modelo);
                     qteRodagem.setText(String.valueOf(carroUser.kmRodados));
 
                     if (carroUser.listaGastos != null) {
                         for (Gasto gasto : carroUser.listaGastos) {
-                            if (gasto instanceof GastoCombustivel) {
-                                numCombustivel++;
-                            }
                             carroGastosList.add(gasto);
                             adapter.notifyDataSetChanged();
+                        }
+                    }
+
+                    DataSnapshot carrosDaMarca = dataSnapshot.child("carros").child(carroUser.marca);
+                    for (DataSnapshot ids : carrosDaMarca.getChildren()) {
+                        if (ids.child("Modelo").getValue().toString().equals(carroUser.modelo)) {
+                            manutencaoHash = (HashMap) ids.child("Manutenção").getValue();
                         }
                     }
 
@@ -127,7 +133,7 @@ public class HomeActivity extends AppCompatActivity {
 
     private void adicionarGastoDialog() {
         AdicionarGastoDialog adicionarGastoDialog = new AdicionarGastoDialog(HomeActivity.this);
-        adicionarGastoDialog.setInfo(carroUser, lastCarId);
+        adicionarGastoDialog.setInfo(carroUser, lastCarId, manutencaoHash);
         adicionarGastoDialog.show();
     }
 

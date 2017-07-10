@@ -19,10 +19,12 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 import com.jjoe64.graphview.GraphView;
+import com.jjoe64.graphview.GridLabelRenderer;
 import com.jjoe64.graphview.LegendRenderer;
 import com.jjoe64.graphview.helper.StaticLabelsFormatter;
 import com.jjoe64.graphview.series.BarGraphSeries;
 import com.jjoe64.graphview.series.DataPoint;
+import com.jjoe64.graphview.series.Series;
 
 import java.text.DateFormatSymbols;
 import java.util.ArrayList;
@@ -41,10 +43,13 @@ public class ExpensesReportActivity extends AppCompatActivity {
 
     private GraphView expenseGraph;
     private ArrayList<BarGraphSeries<DataPoint>> series;
+    private ArrayList<BarGraphSeries<DataPoint>> seriesToCompare;
 
+    private String[] listOfCars;
     private String[] typeOfExpenses;
     private String[] yearsOfExpanses;
 
+    private ArrayList<CarroUser> userCarrosList;
     private CarroUser currentCar;
     private DatabaseReference carrosUserRef;
     private ValueEventListener carrosUserListener;
@@ -66,10 +71,20 @@ public class ExpensesReportActivity extends AppCompatActivity {
                 if (dataSnapshot.child("lastCar").getValue() != null) {
                     lastCarId = dataSnapshot.child("lastCar").getValue().toString();
                     currentCar = dataSnapshot.child("carrosList").child(lastCarId).getValue(CarroUser.class);
-                    typeOfExpenses = generateTypeOfExpanses();
-                    yearsOfExpanses = generateYearsOfExpanses();
+                    userCarrosList = new ArrayList<>();
 
-                    if (currentCar.listaGastos != null) {
+                    //itera sobre os nós da lista de carros
+                    for (DataSnapshot dsCarro :  dataSnapshot.child("carrosList").getChildren()) {
+                        //pega o carro e adiciona numa lista
+                        CarroUser carro = dsCarro.getValue(CarroUser.class);
+
+                        userCarrosList.add(carro);
+                    }
+                    listOfCars = generateCarID(userCarrosList);
+
+                    if (!currentCar.estaSemGastos()) {
+                        typeOfExpenses = generateTypeOfExpanses();
+                        yearsOfExpanses = generateYearsOfExpanses();
                         initGraph();
                     } else {
                         Toast.makeText(ExpensesReportActivity.this, R.string.erro_nenhum_gasto,
@@ -91,6 +106,15 @@ public class ExpensesReportActivity extends AppCompatActivity {
         this.carrosUserRef.addValueEventListener(carrosUserListener);
         this.expenseGraph = (GraphView) findViewById(R.id.expenseByDateGraphView);
 
+    }
+
+    private String[] generateCarID(ArrayList<CarroUser> listOfCars) {
+        ArrayList<String> cars = new ArrayList<>();
+        for (CarroUser carUser : listOfCars) {
+            cars.add(carUser.getModelo() + " " + carUser.getAno() + " " + carUser.getPlaca());
+        }
+
+        return cars.toArray(new String[cars.size()]);
     }
 
     private String[] generateTypeOfExpanses() {
@@ -117,7 +141,6 @@ public class ExpensesReportActivity extends AppCompatActivity {
         return years.toArray(new String[years.size()]);
     }
 
-
     private void setLegendRenderer() {
         LegendRenderer legendRenderer = new LegendRenderer(this.expenseGraph);
 
@@ -128,12 +151,12 @@ public class ExpensesReportActivity extends AppCompatActivity {
 
     private void initGraph() {
         int thisYear = Calendar.getInstance().get(Calendar.YEAR);
-        this.setGridRenderer(0, 50);
-        this.setStaticLabelsByMonth("pt", "BR");
+        this.setGridRenderer();
         this.setLegendRenderer();
-
         this.initSeries();
         this.loadSeries(thisYear);
+        this.setXLabels("pt", "BR");
+        this.setYLabels(10);
     }
 
     private void initSeries() {
@@ -167,7 +190,6 @@ public class ExpensesReportActivity extends AppCompatActivity {
             for (int i = 1; i < this.typeOfExpenses.length; i++) {
                 ArrayList<Gasto> expensesByType = this.currentCar.getExpensesByType(expensesMonth, this.typeOfExpenses[i]);
                 Double expensesTypeSum = this.currentCar.calculateExpensesSum(expensesByType);
-
                 DataPoint dpType = new DataPoint(month + 1, expensesTypeSum);
                 this.series.get(i).appendData(dpType, true, MAX);
             }
@@ -175,14 +197,15 @@ public class ExpensesReportActivity extends AppCompatActivity {
         this.expenseGraph.addSeries(series.get(0));
     }
 
-    private void setGridRenderer(int labelAngle, int padding) {
+    private void setGridRenderer() {
         this.expenseGraph.getGridLabelRenderer().setVerticalAxisTitle(getResources().getString(R.string.gascalculator_brazilian_currency_symbol));
         this.expenseGraph.getGridLabelRenderer().setHumanRounding(false);
-        this.expenseGraph.getGridLabelRenderer().setHorizontalLabelsAngle(labelAngle);
-        this.expenseGraph.getGridLabelRenderer().setPadding(padding);
+        this.expenseGraph.getGridLabelRenderer().setHorizontalLabelsAngle(0);
+        this.expenseGraph.getGridLabelRenderer().setPadding(50);
+        this.expenseGraph.getGridLabelRenderer().setNumVerticalLabels(5);
     }
 
-    private void setStaticLabelsByMonth(String language, String country) {
+    private void setXLabels(String language, String country) {
         String[] monthsNames = new DateFormatSymbols(new Locale(language, country)).getShortMonths();
 
         StaticLabelsFormatter staticLabelsFormatter = new StaticLabelsFormatter(this.expenseGraph);
@@ -190,6 +213,23 @@ public class ExpensesReportActivity extends AppCompatActivity {
         this.expenseGraph.getGridLabelRenderer().setLabelFormatter(staticLabelsFormatter);
     }
 
+    private Double maxExpense(GraphView graphView) {
+        Double max = 0.0;
+        for (Series series: graphView.getSeries()) {
+            max = Math.max(series.getHighestValueY(), max);
+        }
+
+        return max;
+    }
+
+    private void setYLabels(int percentage) {
+        double max = this.maxExpense(this.expenseGraph);
+
+        this.expenseGraph.getViewport().setYAxisBoundsManual(true);
+        this.expenseGraph.getViewport().setMinY(0);
+        this.expenseGraph.getViewport().setMaxY(max + max/percentage);
+        this.expenseGraph.getViewport().setDrawBorder(false);
+    }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -201,8 +241,40 @@ public class ExpensesReportActivity extends AppCompatActivity {
     public boolean onOptionsItemSelected(final MenuItem item) {
 
         int id = item.getItemId();
+        if (id == R.id.choose_car) {
+            AlertDialog.Builder mBuilder = new AlertDialog.Builder(ExpensesReportActivity.this);
+            mBuilder.setTitle(getResources().getString(R.string.choose_expense_year));
 
-        if (id == R.id.time_interval) {
+            mBuilder.setSingleChoiceItems(this.listOfCars, -1, new DialogInterface.OnClickListener() {
+
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                    int thisYear = Calendar.getInstance().get(Calendar.YEAR);
+                    currentCar = userCarrosList.get(which);
+                    yearsOfExpanses = generateYearsOfExpanses();
+                    expenseGraph.removeAllSeries();
+                    series.clear();
+                    initSeries();
+                    if (!currentCar.estaSemGastos()) {
+                        loadSeries(thisYear);
+                    }
+                    setLegendRenderer();
+                    setGridRenderer();
+                    setYLabels(10);
+                }
+            });
+
+            mBuilder.setCancelable(false);
+            mBuilder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                }
+
+            });
+            AlertDialog mDialog = mBuilder.create();
+            mDialog.show();
+
+        }else if (id == R.id.choose_time_interval) {
             AlertDialog.Builder mBuilder = new AlertDialog.Builder(ExpensesReportActivity.this);
             mBuilder.setTitle(getResources().getString(R.string.choose_expense_year));
 
@@ -214,6 +286,9 @@ public class ExpensesReportActivity extends AppCompatActivity {
                     series.clear();
                     initSeries();
                     loadSeries(Integer.parseInt(yearsOfExpanses[which]));
+                    setLegendRenderer();
+                    setGridRenderer();
+                    setYLabels(10);
                 }
             });
 
@@ -221,7 +296,6 @@ public class ExpensesReportActivity extends AppCompatActivity {
             mBuilder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
                 @Override
                 public void onClick(DialogInterface dialog, int which) {
-                    setLegendRenderer();
                 }
 
             });
@@ -238,6 +312,8 @@ public class ExpensesReportActivity extends AppCompatActivity {
                 public void onClick(DialogInterface dialog, int which) {
                     expenseGraph.removeAllSeries();
                     expenseGraph.addSeries(series.get(which));
+                    setLegendRenderer();
+                    setGridRenderer();
                 }
             });
 
@@ -245,7 +321,6 @@ public class ExpensesReportActivity extends AppCompatActivity {
             mBuilder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
                 @Override
                 public void onClick(DialogInterface dialog, int which) {
-                    setLegendRenderer();
                 }
 
             });

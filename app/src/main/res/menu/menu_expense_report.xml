@@ -3,8 +3,13 @@
     xmlns:app="http://schemas.android.com/apk/res-auto">
     <!-- "Mark Favorite", should appear as action button if possible -->
     <item
-        android:id="@+id/time_interval"
-        android:icon="@android:drawable/ic_menu_day"
+        android:id="@+id/choose_car"
+        android:icon="@android:drawable/ic_menu_more"
+        android:title="@string/choose_car"
+        app:showAsAction="always"/>
+    <item
+        android:id="@+id/choose_time_interval"
+        android:icon="@android:drawable/ic_menu_today"
         android:title="@string/choose_expense_year"
         app:showAsAction="always"/>
 

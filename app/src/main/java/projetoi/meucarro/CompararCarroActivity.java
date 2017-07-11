@@ -35,23 +35,27 @@ public class CompararCarroActivity extends AppCompatActivity {
     private TextView textViewGastosC1Combustivel;
     private TextView textViewGastosC1Oleo;
     private TextView textViewGastosC1Pneu;
+    private TextView textViewGastosC1ipva;
     private TextView textViewGastosC1Pecas;
     private TextView textViewGastosC1Correia;
     private TextView textViewGastosC1FiltroArC;
     private TextView textViewGastosC1FiltroAr;
     private TextView textViewGastosC1Velas;
     private TextView textViewGastosC1Revisao;
+    private TextView textViewGastosC1;
 
     private TextView textViewSpinner2;
     private TextView textViewGastosC2Combustivel;
     private TextView textViewGastosC2Oleo;
     private TextView textViewGastosC2Pneu;
+    private TextView textViewGastosC2ipva;
     private TextView textViewGastosC2Pecas;
     private TextView textViewGastosC2Correia;
     private TextView textViewGastosC2FiltroArC;
     private TextView textViewGastosC2FiltroAr;
     private TextView textViewGastosC2Velas;
     private TextView textViewGastosC2Revisao;
+    private TextView textViewGastosC2;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -80,6 +84,30 @@ public class CompararCarroActivity extends AppCompatActivity {
 
         textViewGastosC1Revisao = (TextView) findViewById(R.id.textViewC1Revisao);
         textViewGastosC2Revisao = (TextView) findViewById(R.id.textViewC2Revisao);
+
+        textViewGastosC1Pneu = (TextView) findViewById(R.id.textViewC1Pneu);
+        textViewGastosC2Pneu = (TextView) findViewById(R.id.textViewC2Pneu);
+
+        textViewGastosC1ipva = (TextView) findViewById(R.id.textViewC1ipva);
+        textViewGastosC2ipva = (TextView) findViewById(R.id.textViewC2ipva);
+
+        textViewGastosC1Pecas = (TextView) findViewById(R.id.textViewC1Pecas);
+        textViewGastosC2Pecas = (TextView) findViewById(R.id.textViewC2Pecas);
+
+        textViewGastosC1Correia = (TextView) findViewById(R.id.textViewC1Correia);
+        textViewGastosC2Correia = (TextView) findViewById(R.id.textViewC2Correia);
+
+        textViewGastosC1FiltroArC = (TextView) findViewById(R.id.textViewC1FiltroArc);
+        textViewGastosC2FiltroArC = (TextView) findViewById(R.id.textViewC2FiltroArc);
+
+        textViewGastosC1FiltroAr = (TextView) findViewById(R.id.textViewC1FiltroAr);
+        textViewGastosC2FiltroAr = (TextView) findViewById(R.id.textViewC2FiltroAr);
+
+        textViewGastosC1Velas = (TextView) findViewById(R.id.textViewC1Velas);
+        textViewGastosC2Velas = (TextView) findViewById(R.id.textViewC2Velas);
+
+        textViewGastosC1 = (TextView) findViewById(R.id.textViewGastosc1);
+        textViewGastosC2 = (TextView) findViewById(R.id.textViewGastosc2);
 
         final ArrayAdapter<CarroUser> adapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_item, userCarrosList);
 
@@ -145,10 +173,26 @@ public class CompararCarroActivity extends AppCompatActivity {
         textViewGastosC1Combustivel.setText(c1.getSomaDeGastoPorTipo("Combustível").toString());
         textViewGastosC1Oleo.setText(c1.getSomaDeGastoPorTipo("Troca de Óleo").toString());
         textViewGastosC1Revisao.setText(c1.getSomaDeGastoPorTipo("Revisão").toString());
+        textViewGastosC1Pneu.setText(c1.getSomaDeGastoPorTipo("Troca de Pneu").toString());
+        textViewGastosC1ipva.setText(c1.getSomaDeGastoPorTipo("IPVA").toString());
+        textViewGastosC1Pecas.setText(c1.getSomaDeGastoPorTipo("Compra de Peças").toString());
+        textViewGastosC1Correia.setText(c1.getSomaDeGastoPorTipo("Correia Dentada").toString());
+        textViewGastosC1FiltroArC.setText(c1.getSomaDeGastoPorTipo("Filtro Ar Condicionado").toString());
+        textViewGastosC1FiltroAr.setText(c1.getSomaDeGastoPorTipo("Filtro de Ar").toString());
+        textViewGastosC1Velas.setText(c1.getSomaDeGastoPorTipo("Velas").toString());
+        textViewGastosC1.setText(c1.getSomaDeGastos().toString());
 
         textViewGastosC2Combustivel.setText(c2.getSomaDeGastoPorTipo("Combustível").toString());
         textViewGastosC2Oleo.setText(c2.getSomaDeGastoPorTipo("Troca de Óleo").toString());
         textViewGastosC2Revisao.setText(c2.getSomaDeGastoPorTipo("Revisão").toString());
+        textViewGastosC2Pneu.setText(c2.getSomaDeGastoPorTipo("Troca de Pneu").toString());
+        textViewGastosC2ipva.setText(c2.getSomaDeGastoPorTipo("IPVA").toString());
+        textViewGastosC2Pecas.setText(c1.getSomaDeGastoPorTipo("Compra de Peças").toString());
+        textViewGastosC2Correia.setText(c1.getSomaDeGastoPorTipo("Correia Dentada").toString());
+        textViewGastosC2FiltroArC.setText(c1.getSomaDeGastoPorTipo("Filtro Ar Condicionado").toString());
+        textViewGastosC2FiltroAr.setText(c1.getSomaDeGastoPorTipo("Filtro de Ar").toString());
+        textViewGastosC2Velas.setText(c1.getSomaDeGastoPorTipo("Velas").toString());
+        textViewGastosC2.setText(c2.getSomaDeGastos().toString());
 
         Toast.makeText(this, "Carro1: " + c1.toString() + " e " + "Carro2: " + c2.toString(), Toast.LENGTH_SHORT).show();
     }

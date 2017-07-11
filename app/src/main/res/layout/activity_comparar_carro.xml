@@ -33,4 +33,146 @@
         app:layout_constraintTop_toBottomOf="@+id/compararcarro_spinner1"
         tools:layout_constraintLeft_creator="1"
         app:layout_constraintLeft_toLeftOf="parent" />
+
+    <Button
+        android:id="@+id/buttonCompara"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Comparar"
+        android:onClick="compara"
+        android:layout_marginLeft="8dp"
+        app:layout_constraintLeft_toLeftOf="parent"
+        android:layout_marginRight="8dp"
+        app:layout_constraintRight_toRightOf="parent"
+        android:layout_marginTop="8dp"
+        app:layout_constraintTop_toBottomOf="@+id/compararcarro_spinner2" />
+
+    <TextView
+        android:id="@+id/textViewCompara1"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="TextView"
+        android:layout_marginTop="8dp"
+        app:layout_constraintTop_toBottomOf="@+id/buttonCompara"
+        app:layout_constraintLeft_toRightOf="@+id/textView8"
+        android:layout_marginLeft="8dp"
+        app:layout_constraintRight_toLeftOf="@+id/textViewCompara2"
+        android:layout_marginRight="8dp" />
+
+    <TextView
+        android:id="@+id/textViewCompara2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="TextView"
+        android:layout_marginRight="16dp"
+        app:layout_constraintRight_toRightOf="parent"
+        android:layout_marginTop="8dp"
+        app:layout_constraintTop_toBottomOf="@+id/buttonCompara" />
+
+    <TextView
+        android:id="@+id/textView8"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Gasto:"
+        tools:layout_editor_absoluteX="8dp"
+        android:layout_marginTop="8dp"
+        app:layout_constraintTop_toBottomOf="@+id/buttonCompara" />
+
+    <TextView
+        android:id="@+id/textView9"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Combustivel:"
+        android:layout_marginLeft="8dp"
+        app:layout_constraintLeft_toLeftOf="parent"
+        android:layout_marginTop="8dp"
+        app:layout_constraintTop_toBottomOf="@+id/textViewCompara1" />
+
+    <TextView
+        android:id="@+id/textView10"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Troca de óleo:"
+        tools:layout_editor_absoluteX="8dp"
+        android:layout_marginTop="8dp"
+        app:layout_constraintTop_toBottomOf="@+id/textView9" />
+
+    <TextView
+        android:id="@+id/textView11"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Revisão:"
+        tools:layout_editor_absoluteX="8dp"
+        android:layout_marginTop="8dp"
+        app:layout_constraintTop_toBottomOf="@+id/textView10" />
+
+    <TextView
+        android:id="@+id/textViewC2Combustivel"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="TextView"
+        android:layout_marginTop="8dp"
+        app:layout_constraintTop_toBottomOf="@+id/textViewCompara2"
+        app:layout_constraintLeft_toRightOf="@+id/textViewC1Combustivel"
+        android:layout_marginLeft="8dp"
+        android:layout_marginRight="8dp"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintHorizontal_bias="0.92" />
+
+    <TextView
+        android:id="@+id/textViewC1Combustivel"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="TextView"
+        app:layout_constraintLeft_toRightOf="@+id/textView8"
+        android:layout_marginLeft="8dp"
+        android:layout_marginTop="8dp"
+        app:layout_constraintTop_toBottomOf="@+id/textViewCompara1"
+        app:layout_constraintRight_toLeftOf="@+id/textViewCompara2"
+        android:layout_marginRight="8dp" />
+
+    <TextView
+        android:id="@+id/textViewC2Oleo"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginRight="16dp"
+        android:text="TextView"
+        app:layout_constraintRight_toRightOf="parent"
+        android:layout_marginTop="8dp"
+        app:layout_constraintTop_toBottomOf="@+id/textViewC2Combustivel" />
+
+    <TextView
+        android:id="@+id/textViewC1Oleo"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="TextView"
+        android:layout_marginTop="6dp"
+        app:layout_constraintTop_toBottomOf="@+id/textViewC1Combustivel"
+        app:layout_constraintLeft_toRightOf="@+id/textView8"
+        android:layout_marginLeft="8dp"
+        app:layout_constraintRight_toLeftOf="@+id/textViewCompara2"
+        android:layout_marginRight="8dp" />
+
+    <TextView
+        android:id="@+id/textViewC2Revisao"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginRight="16dp"
+        android:text="TextView"
+        app:layout_constraintRight_toRightOf="parent"
+        android:layout_marginTop="8dp"
+        app:layout_constraintTop_toBottomOf="@+id/textViewC2Oleo" />
+
+    <TextView
+        android:id="@+id/textViewC1Revisao"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="8dp"
+        android:text="TextView"
+        app:layout_constraintLeft_toRightOf="@+id/textView8"
+        android:layout_marginTop="8dp"
+        app:layout_constraintTop_toBottomOf="@+id/textViewC1Oleo"
+        app:layout_constraintRight_toLeftOf="@+id/textViewCompara2"
+        android:layout_marginRight="8dp" />
+
 </android.support.constraint.ConstraintLayout>

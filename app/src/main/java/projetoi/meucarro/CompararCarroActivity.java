@@ -187,14 +187,14 @@ public class CompararCarroActivity extends AppCompatActivity {
         textViewGastosC2Revisao.setText(c2.getSomaDeGastoPorTipo("Revisão").toString());
         textViewGastosC2Pneu.setText(c2.getSomaDeGastoPorTipo("Troca de Pneu").toString());
         textViewGastosC2ipva.setText(c2.getSomaDeGastoPorTipo("IPVA").toString());
-        textViewGastosC2Pecas.setText(c1.getSomaDeGastoPorTipo("Compra de Peças").toString());
-        textViewGastosC2Correia.setText(c1.getSomaDeGastoPorTipo("Correia Dentada").toString());
-        textViewGastosC2FiltroArC.setText(c1.getSomaDeGastoPorTipo("Filtro Ar Condicionado").toString());
-        textViewGastosC2FiltroAr.setText(c1.getSomaDeGastoPorTipo("Filtro de Ar").toString());
-        textViewGastosC2Velas.setText(c1.getSomaDeGastoPorTipo("Velas").toString());
+        textViewGastosC2Pecas.setText(c2.getSomaDeGastoPorTipo("Compra de Peças").toString());
+        textViewGastosC2Correia.setText(c2.getSomaDeGastoPorTipo("Correia Dentada").toString());
+        textViewGastosC2FiltroArC.setText(c2.getSomaDeGastoPorTipo("Filtro Ar Condicionado").toString());
+        textViewGastosC2FiltroAr.setText(c2.getSomaDeGastoPorTipo("Filtro de Ar").toString());
+        textViewGastosC2Velas.setText(c2.getSomaDeGastoPorTipo("Velas").toString());
         textViewGastosC2.setText(c2.getSomaDeGastos().toString());
 
-        Toast.makeText(this, "Carro1: " + c1.toString() + " e " + "Carro2: " + c2.toString(), Toast.LENGTH_SHORT).show();
+        //Toast.makeText(this, "Carro1: " + c1.toString() + " e " + "Carro2: " + c2.toString(), Toast.LENGTH_SHORT).show();
     }
 
 }

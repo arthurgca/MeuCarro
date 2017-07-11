@@ -51,20 +51,22 @@
         android:id="@+id/textViewCompara1"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginLeft="8dp"
-        android:layout_marginRight="8dp"
+        android:text="TextView"
         android:layout_marginTop="8dp"
+        app:layout_constraintTop_toBottomOf="@+id/buttonCompara"
         app:layout_constraintLeft_toRightOf="@+id/textView8"
+        android:layout_marginLeft="8dp"
         app:layout_constraintRight_toLeftOf="@+id/textViewCompara2"
-        app:layout_constraintTop_toBottomOf="@+id/buttonCompara" />
+        android:layout_marginRight="8dp" />
 
     <TextView
         android:id="@+id/textViewCompara2"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginRight="16dp"
-        android:layout_marginTop="8dp"
+        android:text="TextView"
+        android:layout_marginRight="24dp"
         app:layout_constraintRight_toRightOf="parent"
+        android:layout_marginTop="8dp"
         app:layout_constraintTop_toBottomOf="@+id/buttonCompara" />
 
     <TextView
@@ -108,52 +110,54 @@
         android:id="@+id/textViewC2Combustivel"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginLeft="8dp"
-        android:layout_marginRight="8dp"
+        android:text="TextView"
+        android:layout_marginRight="0dp"
+        app:layout_constraintRight_toRightOf="@+id/textViewCompara2"
         android:layout_marginTop="8dp"
-        app:layout_constraintHorizontal_bias="0.92"
-        app:layout_constraintLeft_toRightOf="@+id/textViewC1Combustivel"
-        app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/textViewCompara2" />
 
     <TextView
         android:id="@+id/textViewC1Combustivel"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginLeft="8dp"
-        android:layout_marginRight="8dp"
-        android:layout_marginTop="8dp"
+        android:text="TextView"
         app:layout_constraintLeft_toRightOf="@+id/textView8"
+        android:layout_marginLeft="8dp"
+        android:layout_marginTop="8dp"
+        app:layout_constraintTop_toBottomOf="@+id/textViewCompara1"
         app:layout_constraintRight_toLeftOf="@+id/textViewCompara2"
-        app:layout_constraintTop_toBottomOf="@+id/textViewCompara1" />
+        android:layout_marginRight="8dp" />
 
     <TextView
         android:id="@+id/textViewC2Oleo"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginRight="16dp"
+        android:layout_marginRight="0dp"
+        android:text="TextView"
+        app:layout_constraintRight_toRightOf="@+id/textViewCompara2"
         android:layout_marginTop="8dp"
-        app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/textViewC2Combustivel" />
 
     <TextView
         android:id="@+id/textViewC1Oleo"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginLeft="8dp"
-        android:layout_marginRight="8dp"
+        android:text="TextView"
         android:layout_marginTop="6dp"
+        app:layout_constraintTop_toBottomOf="@+id/textViewC1Combustivel"
         app:layout_constraintLeft_toRightOf="@+id/textView8"
+        android:layout_marginLeft="8dp"
         app:layout_constraintRight_toLeftOf="@+id/textViewCompara2"
-        app:layout_constraintTop_toBottomOf="@+id/textViewC1Combustivel" />
+        android:layout_marginRight="8dp" />
 
     <TextView
         android:id="@+id/textViewC2Revisao"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginRight="16dp"
+        android:layout_marginRight="0dp"
+        android:text="TextView"
+        app:layout_constraintRight_toRightOf="@+id/textViewCompara2"
         android:layout_marginTop="8dp"
-        app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/textViewC2Oleo" />
 
     <TextView
@@ -161,11 +165,12 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginLeft="8dp"
-        android:layout_marginRight="8dp"
-        android:layout_marginTop="8dp"
+        android:text="TextView"
         app:layout_constraintLeft_toRightOf="@+id/textView8"
+        android:layout_marginTop="8dp"
+        app:layout_constraintTop_toBottomOf="@+id/textViewC1Oleo"
         app:layout_constraintRight_toLeftOf="@+id/textViewCompara2"
-        app:layout_constraintTop_toBottomOf="@+id/textViewC1Oleo" />
+        android:layout_marginRight="8dp" />
 
     <TextView
         android:id="@+id/textView4"
@@ -180,9 +185,11 @@
         android:id="@+id/textViewC2Pneu"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:text="TextView"
+        android:layout_marginRight="0dp"
+        app:layout_constraintRight_toRightOf="@+id/textViewCompara2"
         android:layout_marginTop="8dp"
-        app:layout_constraintTop_toBottomOf="@+id/textViewC2Revisao"
-        tools:layout_editor_absoluteX="310dp" />
+        app:layout_constraintTop_toBottomOf="@+id/textViewC2Revisao" />
 
     <TextView
         android:id="@+id/textViewC1Pneu"
@@ -191,6 +198,7 @@
         android:layout_marginLeft="8dp"
         android:layout_marginRight="8dp"
         android:layout_marginTop="8dp"
+        android:text="TextView"
         app:layout_constraintLeft_toRightOf="@+id/textView8"
         app:layout_constraintRight_toLeftOf="@+id/textViewCompara2"
         app:layout_constraintTop_toBottomOf="@+id/textViewC1Revisao" />
@@ -208,9 +216,11 @@
         android:id="@+id/textViewC2ipva"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:text="TextView"
+        android:layout_marginRight="0dp"
+        app:layout_constraintRight_toRightOf="@+id/textViewCompara2"
         android:layout_marginTop="8dp"
-        app:layout_constraintTop_toBottomOf="@+id/textViewC2Pneu"
-        tools:layout_editor_absoluteX="310dp" />
+        app:layout_constraintTop_toBottomOf="@+id/textViewC2Pneu" />
 
     <TextView
         android:id="@+id/textViewC1ipva"
@@ -219,6 +229,7 @@
         android:layout_marginLeft="8dp"
         android:layout_marginRight="8dp"
         android:layout_marginTop="8dp"
+        android:text="TextView"
         app:layout_constraintLeft_toRightOf="@+id/textView8"
         app:layout_constraintRight_toLeftOf="@+id/textViewCompara2"
         app:layout_constraintTop_toBottomOf="@+id/textViewC1Pneu" />
@@ -239,6 +250,7 @@
         android:layout_marginLeft="8dp"
         android:layout_marginRight="8dp"
         android:layout_marginTop="8dp"
+        android:text="TextView"
         app:layout_constraintLeft_toRightOf="@+id/textView8"
         app:layout_constraintRight_toLeftOf="@+id/textViewCompara2"
         app:layout_constraintTop_toBottomOf="@+id/textViewC1ipva" />
@@ -247,9 +259,11 @@
         android:id="@+id/textViewC2Pecas"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="7dp"
-        app:layout_constraintTop_toBottomOf="@+id/textViewC2ipva"
-        tools:layout_editor_absoluteX="310dp" />
+        android:text="TextView"
+        android:layout_marginRight="0dp"
+        app:layout_constraintRight_toRightOf="@+id/textViewCompara2"
+        android:layout_marginTop="8dp"
+        app:layout_constraintTop_toBottomOf="@+id/textViewC2ipva" />
 
     <TextView
         android:id="@+id/textView17"
@@ -267,6 +281,7 @@
         android:layout_marginLeft="8dp"
         android:layout_marginRight="8dp"
         android:layout_marginTop="8dp"
+        android:text="TextView"
         app:layout_constraintLeft_toRightOf="@+id/textView8"
         app:layout_constraintRight_toLeftOf="@+id/textViewCompara2"
         app:layout_constraintTop_toBottomOf="@+id/textViewC1Pecas" />
@@ -275,8 +290,11 @@
         android:id="@+id/textViewC2Correia"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        tools:layout_editor_absoluteX="310dp"
-        tools:layout_editor_absoluteY="295dp" />
+        android:text="TextView"
+        android:layout_marginRight="-8dp"
+        app:layout_constraintRight_toRightOf="@+id/textViewCompara2"
+        android:layout_marginTop="8dp"
+        app:layout_constraintTop_toBottomOf="@+id/textViewC2Velas" />
 
     <TextView
         android:id="@+id/textView20"
@@ -294,6 +312,7 @@
         android:layout_marginLeft="8dp"
         android:layout_marginRight="8dp"
         android:layout_marginTop="8dp"
+        android:text="TextView"
         app:layout_constraintLeft_toRightOf="@+id/textView8"
         app:layout_constraintRight_toLeftOf="@+id/textViewCompara2"
         app:layout_constraintTop_toBottomOf="@+id/textViewC1Correia" />
@@ -302,9 +321,11 @@
         android:id="@+id/textViewC2FiltroArc"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:text="TextView"
+        android:layout_marginRight="-8dp"
+        app:layout_constraintRight_toRightOf="@+id/textViewCompara2"
         android:layout_marginTop="8dp"
-        app:layout_constraintTop_toBottomOf="@+id/textViewC2Correia"
-        tools:layout_editor_absoluteX="310dp" />
+        app:layout_constraintTop_toBottomOf="@+id/textViewGastosc2" />
 
     <TextView
         android:id="@+id/textView24"
@@ -322,6 +343,7 @@
         android:layout_marginLeft="8dp"
         android:layout_marginRight="8dp"
         android:layout_marginTop="8dp"
+        android:text="TextView"
         app:layout_constraintLeft_toRightOf="@+id/textView8"
         app:layout_constraintRight_toLeftOf="@+id/textViewCompara2"
         app:layout_constraintTop_toBottomOf="@+id/textViewC1FiltroArc" />
@@ -330,9 +352,11 @@
         android:id="@+id/textViewC2FiltroAr"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:text="TextView"
+        android:layout_marginRight="0dp"
+        app:layout_constraintRight_toRightOf="@+id/textViewCompara2"
         android:layout_marginTop="8dp"
-        app:layout_constraintTop_toBottomOf="@+id/textViewC2FiltroArc"
-        tools:layout_editor_absoluteX="310dp" />
+        app:layout_constraintTop_toBottomOf="@+id/textViewC2Pecas" />
 
     <TextView
         android:id="@+id/textView27"
@@ -349,18 +373,22 @@
         android:layout_height="wrap_content"
         android:layout_marginLeft="8dp"
         android:layout_marginRight="8dp"
-        android:layout_marginTop="8dp"
+        android:text="TextView"
         app:layout_constraintLeft_toRightOf="@+id/textView8"
         app:layout_constraintRight_toLeftOf="@+id/textViewCompara2"
+        app:layout_constraintHorizontal_bias="0.502"
+        android:layout_marginTop="8dp"
         app:layout_constraintTop_toBottomOf="@+id/textViewC1FiltroAr" />
 
     <TextView
         android:id="@+id/textViewC2Velas"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:text="TextView"
+        android:layout_marginRight="0dp"
+        app:layout_constraintRight_toRightOf="@+id/textViewCompara2"
         android:layout_marginTop="8dp"
-        app:layout_constraintTop_toBottomOf="@+id/textViewC2FiltroAr"
-        tools:layout_editor_absoluteX="310dp" />
+        app:layout_constraintTop_toBottomOf="@+id/textViewC2FiltroAr" />
 
     <TextView
         android:id="@+id/textView30"
@@ -377,17 +405,21 @@
         android:layout_height="wrap_content"
         android:layout_marginLeft="8dp"
         android:layout_marginRight="8dp"
-        android:layout_marginTop="8dp"
+        android:text="TextView"
         app:layout_constraintLeft_toRightOf="@+id/textView8"
         app:layout_constraintRight_toLeftOf="@+id/textViewCompara2"
+        app:layout_constraintHorizontal_bias="0.502"
+        android:layout_marginTop="8dp"
         app:layout_constraintTop_toBottomOf="@+id/textViewC1Velas" />
 
     <TextView
         android:id="@+id/textViewGastosc2"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="9dp"
-        app:layout_constraintTop_toBottomOf="@+id/textViewC2Velas"
-        tools:layout_editor_absoluteX="310dp" />
+        android:layout_marginRight="0dp"
+        android:text="TextView"
+        app:layout_constraintRight_toRightOf="@+id/textViewCompara2"
+        android:layout_marginTop="8dp"
+        app:layout_constraintTop_toBottomOf="@+id/textViewC2Correia" />
 
 </android.support.constraint.ConstraintLayout>

@@ -115,7 +115,7 @@ public class OficinasActivity extends AppCompatActivity {
                 for (DataSnapshot ofici : oficinasDatasnapshop.getChildren()) {
                     Log.d("ofi", ofici.getValue().toString());
                     Oficina ofic = ofici.getValue(Oficina.class);
-                    oficinaList.add(ofic);
+//                    oficinaList.add(ofic);
                     adapter.notifyDataSetChanged();
                 }
 

@@ -1,34 +1,19 @@
 package projetoi.meucarro.dialog;
 
 import android.app.Activity;
-import android.app.DatePickerDialog;
 import android.app.Dialog;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
-import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
 import android.widget.Button;
-import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.RatingBar;
-import android.widget.Spinner;
 import android.widget.Toast;
 
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
-import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.Collections;
-import java.util.Date;
-import java.util.List;
-
 import projetoi.meucarro.R;
-import projetoi.meucarro.models.CarroUser;
-import projetoi.meucarro.models.Gasto;
-import projetoi.meucarro.models.GastoCombustivel;
 import projetoi.meucarro.models.Oficina;
 
 public class AdicionarOficinaDialog extends Dialog {

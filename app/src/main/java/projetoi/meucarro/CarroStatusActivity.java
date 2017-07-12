@@ -18,7 +18,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 
 import projetoi.meucarro.adapters.StatusRowAdapter;
-import projetoi.meucarro.models.CarroUser;
+import projetoi.meucarro.models.Carro;
 import projetoi.meucarro.utils.CheckStatus;
 import projetoi.meucarro.utils.StatusAdapterPlaceholder;
 
@@ -26,7 +26,7 @@ public class CarroStatusActivity extends AppCompatActivity {
 
     private DatabaseReference carrosUserRef;
     private String lastCarId;
-    private CarroUser currentCar;
+    private Carro currentCar;
     private FirebaseAuth mAuth;
     private ArrayAdapter adapter;
     private ArrayList<StatusAdapterPlaceholder> placeHolderList;
@@ -50,7 +50,7 @@ public class CarroStatusActivity extends AppCompatActivity {
                 DataSnapshot dbUsers = dataSnapshot.child("users").child(mAuth.getCurrentUser().getUid());
                 if (dbUsers.child("lastCar").getValue() != null) {
                     lastCarId = dbUsers.child("lastCar").getValue().toString();
-                    currentCar = dbUsers.child("carrosList").child(lastCarId).getValue(CarroUser.class);
+                    currentCar = dbUsers.child("carrosList").child(lastCarId).getValue(Carro.class);
 
                     if (currentCar.listaGastos != null) {
                         DataSnapshot carrosDaMarca = dataSnapshot.child("carros").child(currentCar.marca);

@@ -27,10 +27,8 @@ import java.util.HashMap;
 
 import projetoi.meucarro.adapters.HomeGastosAdapter;
 import projetoi.meucarro.dialog.AdicionarGastoDialog;
-import projetoi.meucarro.models.CarroUser;
+import projetoi.meucarro.models.Carro;
 import projetoi.meucarro.models.Gasto;
-import projetoi.meucarro.models.GastoCombustivel;
-import projetoi.meucarro.utils.CheckStatus;
 
 
 public class HomeActivity extends AppCompatActivity {
@@ -42,7 +40,7 @@ public class HomeActivity extends AppCompatActivity {
     private ArrayAdapter<Gasto> adapter;
     private ValueEventListener carrosUserListener;
     private TextView nomeDoCarroTextView;
-    private CarroUser carroUser;
+    private Carro carro;
     private FirebaseDatabase database;
     private DatabaseReference carrosUserRef;
     private String lastCarId;
@@ -98,20 +96,20 @@ public class HomeActivity extends AppCompatActivity {
                 if (carSnapshot.child("lastCar").getValue() != null) {
                     fab.setVisibility(View.VISIBLE);
                     lastCarId = carSnapshot.child("lastCar").getValue().toString();
-                    carroUser = carSnapshot.child("carrosList").child(lastCarId).getValue(CarroUser.class);
-                    nomeDoCarroTextView.setText(carroUser.modelo);
-                    qteRodagem.setText(String.valueOf(carroUser.kmRodados));
+                    carro = carSnapshot.child("carrosList").child(lastCarId).getValue(Carro.class);
+                    nomeDoCarroTextView.setText(carro.modelo);
+                    qteRodagem.setText(String.valueOf(carro.kmRodados));
 
-                    if (carroUser.listaGastos != null) {
-                        for (Gasto gasto : carroUser.listaGastos) {
+                    if (carro.listaGastos != null) {
+                        for (Gasto gasto : carro.listaGastos) {
                             carroGastosList.add(gasto);
                             adapter.notifyDataSetChanged();
                         }
                     }
 
-                    DataSnapshot carrosDaMarca = dataSnapshot.child("carros").child(carroUser.marca);
+                    DataSnapshot carrosDaMarca = dataSnapshot.child("carros").child(carro.marca);
                     for (DataSnapshot ids : carrosDaMarca.getChildren()) {
-                        if (ids.child("Modelo").getValue().toString().equals(carroUser.modelo)) {
+                        if (ids.child("Modelo").getValue().toString().equals(carro.modelo)) {
                             manutencaoHash = (HashMap) ids.child("Manutenção").getValue();
                         }
                     }
@@ -133,7 +131,7 @@ public class HomeActivity extends AppCompatActivity {
 
     private void adicionarGastoDialog() {
         AdicionarGastoDialog adicionarGastoDialog = new AdicionarGastoDialog(HomeActivity.this);
-        adicionarGastoDialog.setInfo(carroUser, lastCarId, manutencaoHash);
+        adicionarGastoDialog.setInfo(carro, lastCarId, manutencaoHash);
         adicionarGastoDialog.show();
     }
 

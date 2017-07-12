@@ -45,6 +45,14 @@
     <string name="home_listadegastostext">Histórico de gastos</string>
     <string name="home_kmsrodadostext">Km\'s Rodados</string>
 
+    <!--ProfileActivity-->
+    <string name="username_text">Nome</string>
+    <string name="user_email_text">Email</string>
+    <string name="user_password_text">Senha</string>
+    <string name="user_phone_text">Telefone</string>
+    <string name="user_zipcode_text">CEP</string>
+    <string name="save_button">Salvar</string>
+
     <!--Menu-->
     <string name="menu_logout">Logout</string>
     <string name="menu_adicionar_carro_string">Adicionar carro</string>
@@ -62,7 +70,6 @@
     <string name="adicionardialog_oficinaname">Nome da Oficina</string>
     <string name="adicionardialog_oficinaend">Endereço da Oficina</string>
     <string name="adicionardialog_oficinatel">Telefone da Oficina</string>
-
 
     <!--Mensagens do sistema-->
     <string name="msg_cadastro_sucesso">Cadastro realizado com sucesso</string>

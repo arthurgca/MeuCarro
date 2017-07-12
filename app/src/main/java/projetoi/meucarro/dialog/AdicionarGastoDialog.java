@@ -29,19 +29,17 @@ import java.util.HashMap;
 import java.util.List;
 
 import projetoi.meucarro.R;
-import projetoi.meucarro.models.CarroUser;
+import projetoi.meucarro.models.Carro;
 import projetoi.meucarro.models.Gasto;
 import projetoi.meucarro.models.GastoCombustivel;
 import projetoi.meucarro.utils.CheckStatus;
 import projetoi.meucarro.utils.StatusAdapterPlaceholder;
 
-import static projetoi.meucarro.R.id.dialogSpinner;
-
 public class AdicionarGastoDialog extends Dialog {
 
 
     private Date dataEscolhida;
-    private CarroUser carroUser;
+    private Carro carro;
     private DatabaseReference carrosUserRef;
     private String lastCarId;
     private FirebaseDatabase database;
@@ -134,7 +132,7 @@ public class AdicionarGastoDialog extends Dialog {
 
                     if (dia.getTime().compareTo(dataEscolhida) > 0) {
                         int quilometragemNova = Integer.valueOf(editTextKm.getText().toString());
-                            if (quilometragemNova > carroUser.kmRodados && carroUser.kmRodados != 0) {
+                            if (quilometragemNova > carro.kmRodados && carro.kmRodados != 0) {
                             Toast.makeText(getContext(), R.string.erro_adicionargasto_quilmetragem_maior,
                                     Toast.LENGTH_SHORT).show();
                         } else {
@@ -142,7 +140,7 @@ public class AdicionarGastoDialog extends Dialog {
                         }
                     } else {
                         int quilometragemNova = Integer.valueOf(editTextKm.getText().toString());
-                        if (quilometragemNova < carroUser.kmRodados) {
+                        if (quilometragemNova < carro.kmRodados) {
                             Toast.makeText(getContext(), R.string.erro_adicionargasto_quilometragem_menor,
                                     Toast.LENGTH_SHORT).show();
                         } else {
@@ -173,9 +171,9 @@ public class AdicionarGastoDialog extends Dialog {
         super.onCreate(savedInstanceState);
     }
 
-    private void showNotif(CarroUser carroUser, HashMap manutencaoHash) {
+    private void showNotif(Carro carro, HashMap manutencaoHash) {
         ArrayList<StatusAdapterPlaceholder> list = new ArrayList<>();
-        list.addAll(CheckStatus.checaStatus(manutencaoHash, carroUser));
+        list.addAll(CheckStatus.checaStatus(manutencaoHash, carro));
         for (StatusAdapterPlaceholder i : list) {
             Log.d("Atraso", String.valueOf(i.isAtrasado()));
             if (i.isAtrasado()) {
@@ -201,28 +199,28 @@ public class AdicionarGastoDialog extends Dialog {
             novoGasto = new Gasto(dialogSpinner.getSelectedItem().toString(), dataEscolhida,
                     Float.valueOf(editTextValor.getText().toString()), quilometragemNova);
         }
-        Log.d("checa", String.valueOf(checaGastoMenor(novoGasto, carroUser.listaGastos)));
-        if (!checaGastoMenor(novoGasto, carroUser.listaGastos)){
+        Log.d("checa", String.valueOf(checaGastoMenor(novoGasto, carro.listaGastos)));
+        if (!checaGastoMenor(novoGasto, carro.listaGastos)){
             Toast.makeText(getContext(), "Já existe um registro com quilometragem maior em dia anterior.",
                     Toast.LENGTH_SHORT).show();
         } else {
 
-            if (carroUser.listaGastos == null) {
-                carroUser.listaGastos = new ArrayList<>();
+            if (carro.listaGastos == null) {
+                carro.listaGastos = new ArrayList<>();
             }
-            if (quilometragemNova >= carroUser.kmRodados) {
-                carroUser.setKmRodados(quilometragemNova);
+            if (quilometragemNova >= carro.kmRodados) {
+                carro.setKmRodados(quilometragemNova);
             }
-            carroUser.adicionaGasto(novoGasto);
-            Collections.sort(carroUser.listaGastos, Gasto.compareByData());
-            carrosUserRef.child("carrosList").child(lastCarId).setValue(carroUser);
-            showNotif(carroUser, manutencaoHash);
+            carro.adicionaGasto(novoGasto);
+            Collections.sort(carro.listaGastos, Gasto.compareByData());
+            carrosUserRef.child("carrosList").child(lastCarId).setValue(carro);
+            showNotif(carro, manutencaoHash);
             dismiss();
         }
     }
 
-    public void setInfo(CarroUser carroUser, String lastCarId, HashMap manutencaoHash) {
-        this.carroUser = carroUser;
+    public void setInfo(Carro carro, String lastCarId, HashMap manutencaoHash) {
+        this.carro = carro;
         this.lastCarId = lastCarId;
         this.manutencaoHash = manutencaoHash;
     }

@@ -9,7 +9,7 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.Locale;
 
-import projetoi.meucarro.models.CarroUser;
+import projetoi.meucarro.models.Carro;
 import projetoi.meucarro.models.Gasto;
 
 /**
@@ -21,7 +21,7 @@ public class CheckStatus {
 
     private static ArrayList<StatusAdapterPlaceholder> placeholderList;
 
-    public static ArrayList<StatusAdapterPlaceholder> checaStatus(HashMap manutencao, CarroUser currentCar) {
+    public static ArrayList<StatusAdapterPlaceholder> checaStatus(HashMap manutencao, Carro currentCar) {
         placeholderList = new ArrayList<>();
 
         for (Object i : manutencao.keySet()) {

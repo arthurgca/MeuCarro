@@ -8,7 +8,6 @@ import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.Spinner;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
@@ -19,13 +18,13 @@ import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
 
-import projetoi.meucarro.models.CarroUser;
+import projetoi.meucarro.models.Carro;
 
 public class CompararCarroActivity extends AppCompatActivity {
 
     private DatabaseReference carrosUserRef;
     private FirebaseAuth mAuth;
-    private ArrayList<CarroUser> userCarrosList;
+    private ArrayList<Carro> userCarrosList;
     private Spinner spinner1;
     private Spinner spinner2;
 
@@ -109,7 +108,7 @@ public class CompararCarroActivity extends AppCompatActivity {
         textViewGastosC1 = (TextView) findViewById(R.id.textViewGastosc1);
         textViewGastosC2 = (TextView) findViewById(R.id.textViewGastosc2);
 
-        final ArrayAdapter<CarroUser> adapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_item, userCarrosList);
+        final ArrayAdapter<Carro> adapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_item, userCarrosList);
 
         spinner1.setAdapter(adapter);
         spinner2.setAdapter(adapter);
@@ -151,7 +150,7 @@ public class CompararCarroActivity extends AppCompatActivity {
             public void onDataChange(DataSnapshot dataSnapshot) {
                 for (DataSnapshot dsCarro :  dataSnapshot.child("carrosList").getChildren()) {
                     //pega o carro e adiciona numa lista
-                    CarroUser carro = dsCarro.getValue(CarroUser.class);
+                    Carro carro = dsCarro.getValue(Carro.class);
                     userCarrosList.add(carro);
                     adapter.notifyDataSetChanged();
                 }
@@ -167,8 +166,8 @@ public class CompararCarroActivity extends AppCompatActivity {
     }
 
     public void compara(View view) {
-        CarroUser c1 = (CarroUser) spinner1.getSelectedItem();
-        CarroUser c2 = (CarroUser) spinner2.getSelectedItem();
+        Carro c1 = (Carro) spinner1.getSelectedItem();
+        Carro c2 = (Carro) spinner2.getSelectedItem();
 
         textViewGastosC1Combustivel.setText(c1.getSomaDeGastoPorTipo("Combustível").toString());
         textViewGastosC1Oleo.setText(c1.getSomaDeGastoPorTipo("Troca de Óleo").toString());

@@ -8,7 +8,7 @@ import java.util.Map;
 
 import projetoi.meucarro.R;
 
-public class CarroUser {
+public class Carro {
     public String marca;
     public String modelo;
     public String ano;
@@ -18,11 +18,11 @@ public class CarroUser {
     public Map<String, Double> somaDeGastosPorTipo;
     public Double somaDeGastos;
 
-    public CarroUser() {
+    public Carro() {
         // Default constructor required for calls to DataSnapshot.getValue(User.class)
     }
 
-    public CarroUser(String marca, String modelo, String ano, String placa, int kmRodados, List<Gasto> listaGastos) {
+    public Carro(String marca, String modelo, String ano, String placa, int kmRodados, List<Gasto> listaGastos) {
         this.marca = marca;
         this.modelo = modelo;
         this.ano = ano;

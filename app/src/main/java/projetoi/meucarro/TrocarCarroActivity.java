@@ -18,13 +18,13 @@ import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
 
-import projetoi.meucarro.models.CarroUser;
+import projetoi.meucarro.models.Carro;
 
 public class TrocarCarroActivity extends AppCompatActivity {
 
     private ValueEventListener carrosUserListener;
     private RadioGroup rg;
-    private ArrayList<CarroUser> userCarros;
+    private ArrayList<Carro> userCarros;
     private Button trocarCarroBtn;
     private ArrayList<String> idsList;
     private int qtdeCarros;
@@ -81,7 +81,7 @@ public class TrocarCarroActivity extends AppCompatActivity {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 for (DataSnapshot carroUser : dataSnapshot.getChildren()) {
-                    CarroUser carro = carroUser.getValue(CarroUser.class);
+                    Carro carro = carroUser.getValue(Carro.class);
                     RadioButton rbn = new RadioButton(TrocarCarroActivity.this);
 
                     rbn.setId(qtdeCarros);

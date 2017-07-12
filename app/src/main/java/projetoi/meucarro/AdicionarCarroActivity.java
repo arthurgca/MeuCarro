@@ -10,7 +10,6 @@ import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Spinner;
-import android.widget.TextView;
 
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
@@ -24,7 +23,7 @@ import java.util.HashMap;
 import java.util.List;
 
 
-import projetoi.meucarro.models.CarroUser;
+import projetoi.meucarro.models.Carro;
 import projetoi.meucarro.models.Gasto;
 
 public class AdicionarCarroActivity extends AppCompatActivity {
@@ -157,9 +156,9 @@ public class AdicionarCarroActivity extends AppCompatActivity {
                 String modeloCarroSelecionado = carrosModeloList.get(spinnerModelo.getSelectedItemPosition());
                 String modeloAnoSelecionado = spinnerAno.getSelectedItem().toString();
                 String placaCarro = placa.getText().toString();
-                CarroUser carroUser = new CarroUser(marcaSelecionada, modeloCarroSelecionado, modeloAnoSelecionado, placaCarro, 0, new ArrayList<Gasto>());
+                Carro carro = new Carro(marcaSelecionada, modeloCarroSelecionado, modeloAnoSelecionado, placaCarro, 0, new ArrayList<Gasto>());
                 String uidLastCar = usersRef.child(mAuth.getCurrentUser().getUid()).child("carrosList").push().getKey();
-                usersRef.child(mAuth.getCurrentUser().getUid()).child("carrosList").child(uidLastCar).setValue(carroUser);
+                usersRef.child(mAuth.getCurrentUser().getUid()).child("carrosList").child(uidLastCar).setValue(carro);
                 usersRef.child(mAuth.getCurrentUser().getUid()).child("lastCar").setValue(uidLastCar);
                 finish();
             }

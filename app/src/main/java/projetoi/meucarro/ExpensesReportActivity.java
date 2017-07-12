@@ -19,7 +19,6 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 import com.jjoe64.graphview.GraphView;
-import com.jjoe64.graphview.GridLabelRenderer;
 import com.jjoe64.graphview.LegendRenderer;
 import com.jjoe64.graphview.helper.StaticLabelsFormatter;
 import com.jjoe64.graphview.series.BarGraphSeries;
@@ -31,10 +30,9 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Calendar;
 import java.util.Date;
-import java.util.List;
 import java.util.Locale;
 
-import projetoi.meucarro.models.CarroUser;
+import projetoi.meucarro.models.Carro;
 import projetoi.meucarro.models.Gasto;
 
 public class ExpensesReportActivity extends AppCompatActivity {
@@ -49,8 +47,8 @@ public class ExpensesReportActivity extends AppCompatActivity {
     private String[] typeOfExpenses;
     private String[] yearsOfExpanses;
 
-    private ArrayList<CarroUser> userCarrosList;
-    private CarroUser currentCar;
+    private ArrayList<Carro> userCarrosList;
+    private Carro currentCar;
     private DatabaseReference carrosUserRef;
     private ValueEventListener carrosUserListener;
     private String lastCarId;
@@ -70,13 +68,13 @@ public class ExpensesReportActivity extends AppCompatActivity {
             public void onDataChange(DataSnapshot dataSnapshot) {
                 if (dataSnapshot.child("lastCar").getValue() != null) {
                     lastCarId = dataSnapshot.child("lastCar").getValue().toString();
-                    currentCar = dataSnapshot.child("carrosList").child(lastCarId).getValue(CarroUser.class);
+                    currentCar = dataSnapshot.child("carrosList").child(lastCarId).getValue(Carro.class);
                     userCarrosList = new ArrayList<>();
 
                     //itera sobre os nós da lista de carros
                     for (DataSnapshot dsCarro :  dataSnapshot.child("carrosList").getChildren()) {
                         //pega o carro e adiciona numa lista
-                        CarroUser carro = dsCarro.getValue(CarroUser.class);
+                        Carro carro = dsCarro.getValue(Carro.class);
 
                         userCarrosList.add(carro);
                     }
@@ -108,9 +106,9 @@ public class ExpensesReportActivity extends AppCompatActivity {
 
     }
 
-    private String[] generateCarID(ArrayList<CarroUser> listOfCars) {
+    private String[] generateCarID(ArrayList<Carro> listOfCars) {
         ArrayList<String> cars = new ArrayList<>();
-        for (CarroUser carUser : listOfCars) {
+        for (Carro carUser : listOfCars) {
             cars.add(carUser.getModelo() + " " + carUser.getAno() + " " + carUser.getPlaca());
         }
 

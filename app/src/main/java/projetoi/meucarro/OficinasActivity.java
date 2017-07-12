@@ -1,6 +1,5 @@
 package projetoi.meucarro;
 
-import android.app.ProgressDialog;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AppCompatActivity;
@@ -10,7 +9,6 @@ import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.RatingBar;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
@@ -19,21 +17,11 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.Locale;
 
 import projetoi.meucarro.adapters.OficinaAdapter;
-import projetoi.meucarro.adapters.StatusRowAdapter;
 import projetoi.meucarro.dialog.AdicionarOficinaDialog;
-import projetoi.meucarro.models.CarroUser;
-import projetoi.meucarro.models.Gasto;
-import projetoi.meucarro.models.GastoCombustivel;
 import projetoi.meucarro.models.Oficina;
-import projetoi.meucarro.utils.StatusAdapterPlaceholder;
 
 public class OficinasActivity extends AppCompatActivity {
 

@@ -32,6 +32,7 @@ import projetoi.meucarro.R;
 import projetoi.meucarro.models.Carro;
 import projetoi.meucarro.models.Gasto;
 import projetoi.meucarro.models.GastoCombustivel;
+import projetoi.meucarro.models.User;
 import projetoi.meucarro.utils.CheckStatus;
 import projetoi.meucarro.utils.StatusAdapterPlaceholder;
 
@@ -40,9 +41,6 @@ public class AdicionarGastoDialog extends Dialog {
 
     private Date dataEscolhida;
     private Carro carro;
-    private DatabaseReference carrosUserRef;
-    private String lastCarId;
-    private FirebaseDatabase database;
     private FirebaseAuth mAuth;
     private EditText editTextValor;
     private EditText editTextKm;
@@ -51,6 +49,7 @@ public class AdicionarGastoDialog extends Dialog {
     private Button dataButton;
     private Button adcButton;
     private HashMap manutencaoHash;
+    private User user;
 
     public AdicionarGastoDialog(Activity activity) {
         super(activity);
@@ -62,8 +61,6 @@ public class AdicionarGastoDialog extends Dialog {
         final Calendar dataAtual = Calendar.getInstance();
 
         mAuth = FirebaseAuth.getInstance();
-        database = FirebaseDatabase.getInstance();
-        carrosUserRef = database.getReference().child("users").child(mAuth.getCurrentUser().getUid());
 
         dataButton = (Button) findViewById(R.id.dialogDataButton);
         adcButton = (Button) findViewById(R.id.dialogAdicionar);
@@ -211,17 +208,25 @@ public class AdicionarGastoDialog extends Dialog {
             if (quilometragemNova >= carro.kmRodados) {
                 carro.setKmRodados(quilometragemNova);
             }
-            carro.adicionaGasto(novoGasto);
+
+            user.cars.get(user.lastCarIndex).adicionaGasto(novoGasto);
             Collections.sort(carro.listaGastos, Gasto.compareByData());
-            carrosUserRef.child("carrosList").child(lastCarId).setValue(carro);
+            saveUser(user);
+
             showNotif(carro, manutencaoHash);
+
             dismiss();
         }
     }
 
-    public void setInfo(Carro carro, String lastCarId, HashMap manutencaoHash) {
-        this.carro = carro;
-        this.lastCarId = lastCarId;
+    private void saveUser(User user) {
+        DatabaseReference ref = FirebaseDatabase.getInstance().getReference().child("users");
+        ref.child(mAuth.getCurrentUser().getUid()).setValue(user);
+    }
+
+    public void setInfo(User user, HashMap manutencaoHash) {
+        this.user = user;
+        this.carro = user.currentCar();
         this.manutencaoHash = manutencaoHash;
     }
 

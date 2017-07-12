@@ -19,6 +19,7 @@ import java.util.HashMap;
 
 import projetoi.meucarro.adapters.StatusRowAdapter;
 import projetoi.meucarro.models.Carro;
+import projetoi.meucarro.models.User;
 import projetoi.meucarro.utils.CheckStatus;
 import projetoi.meucarro.utils.StatusAdapterPlaceholder;
 
@@ -47,11 +48,10 @@ public class CarroStatusActivity extends AppCompatActivity {
         ValueEventListener carrosUserListener = new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
-                DataSnapshot dbUsers = dataSnapshot.child("users").child(mAuth.getCurrentUser().getUid());
-                if (dbUsers.child("lastCar").getValue() != null) {
-                    lastCarId = dbUsers.child("lastCar").getValue().toString();
-                    currentCar = dbUsers.child("carrosList").child(lastCarId).getValue(Carro.class);
+                User user = dataSnapshot.child("users").child(mAuth.getCurrentUser().getUid()).getValue(User.class);
+                currentCar = user.currentCar();
 
+                if (currentCar != null) {
                     if (currentCar.listaGastos != null) {
                         DataSnapshot carrosDaMarca = dataSnapshot.child("carros").child(currentCar.marca);
                         for (DataSnapshot ids : carrosDaMarca.getChildren()) {

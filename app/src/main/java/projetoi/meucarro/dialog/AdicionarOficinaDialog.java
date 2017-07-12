@@ -13,8 +13,10 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
+import java.util.ArrayList;
 import projetoi.meucarro.R;
 import projetoi.meucarro.models.Oficina;
+import projetoi.meucarro.models.User;
 
 public class AdicionarOficinaDialog extends Dialog {
 
@@ -27,7 +29,7 @@ public class AdicionarOficinaDialog extends Dialog {
     private RatingBar nota;
     private Button adcButton;
 
-    final DatabaseReference usersRef = database.getReference().child("users");
+    private User user;
 
     public AdicionarOficinaDialog(Activity activity) {
         super(activity);
@@ -68,10 +70,17 @@ public class AdicionarOficinaDialog extends Dialog {
     }
 
     private void adicionaOficina(){
-        Oficina novaOficina;
-        novaOficina = new Oficina(editTextOficina.getText().toString(), editTextTelefone.getText().toString(), editTextEndereco.getText().toString(), nota.getRating());
-        String uidLastCar = usersRef.child(mAuth.getCurrentUser().getUid()).child("oficinaList").push().getKey();
-        usersRef.child(mAuth.getCurrentUser().getUid()).child("oficinaList").child(uidLastCar).setValue(novaOficina);
+        Oficina novaOficina = new Oficina(editTextOficina.getText().toString(), editTextTelefone.getText().toString(), editTextEndereco.getText().toString(), nota.getRating());
+        if (user.repairShops == null) {
+            user.repairShops = new ArrayList<>();
+        }
+        user.repairShops.add(novaOficina);
+        DatabaseReference ref = FirebaseDatabase.getInstance().getReference().child("users");
+        ref.child(mAuth.getCurrentUser().getUid()).setValue(user);
         dismiss();
+    }
+
+    public void setInfo(User user) {
+        this.user = user;
     }
 }

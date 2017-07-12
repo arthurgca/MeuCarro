@@ -34,6 +34,7 @@ import java.util.Locale;
 
 import projetoi.meucarro.models.Carro;
 import projetoi.meucarro.models.Gasto;
+import projetoi.meucarro.models.User;
 
 public class ExpensesReportActivity extends AppCompatActivity {
 
@@ -66,16 +67,14 @@ public class ExpensesReportActivity extends AppCompatActivity {
         carrosUserListener = new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
-                if (dataSnapshot.child("lastCar").getValue() != null) {
-                    lastCarId = dataSnapshot.child("lastCar").getValue().toString();
-                    currentCar = dataSnapshot.child("carrosList").child(lastCarId).getValue(Carro.class);
+                User user = dataSnapshot.getValue(User.class);
+                if (user.currentCar() != null) {
+                    currentCar = user.currentCar();
                     userCarrosList = new ArrayList<>();
 
                     //itera sobre os nós da lista de carros
-                    for (DataSnapshot dsCarro :  dataSnapshot.child("carrosList").getChildren()) {
+                    for (Carro carro : user.cars) {
                         //pega o carro e adiciona numa lista
-                        Carro carro = dsCarro.getValue(Carro.class);
-
                         userCarrosList.add(carro);
                     }
                     listOfCars = generateCarID(userCarrosList);

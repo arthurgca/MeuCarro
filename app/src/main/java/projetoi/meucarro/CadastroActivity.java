@@ -15,7 +15,10 @@ import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseAuthException;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
 
+import projetoi.meucarro.models.User;
 import projetoi.meucarro.utils.FormatadorErros;
 
 public class CadastroActivity extends AppCompatActivity {
@@ -25,6 +28,8 @@ public class CadastroActivity extends AppCompatActivity {
     private Button cadastroBtn;
     private EditText senhaEditText;
     private EditText emailEditText;
+    private DatabaseReference ref;
+    private FirebaseDatabase db;
 
 
     @Override
@@ -32,6 +37,8 @@ public class CadastroActivity extends AppCompatActivity {
         mAuth = FirebaseAuth.getInstance();
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_cadastro);
+
+        db = FirebaseDatabase.getInstance();
 
         cadastroBtn = (Button) findViewById(R.id.cadastroButton);
         senhaEditText = (EditText) findViewById(R.id.cadastroSenhaEditText);
@@ -43,7 +50,8 @@ public class CadastroActivity extends AppCompatActivity {
                 FirebaseUser user = firebaseAuth.getCurrentUser();
                 if (user != null) {
                     // User is signed in
-                    FirebaseAuth.getInstance().signOut();
+                    cadastrarUser(user.getUid(), user.getEmail(), senhaEditText.getText().toString());
+
                     finish();
                     Log.d("Signed in: ", "onAuthStateChanged:signed_in:" + user.getUid());
                 } else {
@@ -81,6 +89,7 @@ public class CadastroActivity extends AppCompatActivity {
                                         Toast.makeText(CadastroActivity.this, errorMessage,
                                                 Toast.LENGTH_SHORT).show();
                                     } else {
+
                                         Toast.makeText(CadastroActivity.this, R.string.msg_cadastro_sucesso,
                                                 Toast.LENGTH_SHORT).show();
                                     }
@@ -90,6 +99,20 @@ public class CadastroActivity extends AppCompatActivity {
                 }
             }
         });
+    }
+
+    private void cadastrarUser(String uid, String email, String senha) {
+        User novoUser = new User("",
+                email,
+                senha,
+                "",
+                "",
+                0, null,null
+        );
+        Log.d("uid", uid);
+        ref = db.getReference().child("users").child(uid);
+
+        ref.setValue(novoUser);
     }
 
     @Override

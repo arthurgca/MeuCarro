@@ -19,6 +19,7 @@ import com.google.firebase.database.ValueEventListener;
 import java.util.ArrayList;
 
 import projetoi.meucarro.models.Carro;
+import projetoi.meucarro.models.User;
 
 public class TrocarCarroActivity extends AppCompatActivity {
 
@@ -26,8 +27,9 @@ public class TrocarCarroActivity extends AppCompatActivity {
     private RadioGroup rg;
     private ArrayList<Carro> userCarros;
     private Button trocarCarroBtn;
-    private ArrayList<String> idsList;
+    private ArrayList<Integer> idsList;
     private int qtdeCarros;
+    private User user;
 
 
     @Override
@@ -43,7 +45,7 @@ public class TrocarCarroActivity extends AppCompatActivity {
 
         final FirebaseDatabase database = FirebaseDatabase.getInstance();
         final FirebaseAuth mAuth = FirebaseAuth.getInstance();
-        DatabaseReference carrosUserRef = database.getReference().child("users").child(mAuth.getCurrentUser().getUid()).child("carrosList");
+        DatabaseReference carrosUserRef = database.getReference().child("users").child(mAuth.getCurrentUser().getUid());
 
         updateRadioButtons();
 
@@ -61,13 +63,20 @@ public class TrocarCarroActivity extends AppCompatActivity {
                 }
 
                 else {
-                    DatabaseReference usersRef = database.getReference().child("users");
-                    String idSelecionado = idsList.get(rg.getCheckedRadioButtonId());
-                    usersRef.child(mAuth.getCurrentUser().getUid()).child("lastCar").setValue(idSelecionado);
+                    saveUser(user);
                     finish();
                 }
             }
         });
+    }
+
+    private void saveUser(User user) {
+        FirebaseAuth mAuth = FirebaseAuth.getInstance();
+        user.changeCurrentCar(rg.getCheckedRadioButtonId());
+
+
+        DatabaseReference ref = FirebaseDatabase.getInstance().getReference().child("users");
+        ref.child(mAuth.getCurrentUser().getUid()).setValue(user);
     }
 
     private void updateRadioButtons() {
@@ -80,14 +89,14 @@ public class TrocarCarroActivity extends AppCompatActivity {
         carrosUserListener = new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
-                for (DataSnapshot carroUser : dataSnapshot.getChildren()) {
-                    Carro carro = carroUser.getValue(Carro.class);
+                user = dataSnapshot.getValue(User.class);
+                for (Carro carro : user.cars) {
                     RadioButton rbn = new RadioButton(TrocarCarroActivity.this);
 
                     rbn.setId(qtdeCarros);
                     rbn.setText(carro.modelo);
 
-                    idsList.add(carroUser.getKey());
+                    idsList.add(user.cars.indexOf(carro));
 
                     rg.addView(rbn);
 

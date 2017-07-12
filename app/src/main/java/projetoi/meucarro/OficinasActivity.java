@@ -22,6 +22,7 @@ import java.util.ArrayList;
 import projetoi.meucarro.adapters.OficinaAdapter;
 import projetoi.meucarro.dialog.AdicionarOficinaDialog;
 import projetoi.meucarro.models.Oficina;
+import projetoi.meucarro.models.User;
 
 public class OficinasActivity extends AppCompatActivity {
 
@@ -44,6 +45,7 @@ public class OficinasActivity extends AppCompatActivity {
     private TextView enderecoOficinaTextView;
     private TextView telefoneOficinaTextView;
     private RatingBar notaOficinaRatingBar;
+    private User user;
 
 
     @Override
@@ -84,6 +86,7 @@ public class OficinasActivity extends AppCompatActivity {
 
     private void adicionarOficina() {
         AdicionarOficinaDialog adicionarGastoDialog = new AdicionarOficinaDialog(OficinasActivity.this);
+        adicionarGastoDialog.setInfo(user);
         adicionarGastoDialog.show();
     }
 
@@ -96,15 +99,14 @@ public class OficinasActivity extends AppCompatActivity {
         oficinaListener = new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
+                user = dataSnapshot.getValue(User.class);
                 oficinaList.clear();
                 fab.setVisibility(View.VISIBLE);
-                DataSnapshot oficinasDatasnapshop = dataSnapshot.child("oficinaList");
-                //if (oficinasDatasnapshop.getValue() == null)
-                for (DataSnapshot ofici : oficinasDatasnapshop.getChildren()) {
-                    Log.d("ofi", ofici.getValue().toString());
-                    Oficina ofic = ofici.getValue(Oficina.class);
-                    oficinaList.add(ofic);
-                    adapter.notifyDataSetChanged();
+                if (user.repairShops != null) {
+                    for (Oficina ofici : user.repairShops) {
+                        oficinaList.add(ofici);
+                        adapter.notifyDataSetChanged();
+                    }
                 }
 
             }

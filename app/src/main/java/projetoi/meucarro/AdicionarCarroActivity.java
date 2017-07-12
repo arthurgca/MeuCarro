@@ -25,6 +25,7 @@ import java.util.List;
 
 import projetoi.meucarro.models.Carro;
 import projetoi.meucarro.models.Gasto;
+import projetoi.meucarro.models.User;
 
 public class AdicionarCarroActivity extends AppCompatActivity {
 
@@ -39,6 +40,7 @@ public class AdicionarCarroActivity extends AppCompatActivity {
     private ArrayList<Integer> anoCarroList;
     private ArrayAdapter<Integer> adapterAno;
     private HashMap<String, List<Integer>> modeloMap;
+    private User user;
 
 
     @Override
@@ -73,9 +75,8 @@ public class AdicionarCarroActivity extends AppCompatActivity {
 
         spinnerAno.setAdapter(adapterAno);
 
-        FirebaseDatabase database = FirebaseDatabase.getInstance();
-        final DatabaseReference carrosRef = database.getReference().child("carros");
-        final DatabaseReference usersRef = database.getReference().child("users");
+        final FirebaseDatabase database = FirebaseDatabase.getInstance();
+        final DatabaseReference ref = database.getReference();
 
 
         final ProgressDialog progressDialog = new ProgressDialog(AdicionarCarroActivity.this);
@@ -87,7 +88,8 @@ public class AdicionarCarroActivity extends AppCompatActivity {
         final ValueEventListener spinnerMarcaListener = new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
-                for (DataSnapshot marcas : dataSnapshot.getChildren()) {
+                user = dataSnapshot.child("users").child(mAuth.getCurrentUser().getUid()).getValue(User.class);
+                for (DataSnapshot marcas : dataSnapshot.child("carros").getChildren()) {
                     carrosMarcaList.add(marcas.getKey());
                     adapterMarca.notifyDataSetChanged();
                 }
@@ -100,7 +102,7 @@ public class AdicionarCarroActivity extends AppCompatActivity {
             }
         };
 
-        carrosRef.addValueEventListener(spinnerMarcaListener);
+        ref.addValueEventListener(spinnerMarcaListener);
 
 
 
@@ -109,6 +111,7 @@ public class AdicionarCarroActivity extends AppCompatActivity {
             public void onItemSelected(AdapterView<?> parent, View view, int position, final long id) {
                 modeloMap.clear();
                 carrosModeloList.clear();
+                DatabaseReference carrosRef = ref.child("carros");
                 DatabaseReference modelosRef = carrosRef.child(carrosMarcaList.get(position));
                 final ValueEventListener spinnerModeloListener = new ValueEventListener() {
                     @Override
@@ -157,9 +160,11 @@ public class AdicionarCarroActivity extends AppCompatActivity {
                 String modeloAnoSelecionado = spinnerAno.getSelectedItem().toString();
                 String placaCarro = placa.getText().toString();
                 Carro carro = new Carro(marcaSelecionada, modeloCarroSelecionado, modeloAnoSelecionado, placaCarro, 0, new ArrayList<Gasto>());
-                String uidLastCar = usersRef.child(mAuth.getCurrentUser().getUid()).child("carrosList").push().getKey();
-                usersRef.child(mAuth.getCurrentUser().getUid()).child("carrosList").child(uidLastCar).setValue(carro);
-                usersRef.child(mAuth.getCurrentUser().getUid()).child("lastCar").setValue(uidLastCar);
+                if (user.cars == null) {
+                    user.cars = new ArrayList<>();
+                }
+                user.addCar(carro);
+                ref.child("users").child(mAuth.getCurrentUser().getUid()).setValue(user);
                 finish();
             }
         });

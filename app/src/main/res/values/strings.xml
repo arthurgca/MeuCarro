@@ -92,6 +92,7 @@
     <string name="erro_oficina_endereco">Insira um endereço para a oficina</string>
     <string name="erro_oficina_telefone">Insira um telefone para a oficina</string>
     <string name="choose_car">Escolha o carro</string>
+    <string name="perfilactivity_sucesso">Atualizado com sucesso</string>
 
     <!--Arrays-->
     <string-array name="adicionardialog_gastosarray">

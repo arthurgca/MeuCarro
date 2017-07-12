@@ -19,10 +19,11 @@ import com.google.firebase.database.ValueEventListener;
 import java.util.ArrayList;
 
 import projetoi.meucarro.models.Carro;
+import projetoi.meucarro.models.User;
 
 public class CompararCarroActivity extends AppCompatActivity {
 
-    private DatabaseReference carrosUserRef;
+    private DatabaseReference userRef;
     private FirebaseAuth mAuth;
     private ArrayList<Carro> userCarrosList;
     private Spinner spinner1;
@@ -65,7 +66,7 @@ public class CompararCarroActivity extends AppCompatActivity {
 
         FirebaseDatabase database = FirebaseDatabase.getInstance();
         this.mAuth = FirebaseAuth.getInstance();
-        this.carrosUserRef = database.getReference().child("users").child(mAuth.getCurrentUser().getUid());
+        this.userRef = database.getReference().child("users").child(mAuth.getCurrentUser().getUid());
 
         spinner1 = (Spinner) findViewById(R.id.compararcarro_spinner1);
         spinner2 = (Spinner) findViewById(R.id.compararcarro_spinner2);
@@ -145,12 +146,12 @@ public class CompararCarroActivity extends AppCompatActivity {
             }
         });
 
-        this.carrosUserRef.addValueEventListener(new ValueEventListener() {
+        this.userRef.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
-                for (DataSnapshot dsCarro :  dataSnapshot.child("carrosList").getChildren()) {
+                User user = dataSnapshot.getValue(User.class);
+                for (Carro carro :  user.cars) {
                     //pega o carro e adiciona numa lista
-                    Carro carro = dsCarro.getValue(Carro.class);
                     userCarrosList.add(carro);
                     adapter.notifyDataSetChanged();
                 }

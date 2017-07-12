@@ -29,6 +29,7 @@ import projetoi.meucarro.adapters.HomeGastosAdapter;
 import projetoi.meucarro.dialog.AdicionarGastoDialog;
 import projetoi.meucarro.models.Carro;
 import projetoi.meucarro.models.Gasto;
+import projetoi.meucarro.models.User;
 
 
 public class HomeActivity extends AppCompatActivity {
@@ -43,10 +44,10 @@ public class HomeActivity extends AppCompatActivity {
     private Carro carro;
     private FirebaseDatabase database;
     private DatabaseReference carrosUserRef;
-    private String lastCarId;
     private FloatingActionButton fab;
     private TextView qteRodagem;
     private HashMap manutencaoHash;
+    private User user;
 
 
     @Override
@@ -92,11 +93,10 @@ public class HomeActivity extends AppCompatActivity {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 carroGastosList.clear();
-                DataSnapshot carSnapshot = dataSnapshot.child("users").child(mAuth.getCurrentUser().getUid());
-                if (carSnapshot.child("lastCar").getValue() != null) {
+                user = dataSnapshot.child("users").child(mAuth.getCurrentUser().getUid()).getValue(User.class);
+                if (user.cars != null) {
+                    carro = user.currentCar();
                     fab.setVisibility(View.VISIBLE);
-                    lastCarId = carSnapshot.child("lastCar").getValue().toString();
-                    carro = carSnapshot.child("carrosList").child(lastCarId).getValue(Carro.class);
                     nomeDoCarroTextView.setText(carro.modelo);
                     qteRodagem.setText(String.valueOf(carro.kmRodados));
 
@@ -131,7 +131,7 @@ public class HomeActivity extends AppCompatActivity {
 
     private void adicionarGastoDialog() {
         AdicionarGastoDialog adicionarGastoDialog = new AdicionarGastoDialog(HomeActivity.this);
-        adicionarGastoDialog.setInfo(carro, lastCarId, manutencaoHash);
+        adicionarGastoDialog.setInfo(user, manutencaoHash);
         adicionarGastoDialog.show();
     }
 

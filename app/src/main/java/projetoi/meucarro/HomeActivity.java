@@ -180,6 +180,10 @@ public class HomeActivity extends AppCompatActivity {
             Intent it = new Intent(HomeActivity.this, CompararCarroActivity.class);
             it.setFlags(Intent.FLAG_ACTIVITY_NO_HISTORY);
             startActivity(it);
+        } else if (id == R.id.menu_profile) {
+            Intent it = new Intent(HomeActivity.this, ProfileActivity.class);
+            it.setFlags(Intent.FLAG_ACTIVITY_NO_HISTORY);
+            startActivity(it);
         }
 
         return super.onOptionsItemSelected(item);

@@ -46,6 +46,7 @@
     <string name="home_kmsrodadostext">Km\'s Rodados</string>
 
     <!--ProfileActivity-->
+    <string name="profile_text">Perfil</string>
     <string name="username_text">Nome</string>
     <string name="user_email_text">Email</string>
     <string name="user_password_text">Senha</string>

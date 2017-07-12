@@ -1,7 +1,8 @@
-package projetoi.meucarro.adapters;
+package projetoi.meucarro;
 
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 
@@ -29,6 +30,14 @@ public class ProfileActivity extends AppCompatActivity {
         this.phone = (EditText) findViewById(R.id.userPhoneEditText);
         this.zipCode = (EditText) findViewById(R.id.userZIPCodeEditText);
         this.save = (Button) findViewById(R.id.saveButton);
+
+
+        this.save.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                
+            }
+        });
 
     }
 }

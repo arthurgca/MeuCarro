@@ -1,5 +1,6 @@
 package projetoi.meucarro;
 
+import android.app.ProgressDialog;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -89,6 +90,9 @@ public class ProfileActivity extends AppCompatActivity {
     }
 
     private void saveUser() {
+        final ProgressDialog progressDialog = new ProgressDialog(ProfileActivity.this);
+        progressDialog.setMessage("Salvando informações...");
+        progressDialog.show();
         AuthCredential credential = EmailAuthProvider
                 .getCredential(user.email, user.password);
 
@@ -129,7 +133,7 @@ public class ProfileActivity extends AppCompatActivity {
                                                         //atualiza user
                                                         DatabaseReference ref = FirebaseDatabase.getInstance().getReference().child("users");
                                                         ref.child(mAuth.getCurrentUser().getUid()).setValue(user);
-
+                                                        progressDialog.dismiss();
                                                         Toast.makeText(ProfileActivity.this, R.string.perfilactivity_sucesso,
                                                                 Toast.LENGTH_SHORT).show();
                                                     } else {

@@ -1,5 +1,6 @@
 package projetoi.meucarro;
 
+import android.app.DownloadManager;
 import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.Bundle;
@@ -15,12 +16,27 @@ import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.android.volley.Cache;
+import com.android.volley.Network;
+import com.android.volley.Request;
+import com.android.volley.RequestQueue;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.BasicNetwork;
+import com.android.volley.toolbox.DiskBasedCache;
+import com.android.volley.toolbox.HurlStack;
+import com.android.volley.toolbox.JsonArrayRequest;
+import com.android.volley.toolbox.JsonObjectRequest;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
+
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -48,6 +64,9 @@ public class HomeActivity extends AppCompatActivity {
     private TextView qteRodagem;
     private HashMap manutencaoHash;
     private User user;
+    private int codigoFipeMarca;
+    private Integer codigoFipeModelo;
+    private TextView precoFipeTextView;
 
 
     @Override
@@ -69,6 +88,7 @@ public class HomeActivity extends AppCompatActivity {
 
         updateListView();
 
+        precoFipeTextView = (TextView) findViewById(R.id.home_preco_fipe);
         nomeDoCarroTextView = (TextView) findViewById(R.id.home_nome_carro);
         qteRodagem = (TextView) findViewById(R.id.qteKmsRodados);
 
@@ -94,10 +114,10 @@ public class HomeActivity extends AppCompatActivity {
             public void onDataChange(DataSnapshot dataSnapshot) {
                 carroGastosList.clear();
                 user = dataSnapshot.child("users").child(mAuth.getCurrentUser().getUid()).getValue(User.class);
-                if (user.cars != null) {
+                if (user != null && user.cars != null) {
                     carro = user.currentCar();
                     fab.setVisibility(View.VISIBLE);
-                    nomeDoCarroTextView.setText(carro.modelo);
+                    nomeDoCarroTextView.setText(carro.modelo.substring(0, 20) + " " + carro.ano);
                     qteRodagem.setText(String.valueOf(carro.kmRodados));
 
                     if (carro.listaGastos != null) {
@@ -109,10 +129,48 @@ public class HomeActivity extends AppCompatActivity {
 
                     DataSnapshot carrosDaMarca = dataSnapshot.child("carros").child(carro.marca);
                     for (DataSnapshot ids : carrosDaMarca.getChildren()) {
-                        if (ids.child("Modelo").getValue().toString().equals(carro.modelo)) {
-                            manutencaoHash = (HashMap) ids.child("Manutenção").getValue();
+                        if (!ids.getKey().equals("codigoFipeMarca")) {
+                            if (ids.child("Modelo").getValue().toString().equals(carro.modelo)) {
+                                codigoFipeModelo = Integer.valueOf(String.valueOf(ids.child("codigoFipe").getValue()));
+                                manutencaoHash = (HashMap) ids.child("Manutenção").getValue();
+                            }
+                        } else {
+                            codigoFipeMarca = Integer.valueOf(String.valueOf(ids.getValue()));
                         }
                     }
+
+
+                    RequestQueue mRequestQueue;
+                    Cache cache = new DiskBasedCache(getCacheDir(), 1024 * 1024); // 1MB cap
+                    Network network = new BasicNetwork(new HurlStack());
+                    mRequestQueue = new RequestQueue(cache, network);
+                    mRequestQueue.start();
+                    int anoCorrigido = Integer.valueOf(carro.ano) + 1;
+                    String url = "https://fipe-parallelum.rhcloud.com/api/v1/carros/marcas/" +
+                            codigoFipeMarca + "/modelos/" + codigoFipeModelo + "/anos/" + anoCorrigido + "-1";
+
+                    JsonObjectRequest jsObjRequest = new JsonObjectRequest
+                            (Request.Method.GET, url, null, new Response.Listener<JSONObject>() {
+
+                                @Override
+                                public void onResponse(JSONObject response) {
+                                    try {
+                                        precoFipeTextView.setText(response.get("Valor") + " (" +
+                                        response.get("MesReferencia") +")");
+                                    } catch (JSONException e) {
+                                        e.printStackTrace();
+                                    }
+                                }
+                            }, new Response.ErrorListener() {
+
+                                @Override
+                                public void onErrorResponse(VolleyError error) {
+                                    Log.d("Error", error.getLocalizedMessage());
+
+                                }
+                            });
+
+                    mRequestQueue.add(jsObjRequest);
 
 
                 } else {
@@ -120,6 +178,7 @@ public class HomeActivity extends AppCompatActivity {
                     Toast.makeText(HomeActivity.this, R.string.msg_home_listacarrosvazia,
                             Toast.LENGTH_LONG).show();
                 }
+
                 progressDialog.dismiss();
             }
             @Override

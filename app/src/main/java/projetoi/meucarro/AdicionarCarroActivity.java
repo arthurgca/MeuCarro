@@ -117,13 +117,15 @@ public class AdicionarCarroActivity extends AppCompatActivity {
                     @Override
                     public void onDataChange(DataSnapshot dataSnapshot) {
                         for (DataSnapshot ids : dataSnapshot.getChildren()) {
-                            String modeloString = ids.child("Modelo").getValue().toString();
-                            carrosModeloList.add(modeloString);
-                            adapterModelo.notifyDataSetChanged();
-                            int anoLancamento = Integer.valueOf(String.valueOf(ids.child("Ano Lançamento").getValue()));
-                            int anoFim = Integer.valueOf(String.valueOf(ids.child("Até").getValue()));
-                            modeloMap.put(modeloString, buildAnoList(anoLancamento, anoFim));
-                            updateAnoSpinner(modeloString);
+                            if (!ids.getKey().equals("codigoFipeMarca")) {
+                                String modeloString = ids.child("Modelo").getValue().toString();
+                                carrosModeloList.add(modeloString);
+                                adapterModelo.notifyDataSetChanged();
+                                int anoLancamento = Integer.valueOf(String.valueOf(ids.child("Ano Lançamento").getValue()));
+                                int anoFim = Integer.valueOf(String.valueOf(ids.child("Até").getValue()));
+                                modeloMap.put(modeloString, buildAnoList(anoLancamento, anoFim));
+                                updateAnoSpinner(modeloString);
+                            }
                             }
                         }
                     @Override

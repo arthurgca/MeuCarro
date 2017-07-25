@@ -117,7 +117,7 @@ public class HomeActivity extends AppCompatActivity {
                 if (user != null && user.cars != null) {
                     carro = user.currentCar();
                     fab.setVisibility(View.VISIBLE);
-                    nomeDoCarroTextView.setText(carro.modelo.substring(0, 20) + " " + carro.ano);
+                    nomeDoCarroTextView.setText(carro.modelo.substring(0, 20).concat(" " + carro.ano));
                     qteRodagem.setText(String.valueOf(carro.kmRodados));
 
                     if (carro.listaGastos != null) {

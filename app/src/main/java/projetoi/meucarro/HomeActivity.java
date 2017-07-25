@@ -112,12 +112,16 @@ public class HomeActivity extends AppCompatActivity {
         carrosUserListener = new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
+
                 carroGastosList.clear();
                 user = dataSnapshot.child("users").child(mAuth.getCurrentUser().getUid()).getValue(User.class);
                 if (user != null && user.cars != null) {
                     carro = user.currentCar();
+
+                    int anoCorrigido = Integer.valueOf(carro.ano) + 1;
+
                     fab.setVisibility(View.VISIBLE);
-                    nomeDoCarroTextView.setText(carro.modelo.substring(0, 20).concat(" " + carro.ano));
+                    nomeDoCarroTextView.setText(carro.modelo.substring(0, 20).concat(" " + anoCorrigido));
                     qteRodagem.setText(String.valueOf(carro.kmRodados));
 
                     if (carro.listaGastos != null) {
@@ -145,7 +149,6 @@ public class HomeActivity extends AppCompatActivity {
                     Network network = new BasicNetwork(new HurlStack());
                     mRequestQueue = new RequestQueue(cache, network);
                     mRequestQueue.start();
-                    int anoCorrigido = Integer.valueOf(carro.ano) + 1;
                     String url = "https://fipe-parallelum.rhcloud.com/api/v1/carros/marcas/" +
                             codigoFipeMarca + "/modelos/" + codigoFipeModelo + "/anos/" + anoCorrigido + "-1";
 

@@ -76,13 +76,13 @@
 
     <TextView
         android:id="@+id/qteKmsRodados"
-        android:layout_width="match_parent"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text=""
-        android:textAppearance="@android:style/TextAppearance.Large"
         android:layout_above="@+id/textViewListGastos"
+        android:layout_alignParentEnd="true"
         android:layout_below="@+id/home_preco_fipe"
-        android:layout_toEndOf="@+id/home_preco_fipe" />
+        android:text=""
+        android:textAppearance="@android:style/TextAppearance.Large" />
 
     <TextView
         android:id="@+id/home_precofipetxtview"

@@ -94,6 +94,10 @@
     <string name="choose_car">Escolha o carro</string>
     <string name="perfilactivity_sucesso">Atualizado com sucesso</string>
     <string name="home_precofipetxt">Preço Fipe</string>
+    <string name="home_removergasto_title">Remover gasto</string>
+    <string name="home_removergasto_text">Deseja remover gasto?</string>
+    <string name="home_removergasto_confirm">Sim</string>
+    <string name="home_removergasto_reject">Não</string>
 
     <!--Arrays-->
     <string-array name="adicionardialog_gastosarray">

@@ -2,15 +2,18 @@ package projetoi.meucarro;
 
 import android.app.DownloadManager;
 import android.app.ProgressDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.TextView;
@@ -39,6 +42,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
 
 import projetoi.meucarro.adapters.HomeGastosAdapter;
@@ -99,6 +103,14 @@ public class HomeActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                     adicionarGastoDialog();
+            }
+        });
+
+        carrosListView.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
+            @Override
+            public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id) {
+                onDeleteClick(position);
+                return false;
             }
         });
     }
@@ -249,5 +261,36 @@ public class HomeActivity extends AppCompatActivity {
         }
 
         return super.onOptionsItemSelected(item);
+    }
+
+    private void saveUser(User user) {
+        DatabaseReference ref = FirebaseDatabase.getInstance().getReference().child("users");
+        ref.child(mAuth.getCurrentUser().getUid()).setValue(user);
+    }
+
+    public void onDeleteClick(final int position) {
+
+        final AlertDialog.Builder alert = new AlertDialog.Builder(HomeActivity.this);
+        alert.setTitle(R.string.home_removergasto_title);
+        alert.setMessage(R.string.home_removergasto_text);
+        alert.setPositiveButton(R.string.home_removergasto_confirm, new DialogInterface.OnClickListener() {
+
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                user.cars.get(user.lastCarIndex).removeGasto(carroGastosList.get(position));
+                Collections.sort(carro.listaGastos, Gasto.compareByData());
+                saveUser(user);
+            }
+        });
+
+        alert.setNegativeButton(R.string.home_removergasto_reject, new DialogInterface.OnClickListener() {
+
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                dialog.dismiss();
+            }
+        });
+
+        alert.show();
     }
 }

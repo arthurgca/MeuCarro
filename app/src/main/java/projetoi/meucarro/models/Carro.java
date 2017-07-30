@@ -1,5 +1,7 @@
 package projetoi.meucarro.models;
 
+import android.util.Log;
+
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.HashMap;
@@ -7,6 +9,9 @@ import java.util.List;
 import java.util.Map;
 
 import projetoi.meucarro.R;
+
+import static android.R.attr.logo;
+import static android.R.attr.x;
 
 public class Carro {
     public String marca;
@@ -121,7 +126,24 @@ public class Carro {
         this.somaDeGastosPorTipo.put(
                 gasto.getDescricao(), this.somaDeGastosPorTipo.get(gasto.getDescricao()) - gasto.getValor());
         this.somaDeGastos -= gasto.getValor();
+
+        int gastoIndex = this.listaGastos.indexOf(gasto);
+        int indexUltimo = this.listaGastos.size() - 1;
+
+        if (gastoIndex == indexUltimo) {
+            if (listaGastos.size() == 1) {
+                this.kmRodados = 0;
+            } else {
+                Gasto gastoAnterior = listaGastos.get(gastoIndex - 1);
+                if (gastoAnterior.registroKm != gasto.registroKm) {
+                    this.kmRodados = (int) gastoAnterior.registroKm;
+                }
+            }
+        }
+
         this.listaGastos.remove(gasto);
+
+
     }
 
     public ArrayList<ArrayList<Gasto>> getExpensesByYear(int year) {

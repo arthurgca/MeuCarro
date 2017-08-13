@@ -55,8 +55,10 @@ public class CarroStatusActivity extends AppCompatActivity {
                     if (currentCar.listaGastos != null) {
                         DataSnapshot carrosDaMarca = dataSnapshot.child("carros").child(currentCar.marca);
                         for (DataSnapshot ids : carrosDaMarca.getChildren()) {
-                            if (ids.child("Modelo").getValue().toString().equals(currentCar.modelo)) {
-                                placeHolderList.addAll(CheckStatus.checaStatus((HashMap) ids.child("Manutenção").getValue(), currentCar));
+                            if (!ids.getKey().toString().equals("codigoFipeMarca")) {
+                                if (ids.child("Modelo").getValue().toString().equals(currentCar.modelo)) {
+                                    placeHolderList.addAll(CheckStatus.checaStatus((HashMap) ids.child("Manutenção").getValue(), currentCar));
+                                }
                             }
                         }
                         adapter.notifyDataSetChanged();

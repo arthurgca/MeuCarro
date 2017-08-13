@@ -6,19 +6,19 @@ package projetoi.meucarro.models;
 
 public class Venda {
 
-    public String donoId;
     public String compradorId;
-    public Carro carroVendam;
+    public String senhaConfirmacao;
+    public double valor;
     public boolean haOferta;
 
     public Venda() {
 
     }
 
-    public Venda(String donoId, String compradorId, String idCarro, boolean haOferta) {
-        this.donoId = donoId;
+    public Venda(String compradorId, String senhaConfirmacao, double valor, boolean haOferta) {
         this.compradorId = compradorId;
-        this.carroVendam = carroVendam;
+        this.senhaConfirmacao = senhaConfirmacao;
+        this.valor = valor;
         this.haOferta = haOferta;
     }
 

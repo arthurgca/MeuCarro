@@ -32,7 +32,9 @@
             android:screenOrientation="landscape"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity android:name=".CarroStatusActivity" />
-        <activity android:name=".CompararCarroActivity"></activity>
+        <activity android:name=".CompararCarroActivity"/>
+        <activity android:name=".VendaCarroActivity" />
+
     </application>
 
 </manifest>

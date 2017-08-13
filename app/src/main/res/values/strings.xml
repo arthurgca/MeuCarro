@@ -98,6 +98,11 @@
     <string name="home_removergasto_text">Deseja remover gasto?</string>
     <string name="home_removergasto_confirm">Sim</string>
     <string name="home_removergasto_reject">Não</string>
+    <string name="vendacarro_textbutton">Confirmar</string>
+    <string name="vendacarro_senhaconfirmacaoedit">Senha para venda</string>
+    <string name="vendacarro_valoredit">Valor do carro</string>
+    <string name="erro_vendacarro_valorvazio">Há um valor vazio.</string>
+    <string name="erro_vendacarro_completarperfil">Complete seu perfil (nome, telefone e CEP) para poder vender</string>
 
     <!--Arrays-->
     <string-array name="adicionardialog_gastosarray">

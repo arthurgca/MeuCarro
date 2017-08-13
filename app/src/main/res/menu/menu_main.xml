@@ -34,6 +34,10 @@
         android:title="Comparar Carro" />
 
     <item
+        android:id="@+id/menu_venda_carro"
+        android:title="Vender carro" />
+
+    <item
         android:id="@+id/menu_logout"
         android:title="@string/menu_logout" />
 </menu>

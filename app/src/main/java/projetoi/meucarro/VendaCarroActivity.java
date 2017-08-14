@@ -27,7 +27,6 @@ public class VendaCarroActivity extends AppCompatActivity {
 
     private ValueEventListener carrosUserListener;
     private RadioGroup rg;
-    private ArrayList<Carro> userCarros;
     private Button vendaCarroBtn;
     private ArrayList<Integer> idsList;
     private int qtdeCarros;
@@ -87,10 +86,10 @@ public class VendaCarroActivity extends AppCompatActivity {
         String userId = FirebaseAuth.getInstance().getCurrentUser().getUid();
         String senha = senhaConfirmacaoEdit.getText().toString();
         double valor = Double.parseDouble(valorEdit.getText().toString());
-
+        String carroNome = user.cars.get(rg.getCheckedRadioButtonId()).modelo;
 
         DatabaseReference ref = FirebaseDatabase.getInstance().getReference().child("vendas");
-        Venda venda = new Venda("", senha, valor, false);
+        Venda venda = new Venda("",user.name, user.ZIPcode, carroNome, senha, valor, false);
         ref.child(userId).child(String.valueOf(rg.getCheckedRadioButtonId())).setValue(venda);
     }
 

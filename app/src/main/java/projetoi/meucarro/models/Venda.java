@@ -18,10 +18,10 @@ public class Venda {
 
     }
 
-    public Venda(String compradorId, String compradorNome, String compradorCep, String carroModelo, String senhaConfirmacao, double valor, boolean haOferta) {
+    public Venda(String compradorId, String vendedorNome, String vendedorCep, String carroModelo, String senhaConfirmacao, double valor, boolean haOferta) {
         this.compradorId = compradorId;
-        this.compradorNome = compradorNome;
-        this.compradorCep = compradorCep;
+        this.compradorNome = vendedorNome;
+        this.compradorCep = vendedorCep;
         this.carroModelo = carroModelo;
         this.senhaConfirmacao = senhaConfirmacao;
         this.valor = valor;

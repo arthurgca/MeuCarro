@@ -33,7 +33,7 @@
             android:theme="@style/AppTheme.NoActionBar" />
         <activity android:name=".CarroStatusActivity" />
         <activity android:name=".CompararCarroActivity" />
-        <activity android:name=".VendaCarroActivity" />
+        <activity android:name=".dialog.CriarVendaDialog" />
         <activity
             android:name=".MarketplaceActivity"
             android:label="@string/title_activity_marketplace"

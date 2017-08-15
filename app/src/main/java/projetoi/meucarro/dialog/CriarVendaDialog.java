@@ -1,7 +1,8 @@
-package projetoi.meucarro;
+package projetoi.meucarro.dialog;
 
+import android.app.Activity;
+import android.app.Dialog;
 import android.app.ProgressDialog;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
@@ -19,11 +20,12 @@ import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
 
+import projetoi.meucarro.R;
 import projetoi.meucarro.models.Carro;
 import projetoi.meucarro.models.User;
 import projetoi.meucarro.models.Venda;
 
-public class VendaCarroActivity extends AppCompatActivity {
+public class CriarVendaDialog extends Dialog {
 
     private ValueEventListener carrosUserListener;
     private RadioGroup rg;
@@ -34,11 +36,14 @@ public class VendaCarroActivity extends AppCompatActivity {
     private EditText senhaConfirmacaoEdit;
     private EditText valorEdit;
 
+    public CriarVendaDialog(Activity activity) {
+        super(activity);
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_venda_carro);
+        setContentView(R.layout.criarvenda_dialog);
 
         qtdeCarros = 0;
         idsList = new ArrayList<>();
@@ -60,23 +65,25 @@ public class VendaCarroActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 if (rg.getChildCount() <= 0) {
-                    Toast.makeText(VendaCarroActivity.this, R.string.erro_trocarcarro_zero_carros, Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getContext(), R.string.erro_trocarcarro_zero_carros, Toast.LENGTH_SHORT).show();
                 }
 
                 else if (rg.getCheckedRadioButtonId() == -1) {
-                    Toast.makeText(VendaCarroActivity.this, R.string.erro_trocarcarro_nenhumaselecao, Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getContext(), R.string.erro_trocarcarro_nenhumaselecao, Toast.LENGTH_SHORT).show();
                 }
-
+                else if (senhaConfirmacaoEdit.getText().toString().length() < 5) {
+                    Toast.makeText(getContext(), R.string.criarvendadialog_errosenhapequena, Toast.LENGTH_SHORT).show();
+                }
                 else if (senhaConfirmacaoEdit.getText().toString().isEmpty() ||
                         valorEdit.getText().toString().isEmpty()) {
-                    Toast.makeText(VendaCarroActivity.this, R.string.erro_vendacarro_valorvazio, Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getContext(), R.string.erro_vendacarro_valorvazio, Toast.LENGTH_SHORT).show();
                 }
                 else if (user.phone.isEmpty() || user.name.isEmpty() || user.ZIPcode.isEmpty()) {
-                    Toast.makeText(VendaCarroActivity.this, R.string.erro_vendacarro_completarperfil, Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getContext(), R.string.erro_vendacarro_completarperfil, Toast.LENGTH_SHORT).show();
                 }
                 else {
                     confirmarVenda();
-                    finish();
+                    dismiss();
                 }
             }
         });
@@ -91,13 +98,16 @@ public class VendaCarroActivity extends AppCompatActivity {
         String carroAno = user.cars.get(rg.getCheckedRadioButtonId()).ano;
 
         DatabaseReference ref = FirebaseDatabase.getInstance().getReference().child("vendas");
+
         Venda venda = new Venda(userId, "", carroId,  carroNome, carroAno, senha, valor, false);
+
         ref.child(userId).child(String.valueOf(rg.getCheckedRadioButtonId())).setValue(venda);
-        Toast.makeText(VendaCarroActivity.this, R.string.vendacarro_mensagemsucesso, Toast.LENGTH_SHORT).show();
+
+        Toast.makeText(getContext(), R.string.vendacarro_mensagemsucesso, Toast.LENGTH_SHORT).show();
     }
 
     private void updateRadioButtons() {
-        final ProgressDialog progressDialog = new ProgressDialog(VendaCarroActivity.this);
+        final ProgressDialog progressDialog = new ProgressDialog(getContext());
         progressDialog.setMessage("Carregando dados...");
         progressDialog.show();
 
@@ -107,17 +117,23 @@ public class VendaCarroActivity extends AppCompatActivity {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 user = dataSnapshot.getValue(User.class);
-                for (Carro carro : user.cars) {
-                    RadioButton rbn = new RadioButton(VendaCarroActivity.this);
 
-                    rbn.setId(qtdeCarros);
-                    rbn.setText(carro.modelo);
+                if (user.cars == null) {
+                    Toast.makeText(getContext(), R.string.criarvendadialog_erronenhumcarro, Toast.LENGTH_SHORT).show();
+                    dismiss();
+                } else {
+                    for (Carro carro : user.cars) {
+                        RadioButton rbn = new RadioButton(getContext());
 
-                    idsList.add(user.cars.indexOf(carro));
+                        rbn.setId(qtdeCarros);
+                        rbn.setText(carro.modelo);
 
-                    rg.addView(rbn);
+                        idsList.add(user.cars.indexOf(carro));
 
-                    qtdeCarros++;
+                        rg.addView(rbn);
+
+                        qtdeCarros++;
+                    }
                 }
                 progressDialog.dismiss();
             }

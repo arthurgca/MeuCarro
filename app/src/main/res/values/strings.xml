@@ -129,6 +129,8 @@
     <string name="erro_comprardialog_senhavazia">Campo de senha vazio.</string>
     <string name="erro_comprardialog_senhaincorreta">Senha incorreta, tente novamente.</string>
     <string name="vendacarro_mensagemsucesso">Carro anunciado com sucesso!</string>
+    <string name="criarvendadialog_erronenhumcarro">Adicione um carro para anunciar.</string>
+    <string name="criarvendadialog_errosenhapequena">Senha tem que ter ao menos 6 caracteres</string>
 
 
 </resources>

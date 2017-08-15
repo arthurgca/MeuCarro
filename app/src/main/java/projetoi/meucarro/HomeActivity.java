@@ -1,6 +1,5 @@
 package projetoi.meucarro;
 
-import android.app.DownloadManager;
 import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -28,7 +27,6 @@ import com.android.volley.VolleyError;
 import com.android.volley.toolbox.BasicNetwork;
 import com.android.volley.toolbox.DiskBasedCache;
 import com.android.volley.toolbox.HurlStack;
-import com.android.volley.toolbox.JsonArrayRequest;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
@@ -37,7 +35,6 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
-import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -258,11 +255,7 @@ public class HomeActivity extends AppCompatActivity {
             Intent it = new Intent(HomeActivity.this, ProfileActivity.class);
             it.setFlags(Intent.FLAG_ACTIVITY_NO_HISTORY);
             startActivity(it);
-        } else if (id == R.id.menu_venda_carro) {
-            Intent it = new Intent(HomeActivity.this, VendaCarroActivity.class);
-            it.setFlags(Intent.FLAG_ACTIVITY_NO_HISTORY);
-            startActivity(it);
-        }   else if (id == R.id.menu_marketplace) {
+        } else if (id == R.id.menu_marketplace) {
             Intent it = new Intent(HomeActivity.this, MarketplaceActivity.class);
             it.setFlags(Intent.FLAG_ACTIVITY_NO_HISTORY);
             startActivity(it);

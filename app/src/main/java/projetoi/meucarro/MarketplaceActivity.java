@@ -3,11 +3,9 @@ package projetoi.meucarro;
 import android.content.DialogInterface;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
@@ -21,11 +19,9 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
-import java.util.Collections;
 
-import projetoi.meucarro.dialog.AdicionarGastoDialog;
 import projetoi.meucarro.dialog.CarroCompraDialog;
-import projetoi.meucarro.models.Gasto;
+import projetoi.meucarro.dialog.CriarVendaDialog;
 import projetoi.meucarro.models.Venda;
 
 public class MarketplaceActivity extends AppCompatActivity {
@@ -80,14 +76,13 @@ public class MarketplaceActivity extends AppCompatActivity {
 
         loadListas();
 
-//        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
-//        fab.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View view) {
-//                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-//                        .setAction("Action", null).show();
-//            }
-//        });
+        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
+        fab.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                mostrarVendaDialog();
+            }
+        });
     }
 
     private void loadListas() {
@@ -95,7 +90,7 @@ public class MarketplaceActivity extends AppCompatActivity {
         dbRef.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
-
+                limparListas();
                 for (DataSnapshot ds : dataSnapshot.getChildren()) {
                     if (ds.getKey().toString().equals(userId)) {
                         for (DataSnapshot anuncios : ds.getChildren()) {
@@ -104,7 +99,6 @@ public class MarketplaceActivity extends AppCompatActivity {
                     } else {
                         for (DataSnapshot anuncios : ds.getChildren()) {
                             listaGlobal.add(anuncios.getValue(Venda.class));
-                            Log.d("size", String.valueOf(listaGlobal.size()));
                         }
                     }
                 }
@@ -130,10 +124,6 @@ public class MarketplaceActivity extends AppCompatActivity {
             @Override
             public void onClick(DialogInterface dialog, int which) {
                 dbRef.child(userId).child(venda.carroId).removeValue();
-                listaPessoal.clear();
-                listaGlobal.clear();
-                adapterGlobal.notifyDataSetChanged();
-                adapterPessoal.notifyDataSetChanged();
             }
         });
 
@@ -152,20 +142,20 @@ public class MarketplaceActivity extends AppCompatActivity {
         CarroCompraDialog carroCompraDialog = new CarroCompraDialog(MarketplaceActivity.this);
         carroCompraDialog.setVenda(venda);
         carroCompraDialog.show();
-        carroCompraDialog.setOnDismissListener(new DialogInterface.OnDismissListener() {
-            @Override
-            public void onDismiss(DialogInterface dialog) {
-                dialog.cancel();
+    }
 
-                listaPessoal.clear();
-                listaGlobal.clear();
 
-                adapterGlobal.notifyDataSetChanged();
-                adapterPessoal.notifyDataSetChanged();
+    private void mostrarVendaDialog() {
+        CriarVendaDialog criarVendaDialog = new CriarVendaDialog(MarketplaceActivity.this);
+        criarVendaDialog.show();
+    }
 
-                loadListas();
-            }
-        });
+    private void limparListas() {
+        listaPessoal.clear();
+        listaGlobal.clear();
+
+        adapterGlobal.notifyDataSetChanged();
+        adapterPessoal.notifyDataSetChanged();
     }
 
 }

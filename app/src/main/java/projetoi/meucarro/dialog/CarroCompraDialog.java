@@ -52,6 +52,7 @@ public class CarroCompraDialog extends Dialog {
     private String userAtualId;
     private DatabaseReference dialogRef;
     private ValueEventListener listener;
+    private TextView kmsRodadosText;
 
     public CarroCompraDialog(Activity activity) {
         super(activity);
@@ -77,6 +78,7 @@ public class CarroCompraDialog extends Dialog {
         telefoneText = (TextView) findViewById(R.id.comprarcarrodialog_vendedortelefonetext);
         anoText = (TextView) findViewById(R.id.comprarcarrodialog_carroanotext);
         senhaText = (TextView) findViewById(R.id.comprarcarro_senha);
+        kmsRodadosText = (TextView) findViewById(R.id.comprarcarrodialog_kmsrodadostxt);
 
         load();
 
@@ -112,10 +114,13 @@ public class CarroCompraDialog extends Dialog {
 
                 carro = vendedor.cars.get(Integer.parseInt(venda.carroId));
 
-                modeloText.setText(venda.carroModelo);
-                anoText.setText(venda.carroAno);
-                nomeVendedorText.setText(vendedor.name);
-                telefoneText.setText(vendedor.phone);
+                kmsRodadosText.setText(kmsRodadosText.getText().toString().concat(String.valueOf(carro.kmRodados)));
+
+
+                modeloText.setText(modeloText.getText().toString().concat(venda.carroModelo));
+                anoText.setText(anoText.getText().toString().concat(venda.carroAno));
+                nomeVendedorText.setText(nomeVendedorText.getText().toString().concat(vendedor.name));
+                telefoneText.setText(telefoneText.getText().toString().concat(vendedor.phone));
 
                 DataSnapshot carrosDaMarca = dataSnapshot.child("carros").child(carro.marca);
                 for (DataSnapshot ids : carrosDaMarca.getChildren()) {

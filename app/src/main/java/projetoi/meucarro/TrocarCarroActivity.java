@@ -89,6 +89,7 @@ public class TrocarCarroActivity extends AppCompatActivity {
         carrosUserListener = new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
+                limparRg();
                 user = dataSnapshot.getValue(User.class);
                 for (Carro carro : user.cars) {
                     RadioButton rbn = new RadioButton(TrocarCarroActivity.this);
@@ -109,5 +110,9 @@ public class TrocarCarroActivity extends AppCompatActivity {
             }
         };
 
+    }
+
+    private void limparRg() {
+        rg.removeAllViews();
     }
 }

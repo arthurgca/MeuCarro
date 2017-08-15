@@ -1,5 +1,6 @@
 package projetoi.meucarro.models;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -32,6 +33,9 @@ public class User {
     }
 
     public void addCar(Carro carro) {
+        if (cars == null) {
+            cars = new ArrayList<>();
+        }
         cars.add(carro);
         lastCarIndex = cars.indexOf(carro);
     }

@@ -119,4 +119,16 @@
     </string-array>
 
 
+    <string name="title_activity_marketplace">Marketplace</string>
+    <string name="marketplace_seusanunciostext">Seus anúncios</string>
+    <string name="marketplace_anunciosglobaistext">Anúncios globais</string>
+    <string name="marketplace_removeranunciotitle">Remover anúncio</string>
+    <string name="marketplace_removeranunciomessage">Deseja remover seu anúncio?</string>
+    <string name="comprarcarrodialog_senhatransterenciahin">Senha de transferência</string>
+    <string name="comprarcarrodialog_trasnferenciabtntext">Confirmar</string>
+    <string name="erro_comprardialog_senhavazia">Campo de senha vazio.</string>
+    <string name="erro_comprardialog_senhaincorreta">Senha incorreta, tente novamente.</string>
+    <string name="vendacarro_mensagemsucesso">Carro anunciado com sucesso!</string>
+
+
 </resources>

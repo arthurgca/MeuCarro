@@ -262,6 +262,10 @@ public class HomeActivity extends AppCompatActivity {
             Intent it = new Intent(HomeActivity.this, VendaCarroActivity.class);
             it.setFlags(Intent.FLAG_ACTIVITY_NO_HISTORY);
             startActivity(it);
+        }   else if (id == R.id.menu_marketplace) {
+            Intent it = new Intent(HomeActivity.this, MarketplaceActivity.class);
+            it.setFlags(Intent.FLAG_ACTIVITY_NO_HISTORY);
+            startActivity(it);
         }
 
         return super.onOptionsItemSelected(item);

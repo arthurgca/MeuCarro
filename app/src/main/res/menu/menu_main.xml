@@ -35,7 +35,12 @@
 
     <item
         android:id="@+id/menu_venda_carro"
-        android:title="Vender carro" />
+        android:title="Anunciar carro" />
+
+    <item
+        android:id="@+id/menu_marketplace"
+        android:title="Marketplace" />
+
 
     <item
         android:id="@+id/menu_logout"

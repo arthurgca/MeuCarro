@@ -84,13 +84,16 @@ public class VendaCarroActivity extends AppCompatActivity {
 
     private void confirmarVenda() {
         String userId = FirebaseAuth.getInstance().getCurrentUser().getUid();
+        String carroId = String.valueOf(rg.getCheckedRadioButtonId());
         String senha = senhaConfirmacaoEdit.getText().toString();
         double valor = Double.parseDouble(valorEdit.getText().toString());
         String carroNome = user.cars.get(rg.getCheckedRadioButtonId()).modelo;
+        String carroAno = user.cars.get(rg.getCheckedRadioButtonId()).ano;
 
         DatabaseReference ref = FirebaseDatabase.getInstance().getReference().child("vendas");
-        Venda venda = new Venda("",user.name, user.ZIPcode, carroNome, senha, valor, false);
+        Venda venda = new Venda(userId, "", carroId,  carroNome, carroAno, senha, valor, false);
         ref.child(userId).child(String.valueOf(rg.getCheckedRadioButtonId())).setValue(venda);
+        Toast.makeText(VendaCarroActivity.this, R.string.vendacarro_mensagemsucesso, Toast.LENGTH_SHORT).show();
     }
 
     private void updateRadioButtons() {

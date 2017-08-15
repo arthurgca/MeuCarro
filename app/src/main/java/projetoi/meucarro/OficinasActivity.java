@@ -85,9 +85,9 @@ public class OficinasActivity extends AppCompatActivity {
     }
 
     private void adicionarOficina() {
-        AdicionarOficinaDialog adicionarGastoDialog = new AdicionarOficinaDialog(OficinasActivity.this);
-        adicionarGastoDialog.setInfo(user);
-        adicionarGastoDialog.show();
+        AdicionarOficinaDialog adicionarOficinaDialog = new AdicionarOficinaDialog(OficinasActivity.this);
+        adicionarOficinaDialog.setInfo(user);
+        adicionarOficinaDialog.show();
     }
 
     private void updateListView() {

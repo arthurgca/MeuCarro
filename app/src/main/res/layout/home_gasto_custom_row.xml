@@ -1,37 +1,41 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:orientation="vertical" android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:layout_margin="5dp"
+    android:background="@color/colorSecondbackground"
+    android:orientation="vertical"
+    android:padding="5dp">
 
     <ImageView
         android:id="@+id/imageView5"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_alignBottom="@+id/home_adapter_manutencaotext"
+        android:layout_alignEnd="@+id/imageView6"
         android:layout_alignParentStart="true"
         android:layout_alignParentTop="true"
-        app:srcCompat="@drawable/ic_build_black_36dp"
-        android:layout_alignBottom="@+id/home_adapter_manutencaotext"
-        android:layout_alignEnd="@+id/imageView6" />
+        app:srcCompat="@drawable/ic_build_black_36dp" />
 
     <ImageView
         android:id="@+id/imageView6"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_alignBottom="@+id/home_adapter_datatext"
+        android:layout_alignEnd="@+id/imageView7"
         android:layout_alignParentStart="true"
         android:layout_below="@+id/imageView5"
-        app:srcCompat="@drawable/ic_date_range_black_36dp"
-        android:layout_alignBottom="@+id/home_adapter_datatext"
-        android:layout_alignEnd="@+id/imageView7" />
+        app:srcCompat="@drawable/ic_date_range_black_36dp" />
 
     <ImageView
         android:id="@+id/imageView7"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_alignBottom="@+id/home_adapter_valortext"
         android:layout_alignParentStart="true"
         android:layout_below="@+id/imageView6"
-        app:srcCompat="@drawable/ic_cash_usd_black_36dp"
-        android:layout_alignBottom="@+id/home_adapter_valortext" />
+        app:srcCompat="@drawable/ic_cash_usd_black_36dp" />
 
     <TextView
         android:id="@+id/home_adapter_manutencaotext"

@@ -132,20 +132,6 @@
     <string name="criarvendadialog_erronenhumcarro">Adicione um carro para anunciar.</string>
     <string name="criarvendadialog_errosenhapequena">Senha tem que ter ao menos 6 caracteres</string>
 
-        <string name="app_name">Navigation Drawer Example</string>
-    <string-array name="menu_array">
-        <item>Home</item>
-        <item>Perfil</item>
-        <item>Trocar Carro</item>
-        <item>Adicionar Carro</item>
-        <item>Calculadora Bicombustível</item>
-        <item>Relatório de Gastos</item>
-        <item>Status do Carro</item>
-        <item>Oficinas</item>
-        <item>Comparar Carro</item>
-        <item>Marketplace</item>
-        <item>Logout</item>
-    </string-array>
     <string name="drawer_open">Open navigation drawer</string>
     <string name="drawer_close">Close navigation drawer</string>
     <string name="action_websearch">Web search</string>
@@ -153,6 +139,10 @@
     <string name="trocarcarro_msgsucesso">Carro atual trocado.</string>
     <string name="adicionarcarro_msgsucesso">Novo carro adicionado.</string>
     <string name="compracarrodialog_msgsucesso">Carro transferido com sucesso.</string>
+    <string name="title_activity_main">CarAssist</string>
+
+    <string name="navigation_drawer_open">Open navigation drawer</string>
+    <string name="navigation_drawer_close">Close navigation drawer</string>
 
 
 </resources>

@@ -22,10 +22,9 @@
             android:label="@string/all_title_activity"
             android:screenOrientation="landscape"
             android:theme="@style/AppTheme.NoActionBar" />
-        <activity android:name=".MainActivity" />
         <activity
-            android:name=".MarketplaceFragment"
-            android:label="@string/title_activity_marketplace"
+            android:name=".MainActivity"
+            android:label="@string/title_activity_main"
             android:theme="@style/AppTheme.NoActionBar"></activity>
     </application>
 

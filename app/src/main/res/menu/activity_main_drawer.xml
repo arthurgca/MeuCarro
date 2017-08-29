@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <group android:checkableBehavior="single">
+        <item
+            android:id="@+id/nav_home"
+            android:title="Home" />
+        <item
+            android:id="@+id/nav_perfil"
+            android:title="Perfil" />
+        <item
+            android:id="@+id/nav_trocarcarro"
+            android:title="Trocar Carro" />
+        <item
+            android:id="@+id/nav_adicionar_carro"
+            android:title="Adicionar Carro" />
+
+        <item android:id="@+id/nav_calculadorabicombustiavel"
+            android:title="Calculadora Bicombustível"/>
+
+        <item android:id="@+id/nav_relatoriogastos"
+            android:title="Relatório de Gastos"/>
+
+        <item android:id="@+id/nav_statuscarro" android:title="Status do Carro"/>
+        <item android:title="Oficinas" android:id="@+id/nav_oficinas"/>
+
+        <item android:title="Comparar Carro" android:id="@+id/nav_compararcarros"/>
+
+        <item android:title="Marketplace" android:id="@+id/nav_marketplace"/>
+
+        <item android:title="Logout" android:id="@+id/nav_logout"/>
+    </group>
+
+
+
+</menu>

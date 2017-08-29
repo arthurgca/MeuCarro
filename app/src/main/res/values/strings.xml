@@ -16,7 +16,7 @@
     <string name="login_logar">Logar</string>
     <string name="logincadastro_emailhint">Email</string>
     <string name="logincadastro_senhahint">Senha</string>
-    <string name="login_cadastratext">Cadastro</string>
+    <string name="login_cadastratext">Cadastrar Nova Conta</string>
 
     <!--CadastroActivity-->
     <string name="cadastro_cadastrartext">Cadastrar</string>
@@ -37,12 +37,12 @@
 
     <!--AdicionarCarroActivity-->
     <string name="adicionarcarro_adicionartext">Adicionar</string>
-    <string name="adicionarcarro_carroscadastradostext">Carros cadastados:</string>
+    <string name="adicionarcarro_carroscadastradostext">Selecione seu Carro</string>
     <string name="adicionarcarro_dadoscarrotext">Dados sobre o carro:</string>
 
     <!--HomeActivity-->
-    <string name="home_carroatualtext">Carro atual:</string>
-    <string name="home_listadegastostext">Histórico de gastos</string>
+    <string name="home_carroatualtext">Carro</string>
+    <string name="home_listadegastostext">Histórico de Gastos</string>
     <string name="home_kmsrodadostext">Km\'s Rodados</string>
 
     <!--ProfileActivity-->

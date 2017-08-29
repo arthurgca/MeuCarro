@@ -1,15 +1,21 @@
 package projetoi.meucarro;
 
 import android.app.ProgressDialog;
+import android.support.annotation.Nullable;
+import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Spinner;
+import android.widget.Toast;
 
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
@@ -27,7 +33,7 @@ import projetoi.meucarro.models.Carro;
 import projetoi.meucarro.models.Gasto;
 import projetoi.meucarro.models.User;
 
-public class AdicionarCarroActivity extends AppCompatActivity {
+public class AdicionarCarroFragment extends Fragment {
 
     private Spinner spinnerMarca;
     private Spinner spinnerModelo;
@@ -42,30 +48,28 @@ public class AdicionarCarroActivity extends AppCompatActivity {
     private HashMap<String, List<Integer>> modeloMap;
     private User user;
 
-
+    @Nullable
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_adicionar_carro);
+    public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+        View rootView = inflater.inflate(R.layout.activity_adicionar_carro, container, false);
+        spinnerMarca = (Spinner) rootView.findViewById(R.id.adicionarCarroSpinnerMarca);
+        spinnerModelo = (Spinner) rootView.findViewById(R.id.adicionarCarroSpinnerModelo);
+        spinnerAno = (Spinner) rootView.findViewById(R.id.adicionarCarroSpinnerAno);
 
-        spinnerMarca = (Spinner) findViewById(R.id.adicionarCarroSpinnerMarca);
-        spinnerModelo = (Spinner) findViewById(R.id.adicionarCarroSpinnerModelo);
-        spinnerAno = (Spinner) findViewById(R.id.adicionarCarroSpinnerAno);
-
-        placa = (EditText) findViewById(R.id.editTextPlaca);
+        placa = (EditText) rootView.findViewById(R.id.editTextPlaca);
 
         mAuth = FirebaseAuth.getInstance();
 
-        adicionarButton = (Button) findViewById(R.id.confirmaAdicionarCarro);
+        adicionarButton = (Button) rootView.findViewById(R.id.confirmaAdicionarCarro);
 
         final ArrayList<String> carrosModeloList = new ArrayList<>();
         anoCarroList = new ArrayList<>();
         final ArrayList<String> carrosMarcaList = new ArrayList<>();
         modeloMap = new HashMap<>();
 
-        final ArrayAdapter<String> adapterMarca = new ArrayAdapter<>(this, android.R.layout.simple_spinner_item, carrosMarcaList);
-        final ArrayAdapter<String> adapterModelo = new ArrayAdapter<>(this, android.R.layout.simple_spinner_item, carrosModeloList);
-        adapterAno =  new ArrayAdapter<>(this, android.R.layout.simple_spinner_item, anoCarroList);
+        final ArrayAdapter<String> adapterMarca = new ArrayAdapter<>(getContext(), android.R.layout.simple_spinner_item, carrosMarcaList);
+        final ArrayAdapter<String> adapterModelo = new ArrayAdapter<>(getContext(), android.R.layout.simple_spinner_item, carrosModeloList);
+        adapterAno =  new ArrayAdapter<>(getContext(), android.R.layout.simple_spinner_item, anoCarroList);
 
         adapterMarca.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         spinnerMarca.setAdapter(adapterMarca);
@@ -79,7 +83,7 @@ public class AdicionarCarroActivity extends AppCompatActivity {
         final DatabaseReference ref = database.getReference();
 
 
-        final ProgressDialog progressDialog = new ProgressDialog(AdicionarCarroActivity.this);
+        final ProgressDialog progressDialog = new ProgressDialog(getContext());
         progressDialog.setMessage("Carregando dados...");
         progressDialog.show();
         progressDialog.setCancelable(false);
@@ -126,8 +130,8 @@ public class AdicionarCarroActivity extends AppCompatActivity {
                                 modeloMap.put(modeloString, buildAnoList(anoLancamento, anoFim));
                                 updateAnoSpinner(modeloString);
                             }
-                            }
                         }
+                    }
                     @Override
                     public void onCancelled(DatabaseError databaseError) {
                         Log.w("Nome", "loadPost:onCancelled", databaseError.toException());
@@ -167,10 +171,15 @@ public class AdicionarCarroActivity extends AppCompatActivity {
                 }
                 user.addCar(carro);
                 ref.child("users").child(mAuth.getCurrentUser().getUid()).setValue(user);
-                finish();
+
+                Toast.makeText(getContext(), R.string.adicionarcarro_msgsucesso, Toast.LENGTH_SHORT).show();
+
             }
         });
+        return rootView;
     }
+
+
 
     private void updateAnoSpinner(String modelo) {
         anoCarroList.clear();
@@ -186,4 +195,5 @@ public class AdicionarCarroActivity extends AppCompatActivity {
         }
         return anoList;
     }
+
 }

@@ -21,7 +21,7 @@
     <!--CadastroActivity-->
     <string name="cadastro_cadastrartext">Cadastrar</string>
 
-    <!--GasCalculatorActivity-->
+    <!--GasCalculatorFragment-->
     <string name="gascalculator_calculate_text">Calcular</string>
     <string name="gascalculator_brazilian_currency_symbol">R$</string>
     <string name="gascalculator_efficiency_text">Eficiência</string>
@@ -32,20 +32,20 @@
     <string name="choose_expense_type">Escolha o tipo de despesa</string>
     <string name="choose_expense_year">Escolha o ano</string>
 
-    <!--TrocarCarroActivity-->
+    <!--TrocarCarroFragment-->
     <string name="trocarcarro_trocartext">Trocar</string>
 
-    <!--AdicionarCarroActivity-->
+    <!--AdicionarCarroFragment-->
     <string name="adicionarcarro_adicionartext">Adicionar</string>
     <string name="adicionarcarro_carroscadastradostext">Carros cadastados:</string>
     <string name="adicionarcarro_dadoscarrotext">Dados sobre o carro:</string>
 
-    <!--HomeActivity-->
+    <!--HomeFragment-->
     <string name="home_carroatualtext">Carro atual:</string>
     <string name="home_listadegastostext">Histórico de gastos</string>
     <string name="home_kmsrodadostext">Km\'s Rodados</string>
 
-    <!--ProfileActivity-->
+    <!--ProfileFragment-->
     <string name="profile_text">Perfil</string>
     <string name="username_text">Nome</string>
     <string name="user_email_text">Email</string>
@@ -131,6 +131,28 @@
     <string name="vendacarro_mensagemsucesso">Carro anunciado com sucesso!</string>
     <string name="criarvendadialog_erronenhumcarro">Adicione um carro para anunciar.</string>
     <string name="criarvendadialog_errosenhapequena">Senha tem que ter ao menos 6 caracteres</string>
+
+        <string name="app_name">Navigation Drawer Example</string>
+    <string-array name="menu_array">
+        <item>Home</item>
+        <item>Perfil</item>
+        <item>Trocar Carro</item>
+        <item>Adicionar Carro</item>
+        <item>Calculadora Bicombustível</item>
+        <item>Relatório de Gastos</item>
+        <item>Status do Carro</item>
+        <item>Oficinas</item>
+        <item>Comparar Carro</item>
+        <item>Marketplace</item>
+        <item>Logout</item>
+    </string-array>
+    <string name="drawer_open">Open navigation drawer</string>
+    <string name="drawer_close">Close navigation drawer</string>
+    <string name="action_websearch">Web search</string>
+    <string name="app_not_available">Sorry, there\'s no web browser available</string>
+    <string name="trocarcarro_msgsucesso">Carro atual trocado.</string>
+    <string name="adicionarcarro_msgsucesso">Novo carro adicionado.</string>
+    <string name="compracarrodialog_msgsucesso">Carro transferido com sucesso.</string>
 
 
 </resources>

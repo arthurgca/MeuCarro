@@ -1,10 +1,15 @@
 package projetoi.meucarro;
 
+import android.content.Context;
 import android.os.Bundle;
+import android.support.annotation.Nullable;
 import android.support.design.widget.FloatingActionButton;
+import android.support.v4.app.Fragment;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.RatingBar;
@@ -24,7 +29,7 @@ import projetoi.meucarro.dialog.AdicionarOficinaDialog;
 import projetoi.meucarro.models.Oficina;
 import projetoi.meucarro.models.User;
 
-public class OficinasActivity extends AppCompatActivity {
+public class OficinasFragment extends Fragment {
 
     private DatabaseReference userRef;
     private FirebaseAuth mAuth;
@@ -46,16 +51,17 @@ public class OficinasActivity extends AppCompatActivity {
     private TextView telefoneOficinaTextView;
     private RatingBar notaOficinaRatingBar;
     private User user;
-
+    private Context act;
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_oficinas);
+    public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+        View rootView = inflater.inflate(R.layout.activity_oficinas, container, false);
+
+        act = getActivity();
 
         mAuth = FirebaseAuth.getInstance();
 
-        fab = (FloatingActionButton) findViewById(R.id.fab);
+        fab = (FloatingActionButton) rootView.findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -63,11 +69,11 @@ public class OficinasActivity extends AppCompatActivity {
             }
         });
 
-        oficinasListView = (ListView) findViewById(R.id.oficinasListView);
+        oficinasListView = (ListView) rootView.findViewById(R.id.oficinasListView);
 
         oficinaList = new ArrayList<>();
         oficinasList = new ArrayList<>();
-        adapter = new OficinaAdapter(this, oficinaList);
+        adapter = new OficinaAdapter(act, oficinaList);
 
         database = FirebaseDatabase.getInstance();
         carrosUserRef = database.getReference().child("users").child(mAuth.getCurrentUser().getUid());
@@ -75,23 +81,23 @@ public class OficinasActivity extends AppCompatActivity {
 
         updateListView();
 
-        nomeOficinaTextView = (TextView) findViewById(R.id.oficina_nome);
-        enderecoOficinaTextView = (TextView) findViewById(R.id.oficina_endereco);
-        telefoneOficinaTextView = (TextView) findViewById(R.id.oficina_telefone);
-        notaOficinaRatingBar = (RatingBar) findViewById(R.id.oficinaNota);
+        nomeOficinaTextView = (TextView) rootView.findViewById(R.id.oficina_nome);
+        enderecoOficinaTextView = (TextView) rootView.findViewById(R.id.oficina_endereco);
+        telefoneOficinaTextView = (TextView) rootView.findViewById(R.id.oficina_telefone);
+        notaOficinaRatingBar = (RatingBar) rootView.findViewById(R.id.oficinaNota);
 
         carrosUserRef.addValueEventListener(oficinaListener);
-
+        return rootView;
     }
 
     private void adicionarOficina() {
-        AdicionarOficinaDialog adicionarOficinaDialog = new AdicionarOficinaDialog(OficinasActivity.this);
+        AdicionarOficinaDialog adicionarOficinaDialog = new AdicionarOficinaDialog(getActivity());
         adicionarOficinaDialog.setInfo(user);
         adicionarOficinaDialog.show();
     }
 
     private void updateListView() {
-        /*final ProgressDialog progressDialog = new ProgressDialog(OficinasActivity.this);
+        /*final ProgressDialog progressDialog = new ProgressDialog(OficinasFragment.this);
         progressDialog.setMessage("Carregando dados...");
         progressDialog.show();*/
 

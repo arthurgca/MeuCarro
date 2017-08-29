@@ -1,8 +1,14 @@
 package projetoi.meucarro;
 
+import android.content.Context;
+import android.support.annotation.Nullable;
+import android.support.v4.app.Fragment;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.Toast;
@@ -23,7 +29,7 @@ import projetoi.meucarro.models.User;
 import projetoi.meucarro.utils.CheckStatus;
 import projetoi.meucarro.utils.StatusAdapterPlaceholder;
 
-public class CarroStatusActivity extends AppCompatActivity {
+public class CarroStatusFragment extends Fragment {
 
     private DatabaseReference carrosUserRef;
     private String lastCarId;
@@ -31,17 +37,19 @@ public class CarroStatusActivity extends AppCompatActivity {
     private FirebaseAuth mAuth;
     private ArrayAdapter adapter;
     private ArrayList<StatusAdapterPlaceholder> placeHolderList;
+    private Context act;
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_carro_status);
+    public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+        View rootView = inflater.inflate(R.layout.activity_carro_status, container, false);
+
+        act = getActivity();
 
         mAuth = FirebaseAuth.getInstance();
         placeHolderList = new ArrayList<>();
 
-        ListView listView = (ListView) findViewById(R.id.carro_status_listview);
-        adapter = new StatusRowAdapter(this, placeHolderList);
+        ListView listView = (ListView) rootView.findViewById(R.id.carro_status_listview);
+        adapter = new StatusRowAdapter(act, placeHolderList);
 
         listView.setAdapter(adapter);
 
@@ -49,6 +57,9 @@ public class CarroStatusActivity extends AppCompatActivity {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 User user = dataSnapshot.child("users").child(mAuth.getCurrentUser().getUid()).getValue(User.class);
+                if (user.cars == null) {
+                    user.cars = new ArrayList<>();
+                }
                 currentCar = user.currentCar();
 
                 if (currentCar != null) {
@@ -63,11 +74,11 @@ public class CarroStatusActivity extends AppCompatActivity {
                         }
                         adapter.notifyDataSetChanged();
                     } else {
-                        Toast.makeText(CarroStatusActivity.this, R.string.erro_nenhum_gasto,
+                        Toast.makeText(act, R.string.erro_nenhum_gasto,
                                 Toast.LENGTH_LONG).show();
                     }
                 } else {
-                    Toast.makeText(CarroStatusActivity.this, R.string.msg_home_listacarrosvazia,
+                    Toast.makeText(act, R.string.msg_home_listacarrosvazia,
                             Toast.LENGTH_LONG).show();
                 }
             }
@@ -81,6 +92,7 @@ public class CarroStatusActivity extends AppCompatActivity {
         FirebaseDatabase database = FirebaseDatabase.getInstance();
         this.carrosUserRef = database.getReference();
         this.carrosUserRef.addValueEventListener(carrosUserListener);
+        return rootView;
     }
 
 }

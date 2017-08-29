@@ -33,6 +33,9 @@ public class CheckStatus {
 
             long valorKm = (long) ((HashMap) manutencao.get(i)).get("Kilometragem");
 
+            if (currentCar.listaGastos == null) {
+                currentCar.listaGastos = new ArrayList<>();
+            }
             for (Gasto gasto : currentCar.listaGastos) {
                 if (gasto.descricao.equals(i.toString())) {
                     ultimoGasto = gasto;

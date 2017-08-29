@@ -18,24 +18,13 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".HomeActivity"
-            android:label="@string/all_title_activity"
-            android:theme="@style/AppTheme.NoActionBar" />
-        <activity android:name=".ProfileActivity" />
-        <activity android:name=".AdicionarCarroActivity" />
-        <activity android:name=".GasCalculatorActivity" />
-        <activity android:name=".TrocarCarroActivity" />
-        <activity android:name=".OficinasActivity" />
-        <activity
             android:name=".ExpensesReportActivity"
             android:label="@string/all_title_activity"
             android:screenOrientation="landscape"
             android:theme="@style/AppTheme.NoActionBar" />
-        <activity android:name=".CarroStatusActivity" />
-        <activity android:name=".CompararCarroActivity" />
-        <activity android:name=".dialog.CriarVendaDialog" />
+        <activity android:name=".MainActivity" />
         <activity
-            android:name=".MarketplaceActivity"
+            android:name=".MarketplaceFragment"
             android:label="@string/title_activity_marketplace"
             android:theme="@style/AppTheme.NoActionBar"></activity>
     </application>

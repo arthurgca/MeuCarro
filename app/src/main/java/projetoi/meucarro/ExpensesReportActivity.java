@@ -68,6 +68,9 @@ public class ExpensesReportActivity extends AppCompatActivity {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 User user = dataSnapshot.getValue(User.class);
+                if (user.cars == null) {
+                    user.cars = new ArrayList<>();
+                }
                 if (user.currentCar() != null) {
                     currentCar = user.currentCar();
                     userCarrosList = new ArrayList<>();

@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     app:layout_behavior="@string/appbar_scrolling_view_behavior"
-    tools:context="projetoi.meucarro.MarketplaceActivity"
+    tools:context="projetoi.meucarro.MarketplaceFragment"
     tools:showIn="@layout/activity_marketplace">
 
     <TextView

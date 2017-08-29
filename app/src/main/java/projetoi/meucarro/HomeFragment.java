@@ -1,17 +1,19 @@
 package projetoi.meucarro;
 
+import android.app.Activity;
 import android.app.ProgressDialog;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.annotation.Nullable;
 import android.support.design.widget.FloatingActionButton;
+import android.support.v4.app.Fragment;
 import android.support.v7.app.AlertDialog;
-import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.Toolbar;
 import android.util.Log;
-import android.view.Menu;
-import android.view.MenuItem;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
@@ -49,7 +51,7 @@ import projetoi.meucarro.models.Gasto;
 import projetoi.meucarro.models.User;
 
 
-public class HomeActivity extends AppCompatActivity {
+public class HomeFragment extends Fragment {
 
     private FirebaseAuth mAuth;
     private float autonomia = 0;
@@ -68,20 +70,21 @@ public class HomeActivity extends AppCompatActivity {
     private int codigoFipeMarca;
     private Integer codigoFipeModelo;
     private TextView precoFipeTextView;
+    private Context act;
 
-
+    @Nullable
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_home);
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
-        setSupportActionBar(toolbar);
+    public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+        View rootView =  inflater.inflate(R.layout.activity_home, container, false);
+
         mAuth = FirebaseAuth.getInstance();
 
-        carrosListView = (ListView) findViewById(R.id.homeListView);
+        act = getActivity();
+
+        carrosListView = (ListView) rootView.findViewById(R.id.homeListView);
 
         carroGastosList = new ArrayList<>();
-        adapter = new HomeGastosAdapter(this, carroGastosList);
+        adapter = new HomeGastosAdapter(getContext(), carroGastosList);
 
         database = FirebaseDatabase.getInstance();
         carrosUserRef = database.getReference();
@@ -89,17 +92,17 @@ public class HomeActivity extends AppCompatActivity {
 
         updateListView();
 
-        precoFipeTextView = (TextView) findViewById(R.id.home_preco_fipe);
-        nomeDoCarroTextView = (TextView) findViewById(R.id.home_nome_carro);
-        qteRodagem = (TextView) findViewById(R.id.qteKmsRodados);
+        precoFipeTextView = (TextView) rootView.findViewById(R.id.home_preco_fipe);
+        nomeDoCarroTextView = (TextView) rootView.findViewById(R.id.home_nome_carro);
+        qteRodagem = (TextView) rootView.findViewById(R.id.qteKmsRodados);
 
         carrosUserRef.addValueEventListener(carrosUserListener);
 
-        fab = (FloatingActionButton) findViewById(R.id.fab);
+        fab = (FloatingActionButton) rootView.findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                    adicionarGastoDialog();
+                adicionarGastoDialog();
             }
         });
 
@@ -110,10 +113,15 @@ public class HomeActivity extends AppCompatActivity {
                 return false;
             }
         });
+
+        return rootView;
     }
 
+    public HomeFragment() {}
+
+
     private void updateListView() {
-        final ProgressDialog progressDialog = new ProgressDialog(HomeActivity.this);
+        final ProgressDialog progressDialog = new ProgressDialog(getContext());
         progressDialog.setMessage("Carregando dados...");
         progressDialog.show();
 
@@ -130,7 +138,7 @@ public class HomeActivity extends AppCompatActivity {
                     int anoCorrigido = Integer.valueOf(carro.ano) + 1;
 
                     fab.setVisibility(View.VISIBLE);
-                    nomeDoCarroTextView.setText(carro.modelo.substring(0, 20).concat(" " + anoCorrigido));
+                        nomeDoCarroTextView.setText(carro.modelo.substring(0, 20).concat(" " + anoCorrigido));
                     qteRodagem.setText(String.valueOf(carro.kmRodados));
 
                     if (carro.listaGastos != null) {
@@ -154,7 +162,7 @@ public class HomeActivity extends AppCompatActivity {
 
 
                     RequestQueue mRequestQueue;
-                    Cache cache = new DiskBasedCache(getCacheDir(), 1024 * 1024); // 1MB cap
+                    Cache cache = new DiskBasedCache(act.getCacheDir(), 1024 * 1024); // 1MB cap
                     Network network = new BasicNetwork(new HurlStack());
                     mRequestQueue = new RequestQueue(cache, network);
                     mRequestQueue.start();
@@ -187,7 +195,7 @@ public class HomeActivity extends AppCompatActivity {
 
                 } else {
                     fab.setVisibility(View.INVISIBLE);
-                    Toast.makeText(HomeActivity.this, R.string.msg_home_listacarrosvazia,
+                    Toast.makeText(act, R.string.msg_home_listacarrosvazia,
                             Toast.LENGTH_LONG).show();
                 }
 
@@ -201,68 +209,11 @@ public class HomeActivity extends AppCompatActivity {
     }
 
     private void adicionarGastoDialog() {
-        AdicionarGastoDialog adicionarGastoDialog = new AdicionarGastoDialog(HomeActivity.this);
+        AdicionarGastoDialog adicionarGastoDialog = new AdicionarGastoDialog(getActivity());
         adicionarGastoDialog.setInfo(user, manutencaoHash);
         adicionarGastoDialog.show();
     }
 
-
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.menu_main, menu);
-        return true;
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-
-        int id = item.getItemId();
-
-        if (id == R.id.menu_logout) {
-            Intent it = new Intent(HomeActivity.this, LoginActivity.class);
-            startActivity(it);
-            mAuth.signOut();
-            finish();
-        } else if (id == R.id.menu_adicionar_carro) {
-            Intent it = new Intent(HomeActivity.this, AdicionarCarroActivity.class);
-            it.setFlags(Intent.FLAG_ACTIVITY_NO_HISTORY);
-            startActivity(it);
-        } else if (id == R.id.menu_trocar_carro) {
-            Intent it = new Intent(HomeActivity.this, TrocarCarroActivity.class);
-            it.setFlags(Intent.FLAG_ACTIVITY_NO_HISTORY);
-            startActivity(it);
-        } else if (id == R.id.menu_calculadora) {
-            Intent it = new Intent(HomeActivity.this, GasCalculatorActivity.class);
-            it.setFlags(Intent.FLAG_ACTIVITY_NO_HISTORY);
-            startActivity(it);
-        } else if (id == R.id.expenses_report_menu) {
-            Intent it = new Intent(HomeActivity.this, ExpensesReportActivity.class);
-            it.setFlags(Intent.FLAG_ACTIVITY_NO_HISTORY);
-            startActivity(it);
-        } else if (id == R.id.menu_status_carro) {
-            Intent it = new Intent(HomeActivity.this, CarroStatusActivity.class);
-            it.setFlags(Intent.FLAG_ACTIVITY_NO_HISTORY);
-            startActivity(it);
-        } else if (id == R.id.menu_oficina) {
-            Intent it = new Intent(HomeActivity.this, OficinasActivity.class);
-            it.setFlags(Intent.FLAG_ACTIVITY_NO_HISTORY);
-            startActivity(it);
-        } else if (id == R.id.menu_compararcarro) {
-            Intent it = new Intent(HomeActivity.this, CompararCarroActivity.class);
-            it.setFlags(Intent.FLAG_ACTIVITY_NO_HISTORY);
-            startActivity(it);
-        } else if (id == R.id.menu_profile) {
-            Intent it = new Intent(HomeActivity.this, ProfileActivity.class);
-            it.setFlags(Intent.FLAG_ACTIVITY_NO_HISTORY);
-            startActivity(it);
-        } else if (id == R.id.menu_marketplace) {
-            Intent it = new Intent(HomeActivity.this, MarketplaceActivity.class);
-            it.setFlags(Intent.FLAG_ACTIVITY_NO_HISTORY);
-            startActivity(it);
-        }
-
-        return super.onOptionsItemSelected(item);
-    }
 
     private void saveUser(User user) {
         DatabaseReference ref = FirebaseDatabase.getInstance().getReference().child("users");
@@ -271,7 +222,7 @@ public class HomeActivity extends AppCompatActivity {
 
     public void onDeleteClick(final int position) {
 
-        final AlertDialog.Builder alert = new AlertDialog.Builder(HomeActivity.this);
+        final AlertDialog.Builder alert = new AlertDialog.Builder(getContext());
         alert.setTitle(R.string.home_removergasto_title);
         alert.setMessage(R.string.home_removergasto_text);
         alert.setPositiveButton(R.string.home_removergasto_confirm, new DialogInterface.OnClickListener() {

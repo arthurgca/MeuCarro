@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="projetoi.meucarro.CarroStatusActivity">
+    tools:context="projetoi.meucarro.CarroStatusFragment">
 
     <ListView
         android:id="@+id/carro_status_listview"

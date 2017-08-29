@@ -1,11 +1,16 @@
 package projetoi.meucarro;
 
 import android.app.ProgressDialog;
+import android.content.Context;
 import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
+import android.support.v4.app.Fragment;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
@@ -25,7 +30,7 @@ import com.google.firebase.database.ValueEventListener;
 import projetoi.meucarro.models.User;
 import projetoi.meucarro.utils.FormatadorErros;
 
-public class ProfileActivity extends AppCompatActivity {
+public class ProfileFragment extends Fragment {
 
     EditText name;
     EditText email;
@@ -35,20 +40,22 @@ public class ProfileActivity extends AppCompatActivity {
     Button save;
     private User user;
     private FirebaseAuth mAuth;
+    private Context act;
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_profile);
+    public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+        View rootView = inflater.inflate(R.layout.activity_profile, container, false);
+
+        act = getActivity();
 
         this.mAuth = FirebaseAuth.getInstance();
 
-        this.name = (EditText) findViewById(R.id.usernameEditText);
-        this.email = (EditText) findViewById(R.id.userEmailEditText);
-        this.password = (EditText) findViewById(R.id.userPasswordEditText);
-        this.phone = (EditText) findViewById(R.id.userPhoneEditText);
-        this.zipCode = (EditText) findViewById(R.id.userZIPCodeEditText);
-        this.save = (Button) findViewById(R.id.saveButton);
+        this.name = (EditText) rootView.findViewById(R.id.usernameEditText);
+        this.email = (EditText) rootView.findViewById(R.id.userEmailEditText);
+        this.password = (EditText) rootView.findViewById(R.id.userPasswordEditText);
+        this.phone = (EditText) rootView.findViewById(R.id.userPhoneEditText);
+        this.zipCode = (EditText) rootView.findViewById(R.id.userZIPCodeEditText);
+        this.save = (Button) rootView.findViewById(R.id.saveButton);
 
         loadUser();
 
@@ -58,7 +65,7 @@ public class ProfileActivity extends AppCompatActivity {
                 saveUser();
             }
         });
-
+        return rootView;
     }
 
     private void loadInfo() {
@@ -90,7 +97,7 @@ public class ProfileActivity extends AppCompatActivity {
     }
 
     private void saveUser() {
-        final ProgressDialog progressDialog = new ProgressDialog(ProfileActivity.this);
+        final ProgressDialog progressDialog = new ProgressDialog(act);
         progressDialog.setMessage("Salvando informações...");
         progressDialog.show();
         AuthCredential credential = EmailAuthProvider
@@ -134,7 +141,7 @@ public class ProfileActivity extends AppCompatActivity {
                                                         DatabaseReference ref = FirebaseDatabase.getInstance().getReference().child("users");
                                                         ref.child(mAuth.getCurrentUser().getUid()).setValue(user);
                                                         progressDialog.dismiss();
-                                                        Toast.makeText(ProfileActivity.this, R.string.perfilactivity_sucesso,
+                                                        Toast.makeText(act, R.string.perfilactivity_sucesso,
                                                                 Toast.LENGTH_SHORT).show();
                                                     } else {
                                                         FirebaseAuthException erro = ((FirebaseAuthException) task.getException());
@@ -153,7 +160,7 @@ public class ProfileActivity extends AppCompatActivity {
 
     private void showErro(FirebaseAuthException erro) {
         String errorMessage = FormatadorErros.getAuthMessage(erro);
-        Toast.makeText(ProfileActivity.this, errorMessage,
+        Toast.makeText(act, errorMessage,
                 Toast.LENGTH_SHORT).show();
     }
 }

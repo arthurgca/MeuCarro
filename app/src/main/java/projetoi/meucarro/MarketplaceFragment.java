@@ -1,12 +1,17 @@
 package projetoi.meucarro;
 
+import android.content.Context;
 import android.content.DialogInterface;
 import android.os.Bundle;
+import android.support.annotation.Nullable;
 import android.support.design.widget.FloatingActionButton;
+import android.support.v4.app.Fragment;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
@@ -24,7 +29,7 @@ import projetoi.meucarro.dialog.CarroCompraDialog;
 import projetoi.meucarro.dialog.CriarVendaDialog;
 import projetoi.meucarro.models.Venda;
 
-public class MarketplaceActivity extends AppCompatActivity {
+public class MarketplaceFragment extends Fragment {
 
     private ListView listViewSeusAnuncios;
     private ListView listViewAnunciosGlobais;
@@ -34,13 +39,13 @@ public class MarketplaceActivity extends AppCompatActivity {
     private ArrayList<Venda> listaGlobal;
     private DatabaseReference dbRef;
     private String userId;
+    private Context act;
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_marketplace);
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
-        setSupportActionBar(toolbar);
+    public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+        View rootView = inflater.inflate(R.layout.activity_marketplace, container, false);
+
+        act = getActivity();
 
         dbRef = FirebaseDatabase.getInstance().getReference().child("vendas");
         userId = FirebaseAuth.getInstance().getCurrentUser().getUid();
@@ -49,11 +54,11 @@ public class MarketplaceActivity extends AppCompatActivity {
         listaPessoal = new ArrayList<>();
         listaGlobal = new ArrayList<>();
 
-        listViewSeusAnuncios = (ListView) findViewById(R.id.marketplace_listViewSeusAnuncios);
-        listViewAnunciosGlobais = (ListView) findViewById(R.id.marketplace_listViewAnunciosGlobais);
+        listViewSeusAnuncios = (ListView) rootView.findViewById(R.id.marketplace_listViewSeusAnuncios);
+        listViewAnunciosGlobais = (ListView) rootView.findViewById(R.id.marketplace_listViewAnunciosGlobais);
 
-        adapterPessoal = new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, listaPessoal);
-        adapterGlobal = new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, listaGlobal);
+        adapterPessoal = new ArrayAdapter<>(act, android.R.layout.simple_list_item_1, listaPessoal);
+        adapterGlobal = new ArrayAdapter<>(act, android.R.layout.simple_list_item_1, listaGlobal);
 
         listViewSeusAnuncios.setAdapter(adapterPessoal);
 
@@ -76,13 +81,14 @@ public class MarketplaceActivity extends AppCompatActivity {
 
         loadListas();
 
-        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
+        FloatingActionButton fab = (FloatingActionButton) rootView.findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 mostrarVendaDialog();
             }
         });
+        return rootView;
     }
 
     private void loadListas() {
@@ -116,7 +122,7 @@ public class MarketplaceActivity extends AppCompatActivity {
 
 
     private void removerAnuncio(final Venda venda) {
-        final AlertDialog.Builder alert = new AlertDialog.Builder(MarketplaceActivity.this);
+        final AlertDialog.Builder alert = new AlertDialog.Builder(act);
         alert.setTitle(R.string.marketplace_removeranunciotitle);
         alert.setMessage(R.string.marketplace_removeranunciomessage);
         alert.setPositiveButton(R.string.home_removergasto_confirm, new DialogInterface.OnClickListener() {
@@ -139,14 +145,14 @@ public class MarketplaceActivity extends AppCompatActivity {
     }
 
     private void mostrarCarroDialog(Venda venda) {
-        CarroCompraDialog carroCompraDialog = new CarroCompraDialog(MarketplaceActivity.this);
+        CarroCompraDialog carroCompraDialog = new CarroCompraDialog(getActivity());
         carroCompraDialog.setVenda(venda);
         carroCompraDialog.show();
     }
 
 
     private void mostrarVendaDialog() {
-        CriarVendaDialog criarVendaDialog = new CriarVendaDialog(MarketplaceActivity.this);
+        CriarVendaDialog criarVendaDialog = new CriarVendaDialog(getActivity());
         criarVendaDialog.show();
     }
 

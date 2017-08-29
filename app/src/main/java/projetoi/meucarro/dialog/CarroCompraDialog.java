@@ -3,6 +3,7 @@ package projetoi.meucarro.dialog;
 import android.app.Activity;
 import android.app.Dialog;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ListView;
@@ -130,7 +131,9 @@ public class CarroCompraDialog extends Dialog {
                         }
                     }
                 }
-
+                if (vendedor.currentCar().listaGastos == null) {
+                    vendedor.currentCar().listaGastos = new ArrayList<>();
+                }
                 for (Gasto gasto : vendedor.currentCar().listaGastos) {
                     carroGastosList.add(gasto);
                     gastosAdapter.notifyDataSetChanged();
@@ -158,6 +161,9 @@ public class CarroCompraDialog extends Dialog {
         FirebaseDatabase.getInstance().getReference().child("users").child(userAtualId).setValue(comprador);
         FirebaseDatabase.getInstance().getReference().child("users").child(venda.vendedorId).setValue(vendedor);
         FirebaseDatabase.getInstance().getReference().child("vendas").child(venda.vendedorId).child(venda.carroId).removeValue();
+        Toast.makeText(getContext(), R.string.compracarrodialog_msgsucesso,
+                Toast.LENGTH_LONG).show();
+
     }
 
     public void setVenda(Venda venda) {

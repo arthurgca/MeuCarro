@@ -45,6 +45,9 @@ public class User {
     }
 
     public Carro currentCar() {
-        return cars.get(lastCarIndex);
+        if (cars.isEmpty())
+            return null;
+        else
+            return cars.get(lastCarIndex);
     }
 }

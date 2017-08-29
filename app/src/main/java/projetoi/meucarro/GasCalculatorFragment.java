@@ -1,9 +1,14 @@
 package projetoi.meucarro;
 
+import android.content.Context;
+import android.support.annotation.Nullable;
+import android.support.v4.app.Fragment;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
 
@@ -13,7 +18,7 @@ import com.jjoe64.graphview.helper.StaticLabelsFormatter;
 import com.jjoe64.graphview.series.BarGraphSeries;
 import com.jjoe64.graphview.series.DataPoint;
 
-public class GasCalculatorActivity extends AppCompatActivity {
+public class GasCalculatorFragment extends Fragment {
 
     private class GasStation {
         private double gasPrice;
@@ -64,16 +69,18 @@ public class GasCalculatorActivity extends AppCompatActivity {
     private GraphView graphView;
     private BarGraphSeries<DataPoint> series;
     private StaticLabelsFormatter staticLabelsFormatter;
+    private Context act;
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_gas_calculator);
+    public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+        View rootView = inflater.inflate(R.layout.activity_gas_calculator, container, false);
 
-        this.gasValue = (EditText) findViewById(R.id.gasEditText);
-        this.alcoolValue = (EditText) findViewById(R.id.alcoolEditText);
-        this.calculateButton = (Button) findViewById(R.id.buttonCalculate);
-        this.graphView = (GraphView) findViewById(R.id.gasCalculatorGraphView);
+        act = getActivity();
+
+        this.gasValue = (EditText) rootView.findViewById(R.id.gasEditText);
+        this.alcoolValue = (EditText) rootView.findViewById(R.id.alcoolEditText);
+        this.calculateButton = (Button) rootView.findViewById(R.id.buttonCalculate);
+        this.graphView = (GraphView) rootView.findViewById(R.id.gasCalculatorGraphView);
 
         this.myGasStation = new GasStation(0.000, 0.000);
         this.initGraph(this.graphView);
@@ -99,11 +106,12 @@ public class GasCalculatorActivity extends AppCompatActivity {
                 }
 
                 if (validField) {
-                    GasCalculatorActivity.this.setGraph(GasCalculatorActivity.this.graphView);
+                    GasCalculatorFragment.this.setGraph(GasCalculatorFragment.this.graphView);
                 }
 
             }
         });
+        return rootView;
     }
 
     private void initGraph(GraphView graphView) {
@@ -134,16 +142,16 @@ public class GasCalculatorActivity extends AppCompatActivity {
 
         series.setAnimated(true);
         series.setDrawValuesOnTop(true);
-        series.setValuesOnTopColor(ContextCompat.getColor(getApplicationContext(), R.color.colorBlack));
+        series.setValuesOnTopColor(ContextCompat.getColor(act, R.color.colorBlack));
         series.setValueDependentColor(new ValueDependentColor<DataPoint>() {
             @Override
             public int get(DataPoint data) {
                 if (data.getX() == 1) {
-                    return ContextCompat.getColor(getApplicationContext(), R.color.colorGas);
+                    return ContextCompat.getColor(act, R.color.colorGas);
                 } else if (data.getX() == 2) {
-                    return ContextCompat.getColor(getApplicationContext(), R.color.colorAlcohol);
+                    return ContextCompat.getColor(act, R.color.colorAlcohol);
                 } else {
-                    return ContextCompat.getColor(getApplicationContext(), R.color.colorBlack);
+                    return ContextCompat.getColor(act, R.color.colorBlack);
                 }
             }
         });

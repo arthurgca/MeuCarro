@@ -92,7 +92,7 @@ public class LoginActivity extends AppCompatActivity {
                 if (user != null) {
                     // User is signed in
                     Log.d("Logado:", "onAuthStateChanged:signed_in:" + user.getUid());
-                    Intent it = new Intent(LoginActivity.this, HomeActivity.class);
+                    Intent it = new Intent(LoginActivity.this, MainActivity.class);
                     it.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
                     startActivity(it);
                 } else {

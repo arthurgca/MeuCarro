@@ -1,8 +1,13 @@
 package projetoi.meucarro;
 
+import android.content.Context;
+import android.support.annotation.Nullable;
+import android.support.v4.app.Fragment;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
@@ -21,7 +26,7 @@ import java.util.ArrayList;
 import projetoi.meucarro.models.Carro;
 import projetoi.meucarro.models.User;
 
-public class CompararCarroActivity extends AppCompatActivity {
+public class CompararCarroFragment extends Fragment {
 
     private DatabaseReference userRef;
     private FirebaseAuth mAuth;
@@ -56,11 +61,13 @@ public class CompararCarroActivity extends AppCompatActivity {
     private TextView textViewGastosC2Velas;
     private TextView textViewGastosC2Revisao;
     private TextView textViewGastosC2;
+    private Context act;
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_comparar_carro);
+    public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+        View rootView = inflater.inflate(R.layout.activity_comparar_carro, container, false);
+
+        act = getActivity();
 
         userCarrosList = new ArrayList<>();
 
@@ -68,48 +75,48 @@ public class CompararCarroActivity extends AppCompatActivity {
         this.mAuth = FirebaseAuth.getInstance();
         this.userRef = database.getReference().child("users").child(mAuth.getCurrentUser().getUid());
 
-        spinner1 = (Spinner) findViewById(R.id.compararcarro_spinner1);
-        spinner2 = (Spinner) findViewById(R.id.compararcarro_spinner2);
+        spinner1 = (Spinner) rootView.findViewById(R.id.compararcarro_spinner1);
+        spinner2 = (Spinner) rootView.findViewById(R.id.compararcarro_spinner2);
 
-        btnCompara = (Button) findViewById(R.id.buttonCompara);
+        btnCompara = (Button) rootView.findViewById(R.id.buttonCompara);
 
-        textViewSpinner1 = (TextView) findViewById(R.id.textViewCompara1);
-        textViewSpinner2 = (TextView) findViewById(R.id.textViewCompara2);
+        textViewSpinner1 = (TextView) rootView.findViewById(R.id.textViewCompara1);
+        textViewSpinner2 = (TextView) rootView.findViewById(R.id.textViewCompara2);
 
-        textViewGastosC1Combustivel = (TextView) findViewById(R.id.textViewC1Combustivel);
-        textViewGastosC2Combustivel = (TextView) findViewById(R.id.textViewC2Combustivel);
+        textViewGastosC1Combustivel = (TextView) rootView.findViewById(R.id.textViewC1Combustivel);
+        textViewGastosC2Combustivel = (TextView) rootView.findViewById(R.id.textViewC2Combustivel);
 
-        textViewGastosC1Oleo = (TextView) findViewById(R.id.textViewC1Oleo);
-        textViewGastosC2Oleo = (TextView) findViewById(R.id.textViewC2Oleo);
+        textViewGastosC1Oleo = (TextView) rootView.findViewById(R.id.textViewC1Oleo);
+        textViewGastosC2Oleo = (TextView) rootView.findViewById(R.id.textViewC2Oleo);
 
-        textViewGastosC1Revisao = (TextView) findViewById(R.id.textViewC1Revisao);
-        textViewGastosC2Revisao = (TextView) findViewById(R.id.textViewC2Revisao);
+        textViewGastosC1Revisao = (TextView) rootView.findViewById(R.id.textViewC1Revisao);
+        textViewGastosC2Revisao = (TextView) rootView.findViewById(R.id.textViewC2Revisao);
 
-        textViewGastosC1Pneu = (TextView) findViewById(R.id.textViewC1Pneu);
-        textViewGastosC2Pneu = (TextView) findViewById(R.id.textViewC2Pneu);
+        textViewGastosC1Pneu = (TextView) rootView.findViewById(R.id.textViewC1Pneu);
+        textViewGastosC2Pneu = (TextView) rootView.findViewById(R.id.textViewC2Pneu);
 
-        textViewGastosC1ipva = (TextView) findViewById(R.id.textViewC1ipva);
-        textViewGastosC2ipva = (TextView) findViewById(R.id.textViewC2ipva);
+        textViewGastosC1ipva = (TextView) rootView.findViewById(R.id.textViewC1ipva);
+        textViewGastosC2ipva = (TextView) rootView.findViewById(R.id.textViewC2ipva);
 
-        textViewGastosC1Pecas = (TextView) findViewById(R.id.textViewC1Pecas);
-        textViewGastosC2Pecas = (TextView) findViewById(R.id.textViewC2Pecas);
+        textViewGastosC1Pecas = (TextView) rootView.findViewById(R.id.textViewC1Pecas);
+        textViewGastosC2Pecas = (TextView) rootView.findViewById(R.id.textViewC2Pecas);
 
-        textViewGastosC1Correia = (TextView) findViewById(R.id.textViewC1Correia);
-        textViewGastosC2Correia = (TextView) findViewById(R.id.textViewC2Correia);
+        textViewGastosC1Correia = (TextView) rootView.findViewById(R.id.textViewC1Correia);
+        textViewGastosC2Correia = (TextView) rootView.findViewById(R.id.textViewC2Correia);
 
-        textViewGastosC1FiltroArC = (TextView) findViewById(R.id.textViewC1FiltroArc);
-        textViewGastosC2FiltroArC = (TextView) findViewById(R.id.textViewC2FiltroArc);
+        textViewGastosC1FiltroArC = (TextView) rootView.findViewById(R.id.textViewC1FiltroArc);
+        textViewGastosC2FiltroArC = (TextView) rootView.findViewById(R.id.textViewC2FiltroArc);
 
-        textViewGastosC1FiltroAr = (TextView) findViewById(R.id.textViewC1FiltroAr);
-        textViewGastosC2FiltroAr = (TextView) findViewById(R.id.textViewC2FiltroAr);
+        textViewGastosC1FiltroAr = (TextView) rootView.findViewById(R.id.textViewC1FiltroAr);
+        textViewGastosC2FiltroAr = (TextView) rootView.findViewById(R.id.textViewC2FiltroAr);
 
-        textViewGastosC1Velas = (TextView) findViewById(R.id.textViewC1Velas);
-        textViewGastosC2Velas = (TextView) findViewById(R.id.textViewC2Velas);
+        textViewGastosC1Velas = (TextView) rootView.findViewById(R.id.textViewC1Velas);
+        textViewGastosC2Velas = (TextView) rootView.findViewById(R.id.textViewC2Velas);
 
-        textViewGastosC1 = (TextView) findViewById(R.id.textViewGastosc1);
-        textViewGastosC2 = (TextView) findViewById(R.id.textViewGastosc2);
+        textViewGastosC1 = (TextView) rootView.findViewById(R.id.textViewGastosc1);
+        textViewGastosC2 = (TextView) rootView.findViewById(R.id.textViewGastosc2);
 
-        final ArrayAdapter<Carro> adapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_item, userCarrosList);
+        final ArrayAdapter<Carro> adapter = new ArrayAdapter<>(act, android.R.layout.simple_spinner_item, userCarrosList);
 
         spinner1.setAdapter(adapter);
         spinner2.setAdapter(adapter);
@@ -163,10 +170,17 @@ public class CompararCarroActivity extends AppCompatActivity {
             }
         });
 
+        btnCompara.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                compara();
+            }
+        });
 
+        return rootView;
     }
 
-    public void compara(View view) {
+    public void compara() {
         Carro c1 = (Carro) spinner1.getSelectedItem();
         Carro c2 = (Carro) spinner2.getSelectedItem();
 

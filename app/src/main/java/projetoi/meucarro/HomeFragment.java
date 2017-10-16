@@ -166,7 +166,7 @@ public class HomeFragment extends Fragment {
                     Network network = new BasicNetwork(new HurlStack());
                     mRequestQueue = new RequestQueue(cache, network);
                     mRequestQueue.start();
-                    String url = "https://fipe-parallelum.rhcloud.com/api/v1/carros/marcas/" +
+                    String url = "https://fipe.parallelum.com.br/api/v1/carros/marcas/" +
                             codigoFipeMarca + "/modelos/" + codigoFipeModelo + "/anos/" + anoCorrigido + "-1";
 
                     JsonObjectRequest jsObjRequest = new JsonObjectRequest

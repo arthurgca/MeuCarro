@@ -251,11 +251,11 @@ public class ExpensesReportActivity extends AppCompatActivity {
                 public void onClick(DialogInterface dialog, int which) {
                     int thisYear = Calendar.getInstance().get(Calendar.YEAR);
                     currentCar = userCarrosList.get(which);
-                    yearsOfExpanses = generateYearsOfExpanses();
-                    expenseGraph.removeAllSeries();
-                    series.clear();
-                    initSeries();
                     if (!currentCar.estaSemGastos()) {
+                        yearsOfExpanses = generateYearsOfExpanses();
+                        expenseGraph.removeAllSeries();
+                        series.clear();
+                        initSeries();
                         loadSeries(thisYear);
                     }
                     setLegendRenderer();

@@ -160,6 +160,7 @@ public class HomeFragment extends Fragment {
                         }
                     }
 
+                    /* Para pegar preço tabela fipe
 
                     RequestQueue mRequestQueue;
                     Cache cache = new DiskBasedCache(act.getCacheDir(), 1024 * 1024); // 1MB cap
@@ -190,7 +191,7 @@ public class HomeFragment extends Fragment {
                                 }
                             });
 
-                    mRequestQueue.add(jsObjRequest);
+                    mRequestQueue.add(jsObjRequest); */
 
 
                 } else {

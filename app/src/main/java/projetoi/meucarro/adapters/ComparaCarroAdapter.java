@@ -1,6 +1,7 @@
 package projetoi.meucarro.adapters;
 
 import android.content.Context;
+import android.graphics.Color;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -36,6 +37,19 @@ public class ComparaCarroAdapter extends ArrayAdapter<Comparacao> {
 
         String stringGasto = comparacao.getGasto();
         nomeGasto.setText(stringGasto);
+
+        if (comparacao.getGastoCarro1().compareTo(comparacao.getGastoCarro2()) == 0) {
+            gastoC1.setTextColor(Color.BLUE);
+            gastoC2.setTextColor(Color.BLUE);
+        } else if (comparacao.getGastoCarro1().compareTo(comparacao.getGastoCarro2()) > 0) {
+            gastoC1.setTextColor(Color.RED);
+            gastoC2.setTextColor(Color.GREEN);
+        } else if (comparacao.getGastoCarro1().compareTo(comparacao.getGastoCarro2()) < 0)  {
+            gastoC2.setTextColor(Color.RED);
+            gastoC1.setTextColor(Color.GREEN);
+        }
+
+
         gastoC1.setText(String.valueOf(comparacao.getGastoCarro1()));
         gastoC2.setText(String.valueOf(comparacao.getGastoCarro2()));
 

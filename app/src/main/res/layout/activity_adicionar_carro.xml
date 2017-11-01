@@ -6,7 +6,7 @@
     android:background="@color/colorbackground"
     tools:context="projetoi.meucarro.AdicionarCarroFragment">
 
-    <Spinner
+    <com.toptoche.searchablespinnerlibrary.SearchableSpinner
         android:id="@+id/adicionarCarroSpinnerMarca"
         android:layout_width="match_parent"
         android:layout_height="?attr/actionBarSize"
@@ -17,7 +17,7 @@
         android:layout_marginTop="13dp"
         android:layout_toEndOf="@+id/textView2" />
 
-    <Spinner
+    <com.toptoche.searchablespinnerlibrary.SearchableSpinner
         android:id="@+id/adicionarCarroSpinnerModelo"
         android:layout_width="match_parent"
         android:layout_height="?attr/actionBarSize"

@@ -38,6 +38,8 @@ public class CarroStatusFragment extends Fragment {
     private ArrayAdapter adapter;
     private ArrayList<StatusAdapterPlaceholder> placeHolderList;
     private Context act;
+    private HashMap manutencaoHash;
+
 
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -64,14 +66,9 @@ public class CarroStatusFragment extends Fragment {
 
                 if (currentCar != null) {
                     if (currentCar.listaGastos != null) {
-                        DataSnapshot carrosDaMarca = dataSnapshot.child("carros").child(currentCar.marca);
-                        for (DataSnapshot ids : carrosDaMarca.getChildren()) {
-                            if (!ids.getKey().toString().equals("codigoFipeMarca")) {
-                                if (ids.child("Modelo").getValue().toString().equals(currentCar.modelo)) {
-                                    placeHolderList.addAll(CheckStatus.checaStatus((HashMap) ids.child("Manutenção").getValue(), currentCar));
-                                }
-                            }
-                        }
+                        DataSnapshot carrosDaMarca = dataSnapshot.child("carros").child("Padrao");
+                        manutencaoHash = (HashMap) carrosDaMarca.child("0").child("Manutenção").getValue();
+                        placeHolderList.addAll(CheckStatus.checaStatus(manutencaoHash, currentCar));
                         adapter.notifyDataSetChanged();
                     } else {
                         Toast.makeText(act, R.string.erro_nenhum_gasto,

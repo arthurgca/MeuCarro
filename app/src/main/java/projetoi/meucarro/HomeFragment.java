@@ -67,9 +67,6 @@ public class HomeFragment extends Fragment {
     private TextView qteRodagem;
     private HashMap manutencaoHash;
     private User user;
-    private int codigoFipeMarca;
-    private Integer codigoFipeModelo;
-    private TextView precoFipeTextView;
     private Context act;
 
     @Nullable
@@ -92,7 +89,6 @@ public class HomeFragment extends Fragment {
 
         updateListView();
 
-        precoFipeTextView = (TextView) rootView.findViewById(R.id.home_preco_fipe);
         nomeDoCarroTextView = (TextView) rootView.findViewById(R.id.home_nome_carro);
         qteRodagem = (TextView) rootView.findViewById(R.id.qteKmsRodados);
 
@@ -135,10 +131,10 @@ public class HomeFragment extends Fragment {
                 if (user != null && user.cars != null) {
                     carro = user.currentCar();
 
-                    int anoCorrigido = Integer.valueOf(carro.ano) + 1;
+                    String ano = carro.ano;
 
                     fab.setVisibility(View.VISIBLE);
-                        nomeDoCarroTextView.setText(carro.modelo.substring(0, 20).concat(" " + anoCorrigido));
+                        nomeDoCarroTextView.setText(carro.modelo.concat(" " + ano));
                     qteRodagem.setText(String.valueOf(carro.kmRodados));
 
                     if (carro.listaGastos != null) {
@@ -148,51 +144,8 @@ public class HomeFragment extends Fragment {
                         }
                     }
 
-                    DataSnapshot carrosDaMarca = dataSnapshot.child("carros").child(carro.marca);
-                    for (DataSnapshot ids : carrosDaMarca.getChildren()) {
-                        if (!ids.getKey().equals("codigoFipeMarca")) {
-                            if (ids.child("Modelo").getValue().toString().equals(carro.modelo)) {
-                                codigoFipeModelo = Integer.valueOf(String.valueOf(ids.child("codigoFipe").getValue()));
-                                manutencaoHash = (HashMap) ids.child("Manutenção").getValue();
-                            }
-                        } else {
-                            codigoFipeMarca = Integer.valueOf(String.valueOf(ids.getValue()));
-                        }
-                    }
-
-                    /* Para pegar preço tabela fipe
-
-                    RequestQueue mRequestQueue;
-                    Cache cache = new DiskBasedCache(act.getCacheDir(), 1024 * 1024); // 1MB cap
-                    Network network = new BasicNetwork(new HurlStack());
-                    mRequestQueue = new RequestQueue(cache, network);
-                    mRequestQueue.start();
-                    String url = "https://fipe.parallelum.com.br/api/v1/carros/marcas/" +
-                            codigoFipeMarca + "/modelos/" + codigoFipeModelo + "/anos/" + anoCorrigido + "-1";
-
-                    JsonObjectRequest jsObjRequest = new JsonObjectRequest
-                            (Request.Method.GET, url, null, new Response.Listener<JSONObject>() {
-
-                                @Override
-                                public void onResponse(JSONObject response) {
-                                    try {
-                                        precoFipeTextView.setText(response.get("Valor") + " (" +
-                                        response.get("MesReferencia") +")");
-                                    } catch (JSONException e) {
-                                        e.printStackTrace();
-                                    }
-                                }
-                            }, new Response.ErrorListener() {
-
-                                @Override
-                                public void onErrorResponse(VolleyError error) {
-                                    Log.d("Error", error.getLocalizedMessage());
-
-                                }
-                            });
-
-                    mRequestQueue.add(jsObjRequest); */
-
+                    DataSnapshot carrosDaMarca = dataSnapshot.child("carros").child("Padrao");
+                    manutencaoHash = (HashMap) carrosDaMarca.child("0").child("Manutenção").getValue();
 
                 } else {
                     fab.setVisibility(View.INVISIBLE);

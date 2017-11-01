@@ -26,6 +26,7 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
+import com.toptoche.searchablespinnerlibrary.SearchableSpinner;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -42,8 +43,8 @@ import projetoi.meucarro.models.User;
 
 public class AdicionarCarroFragment extends Fragment {
 
-    private Spinner spinnerMarca;
-    private Spinner spinnerModelo;
+    private SearchableSpinner spinnerMarca;
+    private SearchableSpinner spinnerModelo;
     private Spinner spinnerAno;
 
     private EditText placa;
@@ -66,8 +67,8 @@ public class AdicionarCarroFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.activity_adicionar_carro, container, false);
-        spinnerMarca = (Spinner) rootView.findViewById(R.id.adicionarCarroSpinnerMarca);
-        spinnerModelo = (Spinner) rootView.findViewById(R.id.adicionarCarroSpinnerModelo);
+        spinnerMarca = (SearchableSpinner) rootView.findViewById(R.id.adicionarCarroSpinnerMarca);
+        spinnerModelo = (SearchableSpinner) rootView.findViewById(R.id.adicionarCarroSpinnerModelo);
         spinnerAno = (Spinner) rootView.findViewById(R.id.adicionarCarroSpinnerAno);
 
         placa = (EditText) rootView.findViewById(R.id.editTextPlaca);
@@ -94,6 +95,12 @@ public class AdicionarCarroFragment extends Fragment {
         spinnerModelo.setAdapter(adapterModelo);
 
         spinnerAno.setAdapter(adapterAno);
+
+        spinnerMarca.setTitle("Escolha a marca");
+        spinnerMarca.setPositiveButton("OK");
+
+        spinnerModelo.setTitle("Escolha o modelo");
+        spinnerModelo.setPositiveButton("OK");
 
         final FirebaseDatabase database = FirebaseDatabase.getInstance();
         final DatabaseReference ref = database.getReference();

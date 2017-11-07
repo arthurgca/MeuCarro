@@ -143,6 +143,8 @@
 
     <string name="navigation_drawer_open">Open navigation drawer</string>
     <string name="navigation_drawer_close">Close navigation drawer</string>
+    <string name="oficina_dialog_removertitle">Remover oficina?</string>
+    <string name="oficina_dialog_removetext">Deseja remover oficina da lista?</string>
 
 
 </resources>

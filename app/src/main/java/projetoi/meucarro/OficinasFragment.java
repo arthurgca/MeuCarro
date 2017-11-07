@@ -1,15 +1,18 @@
 package projetoi.meucarro;
 
 import android.content.Context;
+import android.content.DialogInterface;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.RatingBar;
@@ -23,33 +26,26 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
+import java.util.Collections;
 
 import projetoi.meucarro.adapters.OficinaAdapter;
 import projetoi.meucarro.dialog.AdicionarOficinaDialog;
+import projetoi.meucarro.models.Gasto;
 import projetoi.meucarro.models.Oficina;
 import projetoi.meucarro.models.User;
 
 public class OficinasFragment extends Fragment {
 
-    private DatabaseReference userRef;
     private FirebaseAuth mAuth;
 
     private FloatingActionButton fab;
 
     private ValueEventListener oficinaListener;
-    private ArrayList<Oficina> oficinasList;
-    private String lastCarId;
-    private Oficina oficina;
     private DatabaseReference carrosUserRef;
     private FirebaseDatabase database = FirebaseDatabase.getInstance();
     private ArrayList<Oficina> oficinaList;
     private ArrayAdapter<Oficina> adapter;
     private ListView oficinasListView;
-
-    private TextView nomeOficinaTextView;
-    private TextView enderecoOficinaTextView;
-    private TextView telefoneOficinaTextView;
-    private RatingBar notaOficinaRatingBar;
     private User user;
     private Context act;
 
@@ -71,8 +67,15 @@ public class OficinasFragment extends Fragment {
 
         oficinasListView = (ListView) rootView.findViewById(R.id.oficinasListView);
 
+        oficinasListView.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
+            @Override
+            public boolean onItemLongClick(AdapterView<?> adapterView, View view, int i, long l) {
+                onDeleteClick(i);
+                return false;
+            }
+        });
+
         oficinaList = new ArrayList<>();
-        oficinasList = new ArrayList<>();
         adapter = new OficinaAdapter(act, oficinaList);
 
         database = FirebaseDatabase.getInstance();
@@ -81,13 +84,10 @@ public class OficinasFragment extends Fragment {
 
         updateListView();
 
-        nomeOficinaTextView = (TextView) rootView.findViewById(R.id.oficina_nome);
-        enderecoOficinaTextView = (TextView) rootView.findViewById(R.id.oficina_endereco);
-        telefoneOficinaTextView = (TextView) rootView.findViewById(R.id.oficina_telefone);
-        notaOficinaRatingBar = (RatingBar) rootView.findViewById(R.id.oficinaNota);
-
         carrosUserRef.addValueEventListener(oficinaListener);
+
         return rootView;
+
     }
 
     private void adicionarOficina() {
@@ -97,10 +97,6 @@ public class OficinasFragment extends Fragment {
     }
 
     private void updateListView() {
-        /*final ProgressDialog progressDialog = new ProgressDialog(OficinasFragment.this);
-        progressDialog.setMessage("Carregando dados...");
-        progressDialog.show();*/
-
 
         oficinaListener = new ValueEventListener() {
             @Override
@@ -123,6 +119,38 @@ public class OficinasFragment extends Fragment {
         };
     }
 
+
+    private void saveUser(User user) {
+        DatabaseReference ref = FirebaseDatabase.getInstance().getReference().child("users");
+        ref.child(mAuth.getCurrentUser().getUid()).setValue(user);
+    }
+
+    public void onDeleteClick(final int position) {
+
+        final AlertDialog.Builder alert = new AlertDialog.Builder(getContext());
+        alert.setTitle(R.string.oficina_dialog_removertitle);
+        alert.setMessage(R.string.oficina_dialog_removetext);
+        alert.setPositiveButton(R.string.home_removergasto_confirm, new DialogInterface.OnClickListener() {
+
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                user.repairShops.remove(oficinaList.get(position));
+                saveUser(user);
+                oficinaList.remove(oficinaList.get(position));
+                adapter.notifyDataSetChanged();
+            }
+        });
+
+        alert.setNegativeButton(R.string.home_removergasto_reject, new DialogInterface.OnClickListener() {
+
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                dialog.dismiss();
+            }
+        });
+
+        alert.show();
+    }
 }
 
 

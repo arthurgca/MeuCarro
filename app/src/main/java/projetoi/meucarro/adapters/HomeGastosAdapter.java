@@ -29,10 +29,13 @@ public class HomeGastosAdapter extends ArrayAdapter<Gasto> {
         TextView manutencaoText = (TextView) convertView.findViewById(R.id.home_adapter_manutencaotext);
         TextView dataText = (TextView) convertView.findViewById(R.id.home_adapter_datatext);
         TextView valorText = (TextView) convertView.findViewById(R.id.home_adapter_valortext);
+        TextView qteQuilometrosText = (TextView) convertView.findViewById(R.id.home_adapter_qtekmtext);
+
 
         manutencaoText.setText(gasto.descricao);
         dataText.setText(gasto.getFormattedData());
         valorText.setText(String.valueOf(gasto.valor));
+        qteQuilometrosText.setText(String.format("%d km", gasto.registroKm));
 
         return convertView;
     }

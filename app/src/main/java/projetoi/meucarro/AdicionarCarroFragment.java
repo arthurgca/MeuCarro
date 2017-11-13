@@ -182,7 +182,7 @@ public class AdicionarCarroFragment extends Fragment {
         carrosMarcaHash.clear();
         carroMarcaList.clear();
         adapterMarca.notifyDataSetChanged();
-        String url = "https://fipeapi.appspot.com/api/1/carros/marcas.json";
+        String url = "https://fipe.parallelum.com.br/api/v1/carros/marcas";
         StringRequest request = new StringRequest(url, new Response.Listener<String>() {
             @Override
             public void onResponse(String string) {
@@ -190,7 +190,7 @@ public class AdicionarCarroFragment extends Fragment {
                     JSONArray arrayAPI = new JSONArray(string);
                     for (int i = 0; i < arrayAPI.length(); i++) {
                         JSONObject marcaObj = arrayAPI.getJSONObject(i);
-                        carrosMarcaHash.put(String.valueOf(marcaObj.get("fipe_name")), String.valueOf(marcaObj.get("id")));
+                        carrosMarcaHash.put(String.valueOf(marcaObj.get("nome")), String.valueOf(marcaObj.get("codigo")));
                     }
                     carroMarcaList.addAll(carrosMarcaHash.keySet());
                     adapterMarca.notifyDataSetChanged();
@@ -211,7 +211,7 @@ public class AdicionarCarroFragment extends Fragment {
     }
 
     private void carregaModelo(String marcaId) {
-        String url = String.format("https://fipeapi.appspot.com/api/1/carros/veiculos/%s.json", marcaId);
+        String url = String.format("https://fipe.parallelum.com.br/api/v1/carros/marcas/%s/modelos", marcaId);
         carroModeloHash.clear();
 
         carrosModeloList.clear();
@@ -220,10 +220,11 @@ public class AdicionarCarroFragment extends Fragment {
             @Override
             public void onResponse(String string) {
                 try {
-                    JSONArray arrayAPI = new JSONArray(string);
+                    JSONObject t = new JSONObject(string);
+                    JSONArray arrayAPI = (JSONArray) t.get("modelos");
                     for (int i = 0; i < arrayAPI.length(); i++) {
                         JSONObject modeloObj = arrayAPI.getJSONObject(i);
-                        carroModeloHash.put(String.valueOf(modeloObj.get("fipe_name")), String.valueOf(modeloObj.get("id")));
+                        carroModeloHash.put(String.valueOf(modeloObj.get("nome")), String.valueOf(modeloObj.get("codigo")));
                     }
                     carrosModeloList.addAll(carroModeloHash.keySet());
                     adapterModelo.notifyDataSetChanged();
@@ -243,7 +244,7 @@ public class AdicionarCarroFragment extends Fragment {
     }
 
     private void carregarAnoList(String marcaId, String modeloId) {
-        String url = String.format("https://fipeapi.appspot.com/api/1/carros/veiculo/%s/%s.json", marcaId, modeloId);
+        String url = String.format("https://fipe.parallelum.com.br/api/v1/carros/marcas/%s/modelos/%s/anos", marcaId, modeloId);
         anoCarroList.clear();
         adapterAno.notifyDataSetChanged();
         StringRequest request = new StringRequest(url, new Response.Listener<String>() {
@@ -253,7 +254,7 @@ public class AdicionarCarroFragment extends Fragment {
                     JSONArray arrayAPI = new JSONArray(string);
                     for (int i = 0; i < arrayAPI.length(); i++) {
                         JSONObject modeloObj = arrayAPI.getJSONObject(i);
-                        anoCarroList.add(String.valueOf(modeloObj.get("name")));
+                        anoCarroList.add(String.valueOf(modeloObj.get("nome")));
                     }
                     adapterAno.notifyDataSetChanged();
                     progressDialog.dismiss();

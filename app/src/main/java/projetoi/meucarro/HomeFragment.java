@@ -1,6 +1,7 @@
 package projetoi.meucarro;
 
 import android.app.Activity;
+import android.app.NotificationManager;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.DialogInterface;
@@ -9,6 +10,7 @@ import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.NotificationCompat;
 import android.support.v7.app.AlertDialog;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -125,10 +127,23 @@ public class HomeFragment extends Fragment {
         carrosUserListener = new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
-
+                String userId = mAuth.getCurrentUser().getUid();
                 carroGastosList.clear();
-                user = dataSnapshot.child("users").child(mAuth.getCurrentUser().getUid()).getValue(User.class);
+                user = dataSnapshot.child("users").child(userId).getValue(User.class);
                 if (user != null && user.cars != null) {
+
+                    if(dataSnapshot.child("notificacaoOferta").child(userId).exists()) {
+
+                        NotificationCompat.Builder mBuilder =
+                                new NotificationCompat.Builder(getContext())
+                                        .setContentTitle("MeuCarro - Nova Oferta")
+                                        .setSmallIcon(android.R.drawable.ic_popup_reminder)
+                                        .setContentText("Você tem uma nova oferta em um anúncio.");
+                        NotificationManager mNotificationManager = (NotificationManager) getContext().getSystemService(Context.NOTIFICATION_SERVICE);
+                        mNotificationManager.notify(0, mBuilder.build());
+
+                    }
+
                     carro = user.currentCar();
 
                     String ano = carro.ano;

@@ -3,7 +3,6 @@ package projetoi.meucarro.dialog;
 import android.app.Activity;
 import android.app.Dialog;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ListView;
@@ -47,13 +46,16 @@ public class CarroCompraDialog extends Dialog {
     private ArrayList<StatusAdapterPlaceholder> placeHolderList;
     private ArrayList<Gasto> carroGastosList;
     private HomeGastosAdapter gastosAdapter;
-    private Button transferenciaBtn;
+    private Button confirmarTransferenciaBtn;
     private Carro carro;
-    private TextView senhaText;
+
     private String userAtualId;
     private DatabaseReference dialogRef;
     private ValueEventListener listener;
     private TextView kmsRodadosText;
+    private TextView haOfertaText;
+    private Button cancelaOfertaBtn;
+    private TextView valorText;
 
     public CarroCompraDialog(Activity activity) {
         super(activity);
@@ -76,28 +78,67 @@ public class CarroCompraDialog extends Dialog {
 
         modeloText = (TextView) findViewById(R.id.comprarcarrodialog_modelotext);
         nomeVendedorText = (TextView) findViewById(R.id.comprarcarrodialog_vendedornometext);
+        valorText = (TextView) findViewById(R.id.comprarcarrodialog_valortext);
         telefoneText = (TextView) findViewById(R.id.comprarcarrodialog_vendedortelefonetext);
         anoText = (TextView) findViewById(R.id.comprarcarrodialog_carroanotext);
-        senhaText = (TextView) findViewById(R.id.comprarcarro_senha);
         kmsRodadosText = (TextView) findViewById(R.id.comprarcarrodialog_kmsrodadostxt);
+        haOfertaText = (TextView) findViewById(R.id.comprarcarrodialog_jaexisteoferta);
 
         load();
 
-        transferenciaBtn = (Button) findViewById(R.id.comprarcarrodialog_transferenciabtn);
-        transferenciaBtn.setOnClickListener(new View.OnClickListener() {
+        confirmarTransferenciaBtn = (Button) findViewById(R.id.comprarcarrodialog_confirmarofertabtn);
+        confirmarTransferenciaBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (senhaText.getText().toString().isEmpty()) {
-                    Toast.makeText(getContext(), R.string.erro_comprardialog_senhavazia, Toast.LENGTH_SHORT).show();
-                } else if (!senhaText.getText().toString().equals(venda.senhaConfirmacao)) {
-                    Toast.makeText(getContext(), R.string.erro_comprardialog_senhaincorreta, Toast.LENGTH_SHORT).show();
+                if (!venda.haOferta) {
+                    if (!venda.compradorId.equals(userAtualId)) {
+                        confirmaOferta();
+                    }
+                }
+                else {
+                    Toast.makeText(getContext(), R.string.compracarrodialog_msgjaexisteoferta,
+                            Toast.LENGTH_LONG).show();
+                }
+            }
+        });
+
+        cancelaOfertaBtn = (Button) findViewById(R.id.comprarcarrodialog_cancelarofertabtn);
+        cancelaOfertaBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (venda.compradorId.equals(userAtualId)) {
+                    cancelaOferta();
                 } else {
-                    transferirCarro();
+                    Toast.makeText(getContext(), "Você não fez nenhuma oferta.", Toast.LENGTH_SHORT).show();
                 }
             }
         });
 
         super.onCreate(savedInstanceState);
+    }
+
+    private void cancelaOferta() {
+        dialogRef.removeEventListener(listener);
+        dismiss();
+
+        FirebaseDatabase.getInstance().getReference().child("notificacaoOferta").child(venda.vendedorId).removeValue();
+        FirebaseDatabase.getInstance().getReference().child("vendas").child(venda.vendedorId).child(venda.carroId).child("compradorId").setValue("");
+        FirebaseDatabase.getInstance().getReference().child("vendas").child(venda.vendedorId).child(venda.carroId).child("haOferta").setValue(false);
+        Toast.makeText(getContext(), R.string.compracarrodialog_msgofertacancelada,
+                Toast.LENGTH_LONG).show();
+    }
+
+    private void confirmaOferta() {
+        dialogRef.removeEventListener(listener);
+        dismiss();
+
+        FirebaseDatabase.getInstance().getReference().child("vendas").child(venda.vendedorId).child(venda.carroId).child("compradorId").setValue(userAtualId);
+        FirebaseDatabase.getInstance().getReference().child("vendas").child(venda.vendedorId).child(venda.carroId).child("haOferta").setValue(true);
+
+        FirebaseDatabase.getInstance().getReference().child("notificacaoOferta").child(venda.vendedorId).child("alertaOferta").setValue(true);
+
+        Toast.makeText(getContext(), R.string.compracarrodialog_msgsucesso,
+                Toast.LENGTH_LONG).show();
     }
 
     private void load() {
@@ -110,12 +151,12 @@ public class CarroCompraDialog extends Dialog {
                 vendedor = dsUserVendedor.getValue(User.class);
 
                 userAtualId = FirebaseAuth.getInstance().getCurrentUser().getUid();
-                DataSnapshot dsUserComprador = dataSnapshot.child("users").child(userAtualId);
-                comprador = dsUserComprador.getValue(User.class);
 
                 carro = vendedor.cars.get(Integer.parseInt(venda.carroId));
 
                 kmsRodadosText.setText(kmsRodadosText.getText().toString().concat(String.valueOf(carro.kmRodados)));
+
+                valorText.setText(valorText.getText().toString().concat(String.valueOf(venda.valor)));
 
 
                 modeloText.setText(modeloText.getText().toString().concat(venda.carroModelo));
@@ -123,14 +164,20 @@ public class CarroCompraDialog extends Dialog {
                 nomeVendedorText.setText(nomeVendedorText.getText().toString().concat(vendedor.name));
                 telefoneText.setText(telefoneText.getText().toString().concat(vendedor.phone));
 
-                DataSnapshot carrosDaMarca = dataSnapshot.child("carros").child(carro.marca);
-                for (DataSnapshot ids : carrosDaMarca.getChildren()) {
-                    if (!ids.getKey().equals("codigoFipeMarca")) {
-                        if (ids.child("Modelo").getValue().toString().equals(carro.modelo)) {
-                            placeHolderList.addAll(CheckStatus.checaStatus((HashMap) ids.child("Manutenção").getValue(), carro));
-                        }
+                if (venda.haOferta) {
+                    if(venda.compradorId.equals(userAtualId)) {
+                        haOfertaText.setText(String.valueOf("Você já fez uma oferta por esse carro."));
+                    } else {
+                        haOfertaText.setText(String.valueOf("Alguém já fez uma oferta por esse carro."));
                     }
+                } else {
+                    haOfertaText.setText(String.valueOf("Você pode fazer uma oferta."));
                 }
+
+
+                DataSnapshot carrosDaMarca = dataSnapshot.child("carros").child("Padrao").child("0");
+                placeHolderList.addAll(CheckStatus.checaStatus((HashMap) carrosDaMarca.child("Manutenção").getValue(), carro));
+
                 if (vendedor.currentCar().listaGastos == null) {
                     vendedor.currentCar().listaGastos = new ArrayList<>();
                 }
@@ -149,20 +196,6 @@ public class CarroCompraDialog extends Dialog {
         };
 
         dialogRef.addValueEventListener(listener);
-
-    }
-
-    private void transferirCarro() {
-        dialogRef.removeEventListener(listener);
-        dismiss();
-
-        comprador.addCar(carro);
-        vendedor.cars.remove(carro);
-        FirebaseDatabase.getInstance().getReference().child("users").child(userAtualId).setValue(comprador);
-        FirebaseDatabase.getInstance().getReference().child("users").child(venda.vendedorId).setValue(vendedor);
-        FirebaseDatabase.getInstance().getReference().child("vendas").child(venda.vendedorId).child(venda.carroId).removeValue();
-        Toast.makeText(getContext(), R.string.compracarrodialog_msgsucesso,
-                Toast.LENGTH_LONG).show();
 
     }
 

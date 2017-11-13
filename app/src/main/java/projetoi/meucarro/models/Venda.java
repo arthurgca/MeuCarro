@@ -13,7 +13,6 @@ public class Venda {
     public String carroId;
     public String carroModelo;
     public String carroAno;
-    public String senhaConfirmacao;
     public double valor;
     public boolean haOferta;
 
@@ -21,14 +20,12 @@ public class Venda {
 
     }
 
-    public Venda(String vendedorId, String compradorId, String carroId, String carroModelo, String carroAno,
-                 String senhaConfirmacao, double valor, boolean haOferta) {
+    public Venda(String vendedorId, String compradorId, String carroId, String carroModelo, String carroAno, double valor, boolean haOferta) {
         this.vendedorId = vendedorId;
         this.compradorId = compradorId;
         this.carroId = carroId;
         this.carroModelo = carroModelo;
         this.carroAno = carroAno;
-        this.senhaConfirmacao = senhaConfirmacao;
         this.valor = valor;
         this.haOferta = haOferta;
     }

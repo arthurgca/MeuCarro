@@ -125,7 +125,7 @@
     <string name="marketplace_removeranunciotitle">Remover anúncio</string>
     <string name="marketplace_removeranunciomessage">Deseja remover seu anúncio?</string>
     <string name="comprarcarrodialog_senhatransterenciahin">Senha de transferência</string>
-    <string name="comprarcarrodialog_trasnferenciabtntext">Confirmar</string>
+    <string name="comprarcarrodialog_trasnferenciabtntext">Enviar Oferta</string>
     <string name="erro_comprardialog_senhavazia">Campo de senha vazio.</string>
     <string name="erro_comprardialog_senhaincorreta">Senha incorreta, tente novamente.</string>
     <string name="vendacarro_mensagemsucesso">Carro anunciado com sucesso!</string>
@@ -138,13 +138,18 @@
     <string name="app_not_available">Sorry, there\'s no web browser available</string>
     <string name="trocarcarro_msgsucesso">Carro atual trocado.</string>
     <string name="adicionarcarro_msgsucesso">Novo carro adicionado.</string>
-    <string name="compracarrodialog_msgsucesso">Carro transferido com sucesso.</string>
+    <string name="compracarrodialog_msgsucesso">Oferta feita com sucesso.</string>
     <string name="title_activity_main">CarAssist</string>
 
     <string name="navigation_drawer_open">Open navigation drawer</string>
     <string name="navigation_drawer_close">Close navigation drawer</string>
     <string name="oficina_dialog_removertitle">Remover oficina?</string>
     <string name="oficina_dialog_removetext">Deseja remover oficina da lista?</string>
+    <string name="comprarcarrodialog_cancelarbtntxt">Cancelar Oferta</string>
+    <string name="erro_comprardialognaooferta">Não há nenhuma oferta</string>
+    <string name="compracarrodialog_msgjaexisteoferta">Já existe uma oferta por esse carro, espere o vendedor.</string>
+    <string name="compracarrodialog_msgofertacancelada">Sua oferta foi cancelada.</string>
+    <string name="confirmarvendadialog_nenhumcompradormsg">Nenhum comprador</string>
 
 
 </resources>

@@ -25,7 +25,9 @@ import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
 
+import projetoi.meucarro.adapters.VendaAdapter;
 import projetoi.meucarro.dialog.CarroCompraDialog;
+import projetoi.meucarro.dialog.ConfirmarVendaDialog;
 import projetoi.meucarro.dialog.CriarVendaDialog;
 import projetoi.meucarro.models.Venda;
 
@@ -57,10 +59,17 @@ public class MarketplaceFragment extends Fragment {
         listViewSeusAnuncios = (ListView) rootView.findViewById(R.id.marketplace_listViewSeusAnuncios);
         listViewAnunciosGlobais = (ListView) rootView.findViewById(R.id.marketplace_listViewAnunciosGlobais);
 
-        adapterPessoal = new ArrayAdapter<>(act, android.R.layout.simple_list_item_1, listaPessoal);
-        adapterGlobal = new ArrayAdapter<>(act, android.R.layout.simple_list_item_1, listaGlobal);
+        adapterPessoal = new VendaAdapter(act, listaPessoal);
+        adapterGlobal = new VendaAdapter(act, listaGlobal);
 
         listViewSeusAnuncios.setAdapter(adapterPessoal);
+
+        listViewSeusAnuncios.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+                mostrarOferta(listaPessoal.get(i));
+            }
+        });
 
         listViewSeusAnuncios.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
             @Override
@@ -154,6 +163,12 @@ public class MarketplaceFragment extends Fragment {
     private void mostrarVendaDialog() {
         CriarVendaDialog criarVendaDialog = new CriarVendaDialog(getActivity());
         criarVendaDialog.show();
+    }
+
+    private void mostrarOferta(Venda venda) {
+        ConfirmarVendaDialog carroCompraDialog = new ConfirmarVendaDialog(getActivity());
+        carroCompraDialog.setVenda(venda);
+        carroCompraDialog.show();
     }
 
     private void limparListas() {

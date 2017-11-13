@@ -57,7 +57,7 @@ public class AdicionarGastoDialog extends Dialog {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        setContentView(R.layout.adicionar_gasto_dialog);
+        setContentView(R.layout.dialog_adicionargasto);
         final Calendar dataAtual = Calendar.getInstance();
 
         mAuth = FirebaseAuth.getInstance();

@@ -121,6 +121,7 @@ public class HomeFragment extends Fragment {
     private void updateListView() {
         final ProgressDialog progressDialog = new ProgressDialog(getContext());
         progressDialog.setMessage("Carregando dados...");
+        progressDialog.setCancelable(false);
         progressDialog.show();
 
 
@@ -134,13 +135,15 @@ public class HomeFragment extends Fragment {
 
                     if(dataSnapshot.child("notificacaoOferta").child(userId).exists()) {
 
-                        NotificationCompat.Builder mBuilder =
-                                new NotificationCompat.Builder(getContext())
-                                        .setContentTitle("MeuCarro - Nova Oferta")
-                                        .setSmallIcon(android.R.drawable.ic_popup_reminder)
-                                        .setContentText("Você tem uma nova oferta em um anúncio.");
-                        NotificationManager mNotificationManager = (NotificationManager) getContext().getSystemService(Context.NOTIFICATION_SERVICE);
-                        mNotificationManager.notify(0, mBuilder.build());
+                        if (act != null) {
+                            NotificationCompat.Builder mBuilder =
+                                    new NotificationCompat.Builder(act.getApplicationContext())
+                                            .setContentTitle("MeuCarro - Nova Oferta")
+                                            .setSmallIcon(android.R.drawable.ic_popup_reminder)
+                                            .setContentText("Você tem uma nova oferta em um anúncio.");
+                            NotificationManager mNotificationManager = (NotificationManager) act.getApplicationContext().getSystemService(Context.NOTIFICATION_SERVICE);
+                            mNotificationManager.notify(0, mBuilder.build());
+                        }
 
                     }
 

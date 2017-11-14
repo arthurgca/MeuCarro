@@ -106,6 +106,9 @@ public class MarketplaceFragment extends Fragment {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 limparListas();
+                adapterPessoal.notifyDataSetChanged();
+                adapterGlobal.notifyDataSetChanged();
+
                 for (DataSnapshot ds : dataSnapshot.getChildren()) {
                     if (ds.getKey().toString().equals(userId)) {
                         for (DataSnapshot anuncios : ds.getChildren()) {
@@ -139,6 +142,7 @@ public class MarketplaceFragment extends Fragment {
             @Override
             public void onClick(DialogInterface dialog, int which) {
                 dbRef.child(userId).child(venda.carroId).removeValue();
+                dbRef.child("notificacaoOferta").child(userId).removeValue();
             }
         });
 

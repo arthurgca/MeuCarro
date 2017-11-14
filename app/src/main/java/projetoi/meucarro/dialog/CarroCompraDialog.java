@@ -132,8 +132,8 @@ public class CarroCompraDialog extends Dialog {
         dialogRef.removeEventListener(listener);
         dismiss();
 
-        FirebaseDatabase.getInstance().getReference().child("vendas").child(venda.vendedorId).child(venda.carroId).child("compradorId").setValue(userAtualId);
         FirebaseDatabase.getInstance().getReference().child("vendas").child(venda.vendedorId).child(venda.carroId).child("haOferta").setValue(true);
+        FirebaseDatabase.getInstance().getReference().child("vendas").child(venda.vendedorId).child(venda.carroId).child("compradorId").setValue(userAtualId);
 
         FirebaseDatabase.getInstance().getReference().child("notificacaoOferta").child(venda.vendedorId).child("alertaOferta").setValue(true);
 

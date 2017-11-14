@@ -45,6 +45,8 @@ public class VendaAdapter extends ArrayAdapter<Venda> {
 
         if (venda.haOferta) {
             alertaOferta.setVisibility(View.VISIBLE);
+        } else {
+            alertaOferta.setVisibility(View.INVISIBLE);
         }
 
         return convertView;

@@ -80,10 +80,14 @@ public class ConfirmarVendaDialog extends Dialog {
 
         comprador.addCar(carro);
         vendedor.cars.remove(carro);
+        vendedor.changeCurrentCar(0);
+
+        FirebaseDatabase.getInstance().getReference().child("notificacaoOferta").child(venda.vendedorId).removeValue();
 
         FirebaseDatabase.getInstance().getReference().child("users").child(venda.compradorId).setValue(comprador);
         FirebaseDatabase.getInstance().getReference().child("users").child(venda.vendedorId).setValue(vendedor);
         FirebaseDatabase.getInstance().getReference().child("vendas").child(venda.vendedorId).child(venda.carroId).removeValue();
+
         Toast.makeText(getContext(), R.string.compracarrodialog_msgsucesso,
                 Toast.LENGTH_LONG).show();
 

@@ -1,7 +1,6 @@
-package projetoi.meucarro.dialog;
+package projetoi.meucarro;
 
-import android.app.Activity;
-import android.app.Dialog;
+import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
@@ -19,7 +18,6 @@ import com.google.firebase.database.ValueEventListener;
 import java.util.ArrayList;
 import java.util.HashMap;
 
-import projetoi.meucarro.R;
 import projetoi.meucarro.adapters.HomeGastosAdapter;
 import projetoi.meucarro.adapters.StatusRowAdapter;
 import projetoi.meucarro.models.Carro;
@@ -29,18 +27,13 @@ import projetoi.meucarro.models.Venda;
 import projetoi.meucarro.utils.CheckStatus;
 import projetoi.meucarro.utils.StatusAdapterPlaceholder;
 
-/**
- * Created by Arthur on 14/08/2017.
- */
-
-public class CarroCompraDialog extends Dialog {
+public class OfertaCarroActivity extends AppCompatActivity {
 
     private TextView modeloText;
     private TextView nomeVendedorText;
     private TextView telefoneText;
     private Venda venda;
     private User vendedor;
-    private User comprador;
     private TextView anoText;
     private StatusRowAdapter statusAdapter;
     private ArrayList<StatusAdapterPlaceholder> placeHolderList;
@@ -56,24 +49,26 @@ public class CarroCompraDialog extends Dialog {
     private TextView haOfertaText;
     private Button cancelaOfertaBtn;
     private TextView valorText;
-
-    public CarroCompraDialog(Activity activity) {
-        super(activity);
-    }
+    private String vendedorId;
+    private String carroId;
+    private ListView gastosListView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        setContentView(R.layout.dialog_comprarcarro);
+        setContentView(R.layout.activity_oferta_carro);
+
+        vendedorId = getIntent().getStringExtra("vendedorId");
+        carroId = getIntent().getStringExtra("carroId");
 
         placeHolderList = new ArrayList<>();
 
-        ListView statusListView = (ListView) findViewById(R.id.comprarcarrodialog_listViewStatus);
-        statusAdapter = new StatusRowAdapter(getContext(), placeHolderList);
+        ListView statusListView = (ListView) findViewById(R.id.comprarcarrodialog_listview1);
+        statusAdapter = new StatusRowAdapter(OfertaCarroActivity.this, placeHolderList);
         statusListView.setAdapter(statusAdapter);
 
-        ListView gastosListView = (ListView) findViewById(R.id.comprarcarrodialog_listviewgastos);
+        gastosListView = (ListView) findViewById(R.id.comprarcarrodialog_listView2);
         carroGastosList = new ArrayList<>();
-        gastosAdapter = new HomeGastosAdapter(getContext(), carroGastosList);
+        gastosAdapter = new HomeGastosAdapter(OfertaCarroActivity.this, carroGastosList);
         gastosListView.setAdapter(gastosAdapter);
 
         modeloText = (TextView) findViewById(R.id.comprarcarrodialog_modelotext);
@@ -96,7 +91,7 @@ public class CarroCompraDialog extends Dialog {
                     }
                 }
                 else {
-                    Toast.makeText(getContext(), R.string.compracarrodialog_msgjaexisteoferta,
+                    Toast.makeText(OfertaCarroActivity.this, R.string.compracarrodialog_msgjaexisteoferta,
                             Toast.LENGTH_LONG).show();
                 }
             }
@@ -109,7 +104,7 @@ public class CarroCompraDialog extends Dialog {
                 if (venda.compradorId.equals(userAtualId)) {
                     cancelaOferta();
                 } else {
-                    Toast.makeText(getContext(), "Você não fez nenhuma oferta.", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(OfertaCarroActivity.this, "Você não fez nenhuma oferta.", Toast.LENGTH_SHORT).show();
                 }
             }
         });
@@ -119,25 +114,25 @@ public class CarroCompraDialog extends Dialog {
 
     private void cancelaOferta() {
         dialogRef.removeEventListener(listener);
-        dismiss();
+        finish();
 
         FirebaseDatabase.getInstance().getReference().child("notificacaoOferta").child(venda.vendedorId).removeValue();
         FirebaseDatabase.getInstance().getReference().child("vendas").child(venda.vendedorId).child(venda.carroId).child("compradorId").setValue("");
         FirebaseDatabase.getInstance().getReference().child("vendas").child(venda.vendedorId).child(venda.carroId).child("haOferta").setValue(false);
-        Toast.makeText(getContext(), R.string.compracarrodialog_msgofertacancelada,
+        Toast.makeText(OfertaCarroActivity.this, R.string.compracarrodialog_msgofertacancelada,
                 Toast.LENGTH_LONG).show();
     }
 
     private void confirmaOferta() {
         dialogRef.removeEventListener(listener);
-        dismiss();
+        finish();
 
         FirebaseDatabase.getInstance().getReference().child("vendas").child(venda.vendedorId).child(venda.carroId).child("haOferta").setValue(true);
         FirebaseDatabase.getInstance().getReference().child("vendas").child(venda.vendedorId).child(venda.carroId).child("compradorId").setValue(userAtualId);
 
         FirebaseDatabase.getInstance().getReference().child("notificacaoOferta").child(venda.vendedorId).child("alertaOferta").setValue(true);
 
-        Toast.makeText(getContext(), R.string.compracarrodialog_msgsucesso,
+        Toast.makeText(OfertaCarroActivity.this, R.string.compracarrodialog_msgsucesso,
                 Toast.LENGTH_LONG).show();
     }
 
@@ -147,6 +142,9 @@ public class CarroCompraDialog extends Dialog {
         listener = new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
+                limparListas();
+                venda = dataSnapshot.child("vendas").child(vendedorId).child(carroId).getValue(Venda.class);
+
                 DataSnapshot dsUserVendedor = dataSnapshot.child("users").child(venda.vendedorId);
                 vendedor = dsUserVendedor.getValue(User.class);
 
@@ -180,10 +178,14 @@ public class CarroCompraDialog extends Dialog {
 
                 if (vendedor.currentCar().listaGastos == null) {
                     vendedor.currentCar().listaGastos = new ArrayList<>();
+                    gastosListView.setEnabled(false);
+
                 }
-                for (Gasto gasto : vendedor.currentCar().listaGastos) {
-                    carroGastosList.add(gasto);
-                    gastosAdapter.notifyDataSetChanged();
+                else {
+                    for (Gasto gasto : vendedor.currentCar().listaGastos) {
+                        carroGastosList.add(gasto);
+                        gastosAdapter.notifyDataSetChanged();
+                    }
                 }
 
                 statusAdapter.notifyDataSetChanged();
@@ -199,8 +201,12 @@ public class CarroCompraDialog extends Dialog {
 
     }
 
-    public void setVenda(Venda venda) {
-        this.venda = venda;
-    }
 
+    private void limparListas() {
+        carroGastosList.clear();
+        placeHolderList.clear();
+
+        gastosAdapter.notifyDataSetChanged();
+        statusAdapter.notifyDataSetChanged();
+    }
 }

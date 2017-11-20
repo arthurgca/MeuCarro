@@ -2,13 +2,13 @@ package projetoi.meucarro;
 
 import android.content.Context;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
 import android.support.v7.app.AlertDialog;
-import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -26,7 +26,6 @@ import com.google.firebase.database.ValueEventListener;
 import java.util.ArrayList;
 
 import projetoi.meucarro.adapters.VendaAdapter;
-import projetoi.meucarro.dialog.CarroCompraDialog;
 import projetoi.meucarro.dialog.ConfirmarVendaDialog;
 import projetoi.meucarro.dialog.CriarVendaDialog;
 import projetoi.meucarro.models.Venda;
@@ -82,7 +81,11 @@ public class MarketplaceFragment extends Fragment {
         listViewAnunciosGlobais.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                mostrarCarroDialog(listaGlobal.get(position));
+                Intent intent = new Intent(getActivity(), OfertaCarroActivity.class);
+                intent.putExtra("vendedorId", listaGlobal.get(position).vendedorId);
+                intent.putExtra("carroId", listaGlobal.get(position).carroId);
+
+                startActivity(intent);
             }
         });
 
@@ -155,12 +158,6 @@ public class MarketplaceFragment extends Fragment {
         });
 
         alert.show();
-    }
-
-    private void mostrarCarroDialog(Venda venda) {
-        CarroCompraDialog carroCompraDialog = new CarroCompraDialog(getActivity());
-        carroCompraDialog.setVenda(venda);
-        carroCompraDialog.show();
     }
 
 

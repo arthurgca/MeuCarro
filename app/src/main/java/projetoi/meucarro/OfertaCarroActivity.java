@@ -2,6 +2,7 @@ package projetoi.meucarro;
 
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ListView;
@@ -145,50 +146,56 @@ public class OfertaCarroActivity extends AppCompatActivity {
                 limparListas();
                 venda = dataSnapshot.child("vendas").child(vendedorId).child(carroId).getValue(Venda.class);
 
-                DataSnapshot dsUserVendedor = dataSnapshot.child("users").child(venda.vendedorId);
-                vendedor = dsUserVendedor.getValue(User.class);
 
-                userAtualId = FirebaseAuth.getInstance().getCurrentUser().getUid();
-
-                carro = vendedor.cars.get(Integer.parseInt(venda.carroId));
-
-                kmsRodadosText.setText(kmsRodadosText.getText().toString().concat(String.valueOf(carro.kmRodados)));
-
-                valorText.setText(valorText.getText().toString().concat(String.valueOf(venda.valor)));
-
-
-                modeloText.setText(modeloText.getText().toString().concat(venda.carroModelo));
-                anoText.setText(anoText.getText().toString().concat(venda.carroAno));
-                nomeVendedorText.setText(nomeVendedorText.getText().toString().concat(vendedor.name));
-                telefoneText.setText(telefoneText.getText().toString().concat(vendedor.phone));
-
-                if (venda.haOferta) {
-                    if(venda.compradorId.equals(userAtualId)) {
-                        haOfertaText.setText(String.valueOf("Você já fez uma oferta por esse carro."));
-                    } else {
-                        haOfertaText.setText(String.valueOf("Alguém já fez uma oferta por esse carro."));
-                    }
+                if (venda == null) {
+                    Toast.makeText(OfertaCarroActivity.this, "Ocorreu um erro. A venda não existe mais.", Toast.LENGTH_SHORT).show();
+                    finish();
                 } else {
-                    haOfertaText.setText(String.valueOf("Você pode fazer uma oferta."));
-                }
+
+                    DataSnapshot dsUserVendedor = dataSnapshot.child("users").child(venda.vendedorId);
+                    vendedor = dsUserVendedor.getValue(User.class);
+
+                    userAtualId = FirebaseAuth.getInstance().getCurrentUser().getUid();
+
+                    carro = vendedor.cars.get(Integer.parseInt(venda.carroId));
+
+                    kmsRodadosText.setText(kmsRodadosText.getText().toString().concat(String.valueOf(carro.kmRodados)));
+
+                    valorText.setText(valorText.getText().toString().concat(String.valueOf(venda.valor)));
 
 
-                DataSnapshot carrosDaMarca = dataSnapshot.child("carros").child("Padrao").child("0");
-                placeHolderList.addAll(CheckStatus.checaStatus((HashMap) carrosDaMarca.child("Manutenção").getValue(), carro));
+                    modeloText.setText(modeloText.getText().toString().concat(venda.carroModelo));
+                    anoText.setText(anoText.getText().toString().concat(venda.carroAno));
+                    nomeVendedorText.setText(nomeVendedorText.getText().toString().concat(vendedor.name));
+                    telefoneText.setText(telefoneText.getText().toString().concat(vendedor.phone));
 
-                if (vendedor.currentCar().listaGastos == null) {
-                    vendedor.currentCar().listaGastos = new ArrayList<>();
-                    gastosListView.setEnabled(false);
-
-                }
-                else {
-                    for (Gasto gasto : vendedor.currentCar().listaGastos) {
-                        carroGastosList.add(gasto);
-                        gastosAdapter.notifyDataSetChanged();
+                    if (venda.haOferta) {
+                        if (venda.compradorId.equals(userAtualId)) {
+                            haOfertaText.setText(String.valueOf("Você já fez uma oferta por esse carro."));
+                        } else {
+                            haOfertaText.setText(String.valueOf("Alguém já fez uma oferta por esse carro."));
+                        }
+                    } else {
+                        haOfertaText.setText(String.valueOf("Você pode fazer uma oferta."));
                     }
-                }
 
-                statusAdapter.notifyDataSetChanged();
+
+                    DataSnapshot carrosDaMarca = dataSnapshot.child("carros").child("Padrao").child("0");
+                    placeHolderList.addAll(CheckStatus.checaStatus((HashMap) carrosDaMarca.child("Manutenção").getValue(), carro));
+
+                    if (vendedor.currentCar().listaGastos == null) {
+                        vendedor.currentCar().listaGastos = new ArrayList<>();
+                        gastosListView.setEnabled(false);
+
+                    } else {
+                        for (Gasto gasto : vendedor.currentCar().listaGastos) {
+                            carroGastosList.add(gasto);
+                            gastosAdapter.notifyDataSetChanged();
+                        }
+                    }
+
+                    statusAdapter.notifyDataSetChanged();
+                }
             }
 
             @Override

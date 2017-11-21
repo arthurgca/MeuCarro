@@ -49,7 +49,7 @@ public class AdicionarCarroFragment extends Fragment {
     private SearchableSpinner spinnerModelo;
     private Spinner spinnerAno;
 
-    private EditText placa;
+    private EditText placaLetras;
 
     private Button adicionarButton;
     private FirebaseAuth mAuth;
@@ -64,6 +64,7 @@ public class AdicionarCarroFragment extends Fragment {
     private ArrayAdapter<String> adapterMarca;
     private ArrayAdapter<String> adapterModelo;
     private ProgressDialog progressDialog;
+    private EditText placaNumeros;
 
     @Nullable
     @Override
@@ -73,7 +74,9 @@ public class AdicionarCarroFragment extends Fragment {
         spinnerModelo = (SearchableSpinner) rootView.findViewById(R.id.adicionarCarroSpinnerModelo);
         spinnerAno = (Spinner) rootView.findViewById(R.id.adicionarCarroSpinnerAno);
 
-        placa = (EditText) rootView.findViewById(R.id.editTextPlaca);
+        placaLetras = (EditText) rootView.findViewById(R.id.editTextPlacaLetras);
+        placaNumeros = (EditText) rootView.findViewById(R.id.editTextPlacaNumeros);
+
 
         mAuth = FirebaseAuth.getInstance();
 
@@ -164,16 +167,22 @@ public class AdicionarCarroFragment extends Fragment {
                 String marcaSelecionada = spinnerMarca.getSelectedItem().toString();
                 String modeloCarroSelecionado = spinnerModelo.getSelectedItem().toString();
                 String modeloAnoSelecionado = spinnerAno.getSelectedItem().toString();
-                String placaCarro = placa.getText().toString();
+                String placaCarro = placaLetras.getText().toString().concat(placaNumeros.getText().toString());
                 Carro carro = new Carro(marcaSelecionada, modeloCarroSelecionado, modeloAnoSelecionado, placaCarro, 0, new ArrayList<Gasto>());
                 if (user.cars == null) {
                     user.cars = new ArrayList<>();
-                }
-                user.addCar(carro);
-                ref.child("users").child(mAuth.getCurrentUser().getUid()).setValue(user);
+                } else if (placaLetras.getText().length() != 3) {
+                    placaLetras.setError(getString(R.string.adicionarcarro_msgerroplacaletras));
+                } else if (placaNumeros.getText().length() != 4) {
+                    placaNumeros.setError(getString(R.string.adicionarcarro_msgerroplacanumeros));
+                } else {
+                    user.addCar(carro);
+                    ref.child("users").child(mAuth.getCurrentUser().getUid()).setValue(user);
 
-                Toast.makeText(getContext(), R.string.adicionarcarro_msgsucesso, Toast.LENGTH_SHORT).show();
-                backToHome();
+                    Toast.makeText(getContext(), R.string.adicionarcarro_msgsucesso, Toast.LENGTH_SHORT).show();
+                    backToHome();
+                }
+
 
             }
         });

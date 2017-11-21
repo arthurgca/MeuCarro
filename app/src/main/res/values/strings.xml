@@ -85,7 +85,7 @@
     <string name="erro_nenhum_gasto">Nenhum gasto registrado.</string>
     <string name="erro_trocarcarro_zero_carros">Adicione um carro para poder trocar.</string>
     <string name="erro_trocarcarro_nenhumaselecao">Selecione um carro para trocar.</string>
-    <string name="adicionarcarro_placahint">Placa</string>
+    <string name="adicionarcarro_placaletrashint">ABC</string>
     <string name="menu_status_do_carro">Status do Carro</string>
     <string name="erro_adicionargasto_quilmetragem_maior">Quilometragem em data passada tem que ser menor</string>
     <string name="erro_oficina_nome">Insira um nome para a oficina</string>
@@ -150,6 +150,8 @@
     <string name="compracarrodialog_msgjaexisteoferta">Já existe uma oferta por esse carro, espere o vendedor.</string>
     <string name="compracarrodialog_msgofertacancelada">Sua oferta foi cancelada.</string>
     <string name="confirmarvendadialog_nenhumcompradormsg">Nenhum comprador</string>
+    <string name="adicionarcarro_msgerroplacaletras">Primeira parte da placa tem que ter 3 letras.</string>
+    <string name="adicionarcarro_msgerroplacanumeros">Segunra parte da placo tem que ter 4 números.</string>
 
 
 </resources>

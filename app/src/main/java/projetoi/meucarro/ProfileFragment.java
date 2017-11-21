@@ -68,7 +68,7 @@ public class ProfileFragment extends Fragment {
                 Pattern pattern = Pattern.compile("^[0-9]{5}-[0-9]{3}$");
                 Matcher matcher = pattern.matcher(zipCode.getText().toString());
 
-                if (matcher.find()) {
+                if (matcher.find() || zipCode.getText().toString().isEmpty()) {
                     saveUser();
                 } else {
                     zipCode.setError("ex: 00000-000");

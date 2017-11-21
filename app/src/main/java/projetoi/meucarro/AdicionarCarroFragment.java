@@ -4,6 +4,8 @@ import android.app.ProgressDialog;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.os.Bundle;
+import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentTransaction;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -171,6 +173,7 @@ public class AdicionarCarroFragment extends Fragment {
                 ref.child("users").child(mAuth.getCurrentUser().getUid()).setValue(user);
 
                 Toast.makeText(getContext(), R.string.adicionarcarro_msgsucesso, Toast.LENGTH_SHORT).show();
+                backToHome();
 
             }
         });
@@ -272,5 +275,12 @@ public class AdicionarCarroFragment extends Fragment {
         rQueue.add(request);
     }
 
+    public void backToHome() {
+        HomeFragment homeFragment = new HomeFragment();
+        FragmentManager fragmentManager = getFragmentManager();
+        FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+        fragmentTransaction.replace(R.id.content_frame, homeFragment);
+        fragmentTransaction.commit();
+    }
 
 }

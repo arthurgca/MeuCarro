@@ -3,11 +3,9 @@ package projetoi.meucarro;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.support.annotation.Nullable;
-import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentManager;
-import android.support.v7.app.AppCompatActivity;
+import android.support.v4.app.FragmentTransaction;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -91,6 +89,8 @@ public class TrocarCarroFragment extends Fragment {
 
         DatabaseReference ref = FirebaseDatabase.getInstance().getReference().child("users");
         ref.child(mAuth.getCurrentUser().getUid()).setValue(user);
+        backToHome();
+
     }
 
     private void updateRadioButtons(View rootView) {
@@ -130,6 +130,14 @@ public class TrocarCarroFragment extends Fragment {
 
     private void limparRg() {
         rg.removeAllViews();
+    }
+
+    public void backToHome() {
+        HomeFragment homeFragment = new HomeFragment();
+        FragmentManager fragmentManager = getFragmentManager();
+        FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+        fragmentTransaction.replace(R.id.content_frame, homeFragment);
+        fragmentTransaction.commit();
     }
 
 }

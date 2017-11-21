@@ -154,5 +154,11 @@
     <string name="adicionarcarro_msgerroplacanumeros">Segunra parte da placo tem que ter 4 números.</string>
     <string name="profileactivity_cephint">00000-000</string>
 
+    <string-array name="distancias">
+        <item>50</item>
+        <item>100</item>
+        <item>250</item>
+        <item>500</item>
+    </string-array>
 
 </resources>

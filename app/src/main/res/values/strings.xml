@@ -152,6 +152,7 @@
     <string name="confirmarvendadialog_nenhumcompradormsg">Nenhum comprador</string>
     <string name="adicionarcarro_msgerroplacaletras">Primeira parte da placa tem que ter 3 letras.</string>
     <string name="adicionarcarro_msgerroplacanumeros">Segunra parte da placo tem que ter 4 números.</string>
+    <string name="profileactivity_cephint">00000-000</string>
 
 
 </resources>

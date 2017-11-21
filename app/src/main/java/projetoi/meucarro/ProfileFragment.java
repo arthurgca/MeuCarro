@@ -27,6 +27,9 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+
 import projetoi.meucarro.models.User;
 import projetoi.meucarro.utils.FormatadorErros;
 
@@ -62,7 +65,14 @@ public class ProfileFragment extends Fragment {
         this.save.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                saveUser();
+                Pattern pattern = Pattern.compile("^[0-9]{5}-[0-9]{3}$");
+                Matcher matcher = pattern.matcher(zipCode.getText().toString());
+
+                if (matcher.find()) {
+                    saveUser();
+                } else {
+                    zipCode.setError("ex: 00000-000");
+                }
             }
         });
         return rootView;

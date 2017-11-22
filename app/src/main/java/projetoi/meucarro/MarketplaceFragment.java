@@ -31,6 +31,9 @@ import com.google.firebase.database.ValueEventListener;
 import org.json.JSONException;
 import org.json.JSONObject;
 import java.io.IOException;
+
+import okhttp3.Call;
+import okhttp3.Callback;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.Response;
@@ -59,6 +62,7 @@ public class MarketplaceFragment extends Fragment {
     private Spinner spinner;
     OkHttpClient client = new OkHttpClient();
     private ProgressDialog progressDialog;
+    private int entrou;
 
 
     @Override
@@ -70,6 +74,9 @@ public class MarketplaceFragment extends Fragment {
         dbRef = FirebaseDatabase.getInstance().getReference();
         userId = FirebaseAuth.getInstance().getCurrentUser().getUid();
 
+        progressDialog = new ProgressDialog(getContext());
+        progressDialog.setMessage("Carregando dados...");
+        progressDialog.setCancelable(false);
 
         listaPessoal = new ArrayList<>();
         listaGlobal = new ArrayList<>();
@@ -80,7 +87,7 @@ public class MarketplaceFragment extends Fragment {
                 android.R.layout.simple_spinner_item);
 
         spinner.setAdapter(spinnerAdapter);
-        spinner.setSelection(0,false);
+        spinner.setSelection(0, false);
 
 
         listViewSeusAnuncios = (ListView) rootView.findViewById(R.id.marketplace_listViewSeusAnuncios);
@@ -120,6 +127,8 @@ public class MarketplaceFragment extends Fragment {
         spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
+                progressDialog.show();
+
                 loadListas(Double.parseDouble(spinner.getSelectedItem().toString()) * 1000);
             }
 
@@ -163,12 +172,12 @@ public class MarketplaceFragment extends Fragment {
                     } else {
                         for (DataSnapshot anuncios : ds.getChildren()) {
                             Venda venda = anuncios.getValue(Venda.class);
-                            User vendedor =  dataSnapshot.child("users").child(venda.vendedorId).getValue(User.class);
+                            User vendedor = dataSnapshot.child("users").child(venda.vendedorId).getValue(User.class);
                             vendasCep.put(venda, vendedor.ZIPcode);
                         }
                     }
                 }
-                adicionaEmDistancia(vendasCep, userAtual.ZIPcode,  distanciaDada);
+                adicionaEmDistancia(vendasCep, userAtual.ZIPcode, distanciaDada);
 
                 adapterPessoal.notifyDataSetChanged();
             }
@@ -227,11 +236,10 @@ public class MarketplaceFragment extends Fragment {
     }
 
     @RequiresApi(api = Build.VERSION_CODES.KITKAT)
-    private void adicionaEmDistancia(final HashMap<Venda,String> hashVendaCep, String cepComprador, final double distanciaDada) {
+    private void adicionaEmDistancia(final HashMap<Venda, String> hashVendaCep, String cepComprador, final double distanciaDada) {
         distancia = 0;
 
-        StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
-        StrictMode.setThreadPolicy(policy);
+        entrou = 0;
 
         for (final Venda venda : hashVendaCep.keySet()) {
             String cepVendedor = hashVendaCep.get(venda);
@@ -239,37 +247,51 @@ public class MarketplaceFragment extends Fragment {
                     "&destinations=%s" +
                     "&mode=driving&language=pt-BR&sensor=false", cepComprador, cepVendedor
             );
+            Request request = new Request.Builder()
+                    .url(url)
+                    .build();
 
-            try {
-                String response = run(url);
-                JSONObject jsonObject = new JSONObject(response);
-                JSONObject distance =
-                        jsonObject.getJSONArray("rows")
-                                .getJSONObject(0)
-                                .getJSONArray("elements")
-                                .getJSONObject(0)
-                                .getJSONObject("distance");
-                distancia = Double.parseDouble(distance.get("value").toString());
-                if (distanciaDada >= distancia) {
-                    listaGlobal.add(venda);
-                    adapterGlobal.notifyDataSetChanged();
+            client.newCall(request).enqueue(new Callback() {
+                @Override
+                public void onFailure(Call call, IOException e) {
+
                 }
-            } catch (IOException e) {
-                e.printStackTrace();
-            } catch (JSONException e) {
-                e.printStackTrace();
-            }
-        }
-    }
 
-    @RequiresApi(api = Build.VERSION_CODES.KITKAT)
-    String run(String url) throws IOException {
-        Request request = new Request.Builder()
-                .url(url)
-                .build();
+                @Override
+                public void onResponse(Call call, final Response response) throws IOException {
+                    // ... check for failure using `isSuccessful` before proceeding
 
-        try (Response response = client.newCall(request).execute()) {
-            return response.body().string();
+                    // Read data on the worker thread
+                    final String responseData = response.body().string();
+
+                    // Run view-related code back on the main thread
+                    getActivity().runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            try {
+                                entrou++;
+                                JSONObject jsonObject = new JSONObject(responseData);
+                                JSONObject distance =
+                                        jsonObject.getJSONArray("rows")
+                                                .getJSONObject(0)
+                                                .getJSONArray("elements")
+                                                .getJSONObject(0)
+                                                .getJSONObject("distance");
+                                distancia = Double.parseDouble(distance.get("value").toString());
+                                if (distanciaDada >= distancia) {
+                                    listaGlobal.add(venda);
+                                    adapterGlobal.notifyDataSetChanged();
+                                } if (entrou == hashVendaCep.size()) {
+                                    progressDialog.dismiss();
+                                }
+                            } catch (JSONException e) {
+                                e.printStackTrace();
+                            }
+                        }
+                    });
+                }
+            });
+
         }
     }
 }

@@ -80,6 +80,8 @@ public class MarketplaceFragment extends Fragment {
                 android.R.layout.simple_spinner_item);
 
         spinner.setAdapter(spinnerAdapter);
+        spinner.setSelection(0,false);
+
 
         listViewSeusAnuncios = (ListView) rootView.findViewById(R.id.marketplace_listViewSeusAnuncios);
         listViewAnunciosGlobais = (ListView) rootView.findViewById(R.id.marketplace_listViewAnunciosGlobais);

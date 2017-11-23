@@ -69,7 +69,7 @@
 
 
     <TextView
-        android:id="@+id/home_nome_carro"
+        android:id="@+id/adicionarcarro_marcatext"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentStart="true"
@@ -109,7 +109,7 @@
         android:textAppearance="@android:style/TextAppearance.Large"
         android:textSize="14sp"
         app:layout_constraintStart_toEndOf="@+id/imageView18"
-        app:layout_constraintTop_toBottomOf="@+id/home_nome_carro" />
+        app:layout_constraintTop_toBottomOf="@+id/adicionarcarro_marcatext" />
 
     <ImageView
         android:id="@+id/imageView16"
@@ -129,7 +129,7 @@
         android:layout_marginTop="8dp"
         android:src="@drawable/ic_assignment_black_24dp"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/home_nome_carro" />
+        app:layout_constraintTop_toBottomOf="@+id/adicionarcarro_marcatext" />
 
     <TextView
         android:id="@+id/textView9"

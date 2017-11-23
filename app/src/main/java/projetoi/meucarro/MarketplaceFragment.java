@@ -6,7 +6,6 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
-import android.os.StrictMode;
 import android.support.annotation.Nullable;
 import android.support.annotation.RequiresApi;
 import android.support.design.widget.FloatingActionButton;
@@ -21,6 +20,12 @@ import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.Spinner;
 
+import com.android.volley.DefaultRetryPolicy;
+import com.android.volley.RequestQueue;
+import com.android.volley.RetryPolicy;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.StringRequest;
+import com.android.volley.toolbox.Volley;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -30,16 +35,9 @@ import com.google.firebase.database.ValueEventListener;
 
 import org.json.JSONException;
 import org.json.JSONObject;
-import java.io.IOException;
-
-import okhttp3.Call;
-import okhttp3.Callback;
-import okhttp3.OkHttpClient;
-import okhttp3.Request;
-import okhttp3.Response;
 
 import java.util.ArrayList;
-import java.util.HashMap;
+
 
 import projetoi.meucarro.adapters.VendaAdapter;
 import projetoi.meucarro.dialog.ConfirmarVendaDialog;
@@ -60,9 +58,10 @@ public class MarketplaceFragment extends Fragment {
     private Context act;
     private double distancia;
     private Spinner spinner;
-    OkHttpClient client = new OkHttpClient();
     private ProgressDialog progressDialog;
-    private int entrou;
+    private ValueEventListener listener;
+    private DatabaseReference dbNotificacaoControle;
+    private ValueEventListener listenerControle;
 
 
     @Override
@@ -73,6 +72,9 @@ public class MarketplaceFragment extends Fragment {
 
         dbRef = FirebaseDatabase.getInstance().getReference();
         userId = FirebaseAuth.getInstance().getCurrentUser().getUid();
+
+        dbNotificacaoControle = FirebaseDatabase.getInstance().getReference().child("notificacaoOferta");
+
 
         progressDialog = new ProgressDialog(getContext());
         progressDialog.setMessage("Carregando dados...");
@@ -119,6 +121,7 @@ public class MarketplaceFragment extends Fragment {
                 Intent intent = new Intent(getActivity(), OfertaCarroActivity.class);
                 intent.putExtra("vendedorId", listaGlobal.get(position).vendedorId);
                 intent.putExtra("carroId", listaGlobal.get(position).carroId);
+                dbNotificacaoControle.removeEventListener(listenerControle);
 
                 startActivity(intent);
             }
@@ -128,7 +131,6 @@ public class MarketplaceFragment extends Fragment {
             @Override
             public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
                 progressDialog.show();
-
                 loadListas(Double.parseDouble(spinner.getSelectedItem().toString()) * 1000);
             }
 
@@ -147,38 +149,94 @@ public class MarketplaceFragment extends Fragment {
                 mostrarVendaDialog();
             }
         });
+
         return rootView;
+    }
+
+    private void setControle() {
+        listenerControle = new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                Log.d("Controle", "Entrou");
+                loadListas(Double.parseDouble(spinner.getSelectedItem().toString()) * 1000);
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+        };
+
+        dbNotificacaoControle.addValueEventListener(listenerControle);
     }
 
     private void loadListas(final double distanciaDada) {
 
-        dbRef.addValueEventListener(new ValueEventListener() {
+        listener = new ValueEventListener() {
             @RequiresApi(api = Build.VERSION_CODES.KITKAT)
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
+                progressDialog.show();
+
                 limparListas();
 
-                adapterPessoal.notifyDataSetChanged();
-                adapterGlobal.notifyDataSetChanged();
-
-                HashMap<Venda, String> vendasCep = new HashMap<>();
                 User userAtual = dataSnapshot.child("users").child(userId).getValue(User.class);
 
                 for (DataSnapshot ds : dataSnapshot.child("vendas").getChildren()) {
                     if (ds.getKey().toString().equals(userId)) {
                         for (DataSnapshot anuncios : ds.getChildren()) {
-                            listaPessoal.add(anuncios.getValue(Venda.class));
+                            if (!listaPessoal.contains(anuncios.getValue(Venda.class))) {
+                                listaPessoal.add(anuncios.getValue(Venda.class));
+                            }
                         }
                     } else {
                         for (DataSnapshot anuncios : ds.getChildren()) {
-                            Venda venda = anuncios.getValue(Venda.class);
+                            final Venda venda = anuncios.getValue(Venda.class);
                             User vendedor = dataSnapshot.child("users").child(venda.vendedorId).getValue(User.class);
-                            vendasCep.put(venda, vendedor.ZIPcode);
+                            String url = String.format("http://maps.googleapis.com/maps/api/distancematrix/json?origins=%s" +
+                                    "&destinations=%s" +
+                                    "&mode=driving&language=pt-BR&sensor=false", userAtual.ZIPcode, vendedor.ZIPcode
+                            );
+                            StringRequest request = new StringRequest(url, new com.android.volley.Response.Listener<String>() {
+                                @Override
+                                public void onResponse(String string) {
+                                    try {
+                                        JSONObject jsonObject = new JSONObject(string);
+                                        JSONObject distance =
+                                                jsonObject.getJSONArray("rows")
+                                                        .getJSONObject(0)
+                                                        .getJSONArray("elements")
+                                                        .getJSONObject(0)
+                                                        .getJSONObject("distance");
+                                        distancia = Double.parseDouble(distance.get("value").toString());
+                                        if (distanciaDada >= distancia) {
+                                                listaGlobal.add(venda);
+                                                adapterGlobal.notifyDataSetChanged();
+                                        }
+                                    } catch (JSONException e) {
+                                        e.printStackTrace();
+                                    }
+                                }
+                            }, new com.android.volley.Response.ErrorListener() {
+                                @Override
+                                public void onErrorResponse(VolleyError volleyError) {
+
+                                }
+                            });
+
+                            RetryPolicy mRetryPolicy = new DefaultRetryPolicy(
+                                    0,
+                                    0,
+                                    DefaultRetryPolicy.DEFAULT_BACKOFF_MULT);
+
+                            request.setRetryPolicy(mRetryPolicy);
+                            RequestQueue rQueue = Volley.newRequestQueue(act.getApplicationContext());
+
+                            rQueue.add(request);
                         }
                     }
                 }
-                adicionaEmDistancia(vendasCep, userAtual.ZIPcode, distanciaDada);
-
+                progressDialog.dismiss();
                 adapterPessoal.notifyDataSetChanged();
             }
 
@@ -186,7 +244,9 @@ public class MarketplaceFragment extends Fragment {
             public void onCancelled(DatabaseError databaseError) {
 
             }
-        });
+        };
+
+        dbRef.addListenerForSingleValueEvent(listener);
 
     }
 
@@ -199,6 +259,7 @@ public class MarketplaceFragment extends Fragment {
 
             @Override
             public void onClick(DialogInterface dialog, int which) {
+                FirebaseDatabase.getInstance().getReference().child("notificacaoOferta").child("controle").setValue("Venda removida!");
                 dbRef.child("vendas").child(userId).child(venda.carroId).removeValue();
                 dbRef.child("vendas").child("notificacaoOferta").child(userId).removeValue();
             }
@@ -235,63 +296,12 @@ public class MarketplaceFragment extends Fragment {
         adapterPessoal.notifyDataSetChanged();
     }
 
-    @RequiresApi(api = Build.VERSION_CODES.KITKAT)
-    private void adicionaEmDistancia(final HashMap<Venda, String> hashVendaCep, String cepComprador, final double distanciaDada) {
-        distancia = 0;
 
-        entrou = 0;
+    @Override
+    public void onResume() {
+        setControle();
 
-        for (final Venda venda : hashVendaCep.keySet()) {
-            String cepVendedor = hashVendaCep.get(venda);
-            String url = String.format("http://maps.googleapis.com/maps/api/distancematrix/json?origins=%s" +
-                    "&destinations=%s" +
-                    "&mode=driving&language=pt-BR&sensor=false", cepComprador, cepVendedor
-            );
-            Request request = new Request.Builder()
-                    .url(url)
-                    .build();
-
-            client.newCall(request).enqueue(new Callback() {
-                @Override
-                public void onFailure(Call call, IOException e) {
-
-                }
-
-                @Override
-                public void onResponse(Call call, final Response response) throws IOException {
-                    // ... check for failure using `isSuccessful` before proceeding
-
-                    // Read data on the worker thread
-                    final String responseData = response.body().string();
-
-                    // Run view-related code back on the main thread
-                    getActivity().runOnUiThread(new Runnable() {
-                        @Override
-                        public void run() {
-                            try {
-                                entrou++;
-                                JSONObject jsonObject = new JSONObject(responseData);
-                                JSONObject distance =
-                                        jsonObject.getJSONArray("rows")
-                                                .getJSONObject(0)
-                                                .getJSONArray("elements")
-                                                .getJSONObject(0)
-                                                .getJSONObject("distance");
-                                distancia = Double.parseDouble(distance.get("value").toString());
-                                if (distanciaDada >= distancia) {
-                                    listaGlobal.add(venda);
-                                    adapterGlobal.notifyDataSetChanged();
-                                } if (entrou == hashVendaCep.size()) {
-                                    progressDialog.dismiss();
-                                }
-                            } catch (JSONException e) {
-                                e.printStackTrace();
-                            }
-                        }
-                    });
-                }
-            });
-
-        }
+        super.onResume();
     }
+
 }

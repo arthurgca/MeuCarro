@@ -82,8 +82,8 @@ public class ConfirmarVendaDialog extends Dialog {
         vendedor.cars.remove(carro);
         vendedor.changeCurrentCar(0);
 
-        FirebaseDatabase.getInstance().getReference().child("notificacaoOferta").child(venda.vendedorId).removeValue();
 
+        FirebaseDatabase.getInstance().getReference().child("notificacaoOferta").child(venda.vendedorId).removeValue();
         FirebaseDatabase.getInstance().getReference().child("users").child(venda.compradorId).setValue(comprador);
         FirebaseDatabase.getInstance().getReference().child("users").child(venda.vendedorId).setValue(vendedor);
         FirebaseDatabase.getInstance().getReference().child("vendas").child(venda.vendedorId).child(venda.carroId).removeValue();
@@ -128,4 +128,9 @@ public class ConfirmarVendaDialog extends Dialog {
         }
     }
 
+    @Override
+    protected void onStop() {
+        dialogRef.removeEventListener(listener);
+        super.onStop();
+    }
 }

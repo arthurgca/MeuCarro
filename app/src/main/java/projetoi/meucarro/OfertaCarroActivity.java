@@ -130,7 +130,6 @@ public class OfertaCarroActivity extends AppCompatActivity {
 
         FirebaseDatabase.getInstance().getReference().child("vendas").child(venda.vendedorId).child(venda.carroId).child("haOferta").setValue(true);
         FirebaseDatabase.getInstance().getReference().child("vendas").child(venda.vendedorId).child(venda.carroId).child("compradorId").setValue(userAtualId);
-
         FirebaseDatabase.getInstance().getReference().child("notificacaoOferta").child(venda.vendedorId).child("alertaOferta").setValue(true);
 
         Toast.makeText(OfertaCarroActivity.this, R.string.compracarrodialog_msgsucesso,
@@ -215,5 +214,11 @@ public class OfertaCarroActivity extends AppCompatActivity {
 
         gastosAdapter.notifyDataSetChanged();
         statusAdapter.notifyDataSetChanged();
+    }
+
+    @Override
+    protected void onDestroy() {
+        dialogRef.removeEventListener(listener);
+        super.onDestroy();
     }
 }

@@ -39,6 +39,7 @@ public class CriarVendaDialog extends Dialog {
     private ArrayAdapter adapter;
     private Spinner spinner;
     private ArrayList<Carro> userCarrosList;
+    private DatabaseReference carrosUserRef;
 
     public CriarVendaDialog(Activity activity) {
         super(activity);
@@ -58,7 +59,7 @@ public class CriarVendaDialog extends Dialog {
 
         database = FirebaseDatabase.getInstance();
         mAuth = FirebaseAuth.getInstance();
-        DatabaseReference carrosUserRef = database.getReference().child("users").child(mAuth.getCurrentUser().getUid());
+        carrosUserRef = database.getReference().child("users").child(mAuth.getCurrentUser().getUid());
 
         adapter = new ArrayAdapter<>(getContext(), android.R.layout.simple_spinner_item, userCarrosList);
 
@@ -98,6 +99,8 @@ public class CriarVendaDialog extends Dialog {
         Venda venda = new Venda(userId, "", carroId,  carroEscolhido.modelo, carroEscolhido.ano, valor, false);
 
         ref.child(userId).child(carroId).setValue(venda);
+        FirebaseDatabase.getInstance().getReference().child("notificacaoOferta").child("controle").setValue("Venda criada!");
+
 
         Toast.makeText(getContext(), R.string.vendacarro_mensagemsucesso, Toast.LENGTH_SHORT).show();
     }
@@ -129,5 +132,11 @@ public class CriarVendaDialog extends Dialog {
             }
         };
 
+    }
+
+    @Override
+    protected void onStop() {
+        carrosUserRef.removeEventListener(carrosUserListener);
+        super.onStop();
     }
 }

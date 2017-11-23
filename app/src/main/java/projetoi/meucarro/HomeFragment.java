@@ -132,21 +132,6 @@ public class HomeFragment extends Fragment {
                 carroGastosList.clear();
                 user = dataSnapshot.child("users").child(userId).getValue(User.class);
                 if (user != null && user.cars != null) {
-
-                    if(dataSnapshot.child("notificacaoOferta").child(userId).exists()) {
-
-                        if (act != null) {
-                            NotificationCompat.Builder mBuilder =
-                                    new NotificationCompat.Builder(act.getApplicationContext())
-                                            .setContentTitle("MeuCarro - Nova Oferta")
-                                            .setSmallIcon(android.R.drawable.ic_popup_reminder)
-                                            .setContentText("Você tem uma nova oferta em um anúncio.");
-                            NotificationManager mNotificationManager = (NotificationManager) act.getApplicationContext().getSystemService(Context.NOTIFICATION_SERVICE);
-                            mNotificationManager.notify(0, mBuilder.build());
-                        }
-
-                    }
-
                     carro = user.currentCar();
 
                     String ano = carro.ano;
@@ -216,5 +201,11 @@ public class HomeFragment extends Fragment {
         });
 
         alert.show();
+    }
+
+    @Override
+    public void onDestroy() {
+        carrosUserRef.removeEventListener(carrosUserListener);
+        super.onDestroy();
     }
 }

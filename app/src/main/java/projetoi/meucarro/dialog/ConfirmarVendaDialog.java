@@ -87,6 +87,7 @@ public class ConfirmarVendaDialog extends Dialog {
         FirebaseDatabase.getInstance().getReference().child("users").child(venda.compradorId).setValue(comprador);
         FirebaseDatabase.getInstance().getReference().child("users").child(venda.vendedorId).setValue(vendedor);
         FirebaseDatabase.getInstance().getReference().child("vendas").child(venda.vendedorId).child(venda.carroId).removeValue();
+        FirebaseDatabase.getInstance().getReference().child("mudancaVenda").child("controle").setValue("MudancaTransfere");
 
         Toast.makeText(getContext(), R.string.compracarrodialog_msgsucesso,
                 Toast.LENGTH_LONG).show();

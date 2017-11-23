@@ -133,7 +133,6 @@ public class HomeFragment extends Fragment {
                 user = dataSnapshot.child("users").child(userId).getValue(User.class);
                 if (user != null && user.cars != null) {
                     carro = user.currentCar();
-
                     String ano = carro.ano;
 
                     fab.setVisibility(View.VISIBLE);

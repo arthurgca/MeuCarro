@@ -117,6 +117,7 @@ public class OfertaCarroActivity extends AppCompatActivity {
         dialogRef.removeEventListener(listener);
         finish();
 
+        FirebaseDatabase.getInstance().getReference().child("mudancaVenda").child("controle").setValue("MudancaCancela");
         FirebaseDatabase.getInstance().getReference().child("notificacaoOferta").child(venda.vendedorId).removeValue();
         FirebaseDatabase.getInstance().getReference().child("vendas").child(venda.vendedorId).child(venda.carroId).child("compradorId").setValue("");
         FirebaseDatabase.getInstance().getReference().child("vendas").child(venda.vendedorId).child(venda.carroId).child("haOferta").setValue(false);
@@ -127,7 +128,7 @@ public class OfertaCarroActivity extends AppCompatActivity {
     private void confirmaOferta() {
         dialogRef.removeEventListener(listener);
         finish();
-
+        FirebaseDatabase.getInstance().getReference().child("mudancaVenda").child("controle").setValue("MudancaOferta");
         FirebaseDatabase.getInstance().getReference().child("vendas").child(venda.vendedorId).child(venda.carroId).child("haOferta").setValue(true);
         FirebaseDatabase.getInstance().getReference().child("vendas").child(venda.vendedorId).child(venda.carroId).child("compradorId").setValue(userAtualId);
         FirebaseDatabase.getInstance().getReference().child("notificacaoOferta").child(venda.vendedorId).child("alertaOferta").setValue(true);

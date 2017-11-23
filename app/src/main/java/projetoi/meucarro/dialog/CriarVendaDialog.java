@@ -99,7 +99,7 @@ public class CriarVendaDialog extends Dialog {
         Venda venda = new Venda(userId, "", carroId,  carroEscolhido.modelo, carroEscolhido.ano, valor, false);
 
         ref.child(userId).child(carroId).setValue(venda);
-        FirebaseDatabase.getInstance().getReference().child("notificacaoOferta").child("controle").setValue("Venda criada!");
+        FirebaseDatabase.getInstance().getReference().child("mudancaVenda").child("controle").setValue("MudançaConfirma");
 
 
         Toast.makeText(getContext(), R.string.vendacarro_mensagemsucesso, Toast.LENGTH_SHORT).show();

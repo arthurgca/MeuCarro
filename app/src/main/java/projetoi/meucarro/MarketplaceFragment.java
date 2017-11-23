@@ -73,7 +73,7 @@ public class MarketplaceFragment extends Fragment {
         dbRef = FirebaseDatabase.getInstance().getReference();
         userId = FirebaseAuth.getInstance().getCurrentUser().getUid();
 
-        dbNotificacaoControle = FirebaseDatabase.getInstance().getReference().child("notificacaoOferta");
+        dbNotificacaoControle = FirebaseDatabase.getInstance().getReference().child("mudancaVenda");
 
 
         progressDialog = new ProgressDialog(getContext());
@@ -121,9 +121,10 @@ public class MarketplaceFragment extends Fragment {
                 Intent intent = new Intent(getActivity(), OfertaCarroActivity.class);
                 intent.putExtra("vendedorId", listaGlobal.get(position).vendedorId);
                 intent.putExtra("carroId", listaGlobal.get(position).carroId);
+                startActivity(intent);
+
                 dbNotificacaoControle.removeEventListener(listenerControle);
 
-                startActivity(intent);
             }
         });
 
@@ -157,6 +158,8 @@ public class MarketplaceFragment extends Fragment {
         listenerControle = new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
+                progressDialog.show();
+
                 Log.d("Controle", "Entrou");
                 loadListas(Double.parseDouble(spinner.getSelectedItem().toString()) * 1000);
             }
@@ -259,7 +262,7 @@ public class MarketplaceFragment extends Fragment {
 
             @Override
             public void onClick(DialogInterface dialog, int which) {
-                FirebaseDatabase.getInstance().getReference().child("notificacaoOferta").child("controle").setValue("Venda removida!");
+                FirebaseDatabase.getInstance().getReference().child("mudancaVenda").child("controle").setValue("MudançaRemove");
                 dbRef.child("vendas").child(userId).child(venda.carroId).removeValue();
                 dbRef.child("vendas").child("notificacaoOferta").child(userId).removeValue();
             }
@@ -300,7 +303,6 @@ public class MarketplaceFragment extends Fragment {
     @Override
     public void onResume() {
         setControle();
-
         super.onResume();
     }
 

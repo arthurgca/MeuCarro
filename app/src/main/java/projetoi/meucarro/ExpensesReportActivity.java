@@ -87,6 +87,11 @@ public class ExpensesReportActivity extends AppCompatActivity {
                         yearsOfExpanses = generateYearsOfExpanses();
                         initGraph();
                     } else {
+                        yearsOfExpanses = new String[0];
+                        typeOfExpenses = new String[0];
+                        expenseGraph.removeAllSeries();
+                        series.clear();
+                        initSeries();
                         Toast.makeText(ExpensesReportActivity.this, R.string.erro_nenhum_gasto,
                                 Toast.LENGTH_LONG).show();
                     }
@@ -126,6 +131,9 @@ public class ExpensesReportActivity extends AppCompatActivity {
     }
 
     private String[] generateYearsOfExpanses() {
+        if (this.currentCar.estaSemGastos()) {
+            return new String[0];
+        }
         ArrayList<String> years = new ArrayList<>();
 
         Calendar c = Calendar.getInstance();
@@ -257,6 +265,11 @@ public class ExpensesReportActivity extends AppCompatActivity {
                         series.clear();
                         initSeries();
                         loadSeries(thisYear);
+                    } else {
+                        yearsOfExpanses = generateYearsOfExpanses();
+                        expenseGraph.removeAllSeries();
+                        series.clear();
+                        initSeries();
                     }
                     setLegendRenderer();
                     setGridRenderer();

@@ -193,13 +193,17 @@ public class MarketplaceFragment extends Fragment {
                             }
                         }
                     } else {
+                        final long contador = ds.getChildrenCount();
+                        long entrou = 0;
                         for (DataSnapshot anuncios : ds.getChildren()) {
+                            entrou++;
                             final Venda venda = anuncios.getValue(Venda.class);
                             User vendedor = dataSnapshot.child("users").child(venda.vendedorId).getValue(User.class);
                             String url = String.format("http://maps.googleapis.com/maps/api/distancematrix/json?origins=%s" +
                                     "&destinations=%s" +
                                     "&mode=driving&language=pt-BR&sensor=false", userAtual.ZIPcode, vendedor.ZIPcode
                             );
+                            final long finalEntrou = entrou;
                             StringRequest request = new StringRequest(url, new com.android.volley.Response.Listener<String>() {
                                 @Override
                                 public void onResponse(String string) {
@@ -215,6 +219,8 @@ public class MarketplaceFragment extends Fragment {
                                         if (distanciaDada >= distancia) {
                                                 listaGlobal.add(venda);
                                                 adapterGlobal.notifyDataSetChanged();
+                                        } if (contador == finalEntrou) {
+                                            progressDialog.dismiss();
                                         }
                                     } catch (JSONException e) {
                                         e.printStackTrace();
@@ -239,7 +245,6 @@ public class MarketplaceFragment extends Fragment {
                         }
                     }
                 }
-                progressDialog.dismiss();
                 adapterPessoal.notifyDataSetChanged();
             }
 
@@ -247,6 +252,7 @@ public class MarketplaceFragment extends Fragment {
             public void onCancelled(DatabaseError databaseError) {
 
             }
+
         };
 
         dbRef.addListenerForSingleValueEvent(listener);

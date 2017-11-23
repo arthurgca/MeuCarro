@@ -2,6 +2,7 @@ package projetoi.meucarro.dialog;
 
 import android.app.Activity;
 import android.app.Dialog;
+import android.app.ProgressDialog;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -37,6 +38,7 @@ public class ConfirmarVendaDialog extends Dialog {
     private TextView nomeCompradorTextView;
     private TextView telefoneCompradorTextView;
     private TextView valorCompraTextView;
+    private ProgressDialog progressDialog;
 
 
     public ConfirmarVendaDialog(Activity activity) {
@@ -99,6 +101,10 @@ public class ConfirmarVendaDialog extends Dialog {
     }
 
     private void loadInfo() {
+        progressDialog.setMessage("Carregando dados...");
+        progressDialog.setCancelable(false);
+        progressDialog.show();
+
         listener = new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
@@ -127,6 +133,7 @@ public class ConfirmarVendaDialog extends Dialog {
             telefoneCompradorTextView.setText(String.format("Telefone: %s",comprador.phone));
             valorCompraTextView.setText(String.format("Valor da venda: %s", venda.valor));
         }
+        progressDialog.dismiss();
     }
 
     @Override

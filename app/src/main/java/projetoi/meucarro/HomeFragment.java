@@ -18,6 +18,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.AutoCompleteTextView;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -70,6 +71,7 @@ public class HomeFragment extends Fragment {
     private HashMap manutencaoHash;
     private User user;
     private Context act;
+    private TextView placa;
 
     @Nullable
     @Override
@@ -93,6 +95,8 @@ public class HomeFragment extends Fragment {
 
         nomeDoCarroTextView = (TextView) rootView.findViewById(R.id.home_nome_carro);
         qteRodagem = (TextView) rootView.findViewById(R.id.qteKmsRodados);
+        placa = (TextView) rootView.findViewById(R.id.placaText);
+
 
         carrosUserRef.addValueEventListener(carrosUserListener);
 
@@ -138,6 +142,7 @@ public class HomeFragment extends Fragment {
                     fab.setVisibility(View.VISIBLE);
                         nomeDoCarroTextView.setText(carro.modelo.concat(" " + ano));
                     qteRodagem.setText(String.valueOf(carro.kmRodados));
+                    placa.setText(String.valueOf(carro.placa));
 
                     if (carro.listaGastos != null) {
                         for (Gasto gasto : carro.listaGastos) {

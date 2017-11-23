@@ -37,7 +37,7 @@
 
     <!--AdicionarCarroActivity-->
     <string name="adicionarcarro_adicionartext">Adicionar</string>
-    <string name="adicionarcarro_carroscadastradostext">Selecione seu Carro</string>
+    <string name="adicionarcarro_carroscadastradostext">Adicione novo Carro</string>
     <string name="adicionarcarro_dadoscarrotext">Dados sobre o carro:</string>
 
     <!--HomeActivity-->

@@ -44,6 +44,7 @@ public class ProfileFragment extends Fragment {
     private User user;
     private FirebaseAuth mAuth;
     private Context act;
+    private ProgressDialog progressDialog;
 
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -52,6 +53,7 @@ public class ProfileFragment extends Fragment {
         act = getActivity();
 
         this.mAuth = FirebaseAuth.getInstance();
+        progressDialog = new ProgressDialog(getContext());
 
         this.name = (EditText) rootView.findViewById(R.id.usernameEditText);
         this.email = (EditText) rootView.findViewById(R.id.userEmailEditText);
@@ -84,9 +86,14 @@ public class ProfileFragment extends Fragment {
         this.password.setText(user.password);
         this.phone.setText(user.phone);
         this.zipCode.setText(user.ZIPcode);
+        progressDialog.dismiss();
     }
 
     private void loadUser() {
+        progressDialog.setMessage("Carregando dados...");
+        progressDialog.setCancelable(false);
+        progressDialog.show();
+
         DatabaseReference ref = FirebaseDatabase.getInstance().getReference().child("users");
 
         ref.addValueEventListener(new ValueEventListener() {

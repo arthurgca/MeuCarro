@@ -110,7 +110,7 @@ public class TrocarCarroFragment extends Fragment {
                         RadioButton rbn = new RadioButton(act);
 
                         rbn.setId(qtdeCarros);
-                        String texto = String.format("Modelo: %s || Placa: %s", carro.modelo, carro.ano);
+                        String texto = String.format("Modelo: %s || Placa: %s", carro.modelo, carro.placa);
                         rbn.setText(texto);
 
                         idsList.add(user.cars.indexOf(carro));

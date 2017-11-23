@@ -190,6 +190,7 @@ public class Carro {
 
     @Override
     public String toString() {
-        return "Nome: " + this.modelo + "Ano: " + this.ano + "Placa: " + this.placa + " Km's Rodados: " + this.kmRodados;
+        String s = String.format("Modelo: %s, Placa: %s", modelo, placa);
+        return s;
     }
 }

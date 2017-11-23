@@ -50,8 +50,8 @@ public class ComparaCarroAdapter extends ArrayAdapter<Comparacao> {
         }
 
 
-        gastoC1.setText(String.valueOf(comparacao.getGastoCarro1()));
-        gastoC2.setText(String.valueOf(comparacao.getGastoCarro2()));
+        gastoC1.setText(String.format("%.2f", comparacao.getGastoCarro1()));
+        gastoC2.setText(String.format("%.2f", comparacao.getGastoCarro2()));
 
         return convertView;
     }

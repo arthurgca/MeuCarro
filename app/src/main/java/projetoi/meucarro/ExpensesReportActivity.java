@@ -243,7 +243,7 @@ public class ExpensesReportActivity extends AppCompatActivity {
         int id = item.getItemId();
         if (id == R.id.choose_car) {
             AlertDialog.Builder mBuilder = new AlertDialog.Builder(ExpensesReportActivity.this);
-            mBuilder.setTitle(getResources().getString(R.string.choose_expense_year));
+            mBuilder.setTitle(getResources().getString(R.string.choose_expense_car));
 
             mBuilder.setSingleChoiceItems(this.listOfCars, -1, new DialogInterface.OnClickListener() {
 

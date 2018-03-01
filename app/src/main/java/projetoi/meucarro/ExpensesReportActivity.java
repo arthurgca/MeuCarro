@@ -90,7 +90,9 @@ public class ExpensesReportActivity extends AppCompatActivity {
                         yearsOfExpanses = new String[0];
                         typeOfExpenses = new String[0];
                         expenseGraph.removeAllSeries();
-                        series.clear();
+                        if (series != null) {
+                            series.clear();
+                        }
                         initSeries();
                         Toast.makeText(ExpensesReportActivity.this, R.string.erro_nenhum_gasto,
                                 Toast.LENGTH_LONG).show();

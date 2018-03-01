@@ -101,6 +101,7 @@ public class ConfirmarVendaDialog extends Dialog {
     }
 
     private void loadInfo() {
+        progressDialog = new ProgressDialog(getContext());
         progressDialog.setMessage("Carregando dados...");
         progressDialog.setCancelable(false);
         progressDialog.show();

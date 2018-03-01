@@ -245,6 +245,7 @@ public class MarketplaceFragment extends Fragment {
                         }
                     }
                 }
+                progressDialog.dismiss();
                 adapterPessoal.notifyDataSetChanged();
             }
 

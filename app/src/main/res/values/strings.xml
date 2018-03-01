@@ -140,7 +140,7 @@
     <string name="trocarcarro_msgsucesso">Carro atual trocado.</string>
     <string name="adicionarcarro_msgsucesso">Novo carro adicionado.</string>
     <string name="compracarrodialog_msgsucesso">Oferta feita com sucesso.</string>
-    <string name="title_activity_main">CarAssist</string>
+    <string name="title_activity_main">MeuCarro</string>
 
     <string name="navigation_drawer_open">Open navigation drawer</string>
     <string name="navigation_drawer_close">Close navigation drawer</string>
